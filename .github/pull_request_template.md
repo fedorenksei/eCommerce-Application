@@ -25,6 +25,8 @@ Questionnaire:
 - What reusable entities are created?
 - What else can be extracted from my code as a reusable unit?
 
+If you used any internet resources for controversial issues, provide the links
+
 ## Todo
 List any todos required in the future
 

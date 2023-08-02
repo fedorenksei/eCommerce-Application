@@ -36,6 +36,11 @@ If there are important relations to other tasks, describe it and provide links
 - [ ] 🙅‍♂️ No, they aren't needed
 - [ ] 🙋‍♂️ No, because I need help
 
+## Added to Storybook?
+- [ ] ✅ Yes
+- [ ] 🙅‍♂️ No, they aren't needed
+- [ ] 🙋‍♂️ No, because I need help
+
 ## Added to documentation?
 - [ ] 📝 Yes, in README.md
 - [ ] 🙅‍♂️ No documentation needed

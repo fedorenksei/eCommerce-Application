@@ -5,25 +5,25 @@
 export default App
  */
 
-import React, { FC } from "react";
-import styles from "./Cart.module.scss";
+import React, { FC } from 'react';
+import styles from './Cart.module.scss';
 
 interface CardProps {
-  isInBasket?: boolean,
+  isInBasket?: boolean;
 }
 
-export const App: FC<CardProps> = ({isInBasket}) => {
+export const App: FC<CardProps> = (props) => {
+  const a = 'asd';
+
+  console.log(a);
   return (
-    <div className={`${styles.cart} ${isInBasket ? styles['cart_in-basket'] : ''}`}>
+    <div className={`${styles.cart} ${props.isInBasket ? styles['cart_in-basket'] : ''}`}>
       <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minus, quis.</p>
+      <img src="./asd.jpg" />
       <h4>Name</h4>
-      {(isInBasket ?
-        <span>Alredy in Cart</span>
-        :
-        <button>Add to Cart</button>
-        )}
+      {props.isInBasket ? <span>Alredy in Cart</span> : <button>Add to Cart</button>}
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

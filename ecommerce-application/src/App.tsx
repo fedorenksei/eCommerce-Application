@@ -1,10 +1,3 @@
-/* function App() {
-  return null;
-}
-
-export default App
- */
-
 import React, { FC } from 'react';
 
 interface CardProps {

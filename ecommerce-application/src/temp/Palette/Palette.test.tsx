@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
-import App from './App';
+import { Palette } from './Palette';
 
 describe('Test that tests work', () => {
   it('two plus two is four', () => {
@@ -9,7 +9,8 @@ describe('Test that tests work', () => {
   });
 
   it('Element renders', () => {
-    render(<App />);
-    expect(screen.getByText('Name')).toBeInTheDocument();
+    render(<Palette />);
+    expect(screen.getByText('Light')).toBeInTheDocument();
+    expect(screen.getByText('Dark')).toBeInTheDocument();
   });
 });

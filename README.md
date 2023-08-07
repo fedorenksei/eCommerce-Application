@@ -69,7 +69,7 @@ For task management, we use [Trello](https://trello.com/b/HoYECeHA/ecommerce)
 
 ### Git flow
 
-Development is carried out in the develop branch, which is created from the main branch. The main branch remains empty, merge any pull requests, as well as direct work in it is strictly prohibited.
+Development is carried out in the develop branch, which is created from the main branch. The main branch remains empty, merging any pull requests, as well as direct work in it is strictly prohibited.
 When developing additional functionality, you need to create a new branch from the develop branch.
 
 The branch name must follow the following format:

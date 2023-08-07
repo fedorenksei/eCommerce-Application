@@ -55,6 +55,7 @@
     "jest": "^29.6.2",
     "jest-css-modules-transform": "^4.4.2",
     "jest-environment-jsdom": "^29.6.2",
+    "lint-staged": "^13.2.3",
     "postcss": "^8.4.27",
     "prettier": "^3.0.1",
     "sass": "^1.64.2",
@@ -62,5 +63,13 @@
     "tailwindcss": "^3.3.3",
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
+  },
+  "husky": {
+    "hook": {
+      "pre-comit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,ts,tsx}": ["npm run lint", "prettier --write"]
   }
 }

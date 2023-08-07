@@ -34,7 +34,8 @@ All materials that you can find here are used for non-commercial purposes. If yo
 - React testing library,
 - TailwindCSS,
 - Eslint,
-- Prettier.
+- Prettier,
+- Husky with lint-staged.
 
 ## Scripts
 
@@ -48,7 +49,8 @@ The project uses the following scripts:
 - “build-storybook” – to build the storybook bud
 - "test" - to run jest tests
 - “coverage” – to run jest tests with coverage analysis
-- "format" - to format all project files located in the src folder.
+- "format" - to format all project files located in the src folder
+- "prepare" - To automatically have Git hooks enabled after install. 
 
 ## Rules and conventions
 

@@ -1,5 +1,5 @@
 import React from 'react';
 
 export const Registration = () => {
-  return <div>Registration page</div>;
+  return <div className="text-center text-4xl">Registration page</div>;
 };

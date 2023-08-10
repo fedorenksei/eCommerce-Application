@@ -23,6 +23,9 @@ module.exports = {
       {
         endOfLine: 'auto',
         printWidth: 80,
+        singleAttributePerLine: true,
+        bracketSameLine: true,
+        bracketSpacing: true,
       },
       {
         usePrettierrc: true,

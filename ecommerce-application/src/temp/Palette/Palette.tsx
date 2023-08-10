@@ -1,8 +1,6 @@
 import React from 'react';
 
 export const Palette = () => {
-  const uselessVarForTestingESLint = 'ads';
-
   return (
     <>
       <h2 className="text-4xl font-bold text-center">Colors palette</h2>

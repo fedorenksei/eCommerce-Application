@@ -17,7 +17,8 @@
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.14.2"
   },
   "devDependencies": {
     "@babel/core": "^7.22.9",
@@ -36,6 +37,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
+    "@types/compose-function": "^0.0.30",
     "@types/jest": "^29.5.3",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
@@ -44,6 +46,7 @@
     "@vitejs/plugin-react": "^4.0.3",
     "autoprefixer": "^10.4.14",
     "babel-jest": "^29.6.2",
+    "compose-function": "^3.0.3",
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-jsx-a11y": "^6.7.1",
@@ -70,6 +73,9 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{js,ts,tsx}": ["npm run lint", "prettier --write"]
+    "src/**/*.{js,ts,tsx}": [
+      "npm run lint",
+      "prettier --write"
+    ]
   }
 }

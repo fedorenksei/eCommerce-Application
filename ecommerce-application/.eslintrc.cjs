@@ -12,12 +12,25 @@ module.exports = {
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
     'plugin:storybook/recommended',
-    'prettier',
+    'plugin:prettier/recommended',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh', 'jsx-a11y'],
   rules: {
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+        printWidth: 80,
+      },
+      {
+        usePrettierrc: true,
+      },
+    ],
+    'max-len': 'off',
+    'linebreak-style': 'off',
+    'object-curly-newline': 'off',
     'react/jsx-uses-react': 'error',
     'react/jsx-uses-vars': 'error',
     'react/jsx-key': 'error',

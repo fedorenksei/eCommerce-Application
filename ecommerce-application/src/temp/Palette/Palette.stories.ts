@@ -1,14 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Palette } from './Palette';
 
-
-
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
   title: 'Test/Palette',
   component: Palette,
-  parameters: {
-  },
+  parameters: {},
 } satisfies Meta<typeof Palette>;
 
 export default meta;

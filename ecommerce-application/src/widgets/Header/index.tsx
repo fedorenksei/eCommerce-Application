@@ -22,10 +22,22 @@ export const Header = () => {
         </ul>
       </header>
       <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/registration" element={<Registration />} />
-        <Route path="*" element={<NotFound />} />
+        <Route
+          path="/"
+          element={<Main />}
+        />
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+        <Route
+          path="/registration"
+          element={<Registration />}
+        />
+        <Route
+          path="*"
+          element={<NotFound />}
+        />
       </Routes>
     </>
   );

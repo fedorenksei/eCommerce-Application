@@ -44,13 +44,14 @@ The project uses the following scripts:
 - "start" - to start the project
 - "build" - to build the bundle
 - "lint" - to check for ESLint errors
+- "lint-fix" - to autofix files with ESLint
 - "preview" - to deploy a static site
 - "storybook" - to run storybook
 - “build-storybook” – to build the storybook bud
 - "test" - to run jest tests
 - “coverage” – to run jest tests with coverage analysis
 - "format" - to format all project files located in the src folder
-- "prepare" - To automatically have Git hooks enabled after install. 
+- "prepare" - To automatically have Git hooks enabled after install.
 
 ## Rules and conventions
 

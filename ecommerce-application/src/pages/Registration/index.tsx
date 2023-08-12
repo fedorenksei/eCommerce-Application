@@ -5,9 +5,9 @@ interface ICustomer {
   email: string;
   password: string;
   passwordConfirm: string;
-  // firstName: string;
-  // lastName: string;
-  // dateOfBirth: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
 }
 
 export const Registration = () => {
@@ -15,6 +15,14 @@ export const Registration = () => {
     useForm<ICustomer>({
       mode: 'onChange',
     });
+
+  const validateDate = (value: string) => {
+    const age =
+      (new Date().getTime() - +new Date(value)) / (24 * 3600 * 365.25 * 1000);
+    if (age < 13) {
+      return 'User should be above a 13 years';
+    }
+  };
 
   const onSubmit: SubmitHandler<ICustomer> = (data) => {
     alert(JSON.stringify(data));
@@ -67,7 +75,7 @@ export const Registration = () => {
                   'Password should contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (such as @$!%*?&)',
               },
             })}
-            type="text"
+            type="password"
             className="text-blue-950"
           />
           {formState.errors?.password && (
@@ -90,12 +98,77 @@ export const Registration = () => {
                 }
               },
             })}
-            type="text"
+            type="password"
             className="text-blue-950"
           />
           {formState.errors?.passwordConfirm && (
             <div className="text-red-600 absolute top-0 left-full w-full mx-4">
               {formState.errors.passwordConfirm.message}
+            </div>
+          )}
+        </label>
+        <label className="flex justify-between w-full gap-3 relative">
+          First name
+          <input
+            {...register('firstName', {
+              required: {
+                value: true,
+                message: 'Field is require',
+              },
+              pattern: {
+                value: /^[a-zA-Z]*$/,
+                message:
+                  'Must contain at least one character and no special characters or numbers',
+              },
+            })}
+            type="text"
+            className="text-blue-950"
+          />
+          {formState.errors?.firstName && (
+            <div className="text-red-600 absolute top-0 left-full w-full mx-4">
+              {formState.errors.firstName.message}
+            </div>
+          )}
+        </label>
+        <label className="flex justify-between w-full gap-3 relative">
+          Last name
+          <input
+            {...register('lastName', {
+              required: {
+                value: true,
+                message: 'Field is require',
+              },
+              pattern: {
+                value: /^[a-zA-Z]*$/,
+                message:
+                  'Must contain at least one character and no special characters or numbers',
+              },
+            })}
+            type="text"
+            className="text-blue-950"
+          />
+          {formState.errors?.lastName && (
+            <div className="text-red-600 absolute top-0 left-full w-full mx-4">
+              {formState.errors.lastName.message}
+            </div>
+          )}
+        </label>
+        <label className="flex justify-between w-full gap-3 relative">
+          Date of birth
+          <input
+            {...register('dateOfBirth', {
+              required: {
+                value: true,
+                message: 'Field is require',
+              },
+              validate: validateDate,
+            })}
+            type="date"
+            className="text-blue-950"
+          />
+          {formState.errors?.dateOfBirth && (
+            <div className="text-red-600 absolute top-0 left-full w-full mx-4">
+              {formState.errors.dateOfBirth.message}
             </div>
           )}
         </label>

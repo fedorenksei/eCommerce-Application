@@ -3,18 +3,24 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 
 interface ICustomer {
   email: string;
-  /* password: string;
-  firstName: string;
-  lastName: string;
-  dateOfBirth: string; */
+  password: string;
+  passwordConfirm: string;
+  // firstName: string;
+  // lastName: string;
+  // dateOfBirth: string;
 }
 
 export const Registration = () => {
-  const { register, handleSubmit, formState } = useForm<ICustomer>();
+  const { register, handleSubmit, watch, trigger, formState } =
+    useForm<ICustomer>({
+      mode: 'onChange',
+    });
 
   const onSubmit: SubmitHandler<ICustomer> = (data) => {
     alert(JSON.stringify(data));
   };
+
+  console.log(formState);
 
   return (
     <div className="bg-slate-800 p-10 text-white">
@@ -33,10 +39,10 @@ export const Registration = () => {
               pattern: {
                 value:
                   /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
-                message: 'invalid email',
+                message: 'Invalid email',
               },
             })}
-            type="email"
+            type="text"
             className="text-blue-950"
           />
           {formState.errors?.email && (
@@ -45,8 +51,56 @@ export const Registration = () => {
             </div>
           )}
         </label>
+        <label className="flex justify-between w-full gap-3 relative">
+          Password
+          <input
+            {...register('password', {
+              onChange: async () => await trigger('passwordConfirm'),
+              required: {
+                value: true,
+                message: 'Field is require',
+              },
+              pattern: {
+                value:
+                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                message:
+                  'Password should contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (such as @$!%*?&)',
+              },
+            })}
+            type="text"
+            className="text-blue-950"
+          />
+          {formState.errors?.password && (
+            <div className="text-red-600 absolute top-0 left-full w-full mx-4">
+              {formState.errors.password.message}
+            </div>
+          )}
+        </label>
+        <label className="flex justify-between w-full gap-3 relative">
+          Confirm password
+          <input
+            {...register('passwordConfirm', {
+              required: {
+                value: true,
+                message: 'Field is require',
+              },
+              validate: (val: string) => {
+                if (watch('password') != val) {
+                  return 'Passwords is not the same';
+                }
+              },
+            })}
+            type="text"
+            className="text-blue-950"
+          />
+          {formState.errors?.passwordConfirm && (
+            <div className="text-red-600 absolute top-0 left-full w-full mx-4">
+              {formState.errors.passwordConfirm.message}
+            </div>
+          )}
+        </label>
         <button
-          disabled={formState.errors ? true : false}
+          disabled={!formState.isDirty || !formState.isValid}
           type="submit"
         >
           Submit

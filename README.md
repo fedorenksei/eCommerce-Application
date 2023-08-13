@@ -32,7 +32,7 @@ All materials that you can find here are used for non-commercial purposes. If yo
 - Storybook,
 - Jest,
 - React testing library,
-- TailwindCSS,
+- TailwindCSS, clsx,
 - Eslint,
 - Prettier,
 - Husky with lint-staged.

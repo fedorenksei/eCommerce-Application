@@ -20,3 +20,10 @@ export const Disabled: Story = {
     disabled: true,
   },
 };
+
+export const WithDefaultValue: Story = {
+  args: {
+    placeholder: 'Alex',
+    defaultValue: 'smth default',
+  },
+};

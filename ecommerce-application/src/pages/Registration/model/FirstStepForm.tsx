@@ -1,19 +1,11 @@
 import React from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import { ICustomer, IFirstStepForm } from '../types/interfaces';
 
-interface ICustomer {
-  email: string;
-  password: string;
-  passwordConfirm: string;
-  firstName: string;
-  lastName: string;
-  dateOfBirth: string;
-}
-
-export const FirstStepForm = (props: ICustomer) => {
+export const FirstStepForm = (props: IFirstStepForm) => {
   const { register, handleSubmit, watch, trigger, formState } =
     useForm<ICustomer>({
-      defaultValues: props,
+      defaultValues: props.customerInfo,
       mode: 'onChange',
     });
 
@@ -25,15 +17,11 @@ export const FirstStepForm = (props: ICustomer) => {
     }
   };
 
-  const onSubmit: SubmitHandler<ICustomer> = (data) => {
-    alert(JSON.stringify(data));
-  };
-
   console.log(formState);
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(props.onSubmit)}
       className="flex flex-col gap-10 items-center w-96 mx-auto"
     >
       <label className="flex justify-between w-full gap-3 relative">
@@ -176,7 +164,7 @@ export const FirstStepForm = (props: ICustomer) => {
         disabled={!formState.isDirty || !formState.isValid}
         type="submit"
       >
-        Submit
+        Next step
       </button>
     </form>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { IAddress, ISecondStepForm } from '../types/interfaces';
+import { IAddress, ISecondStepForm } from '../../../shared/types/interfaces';
 
 export const SecondStepForm = (props: ISecondStepForm) => {
   const { register, handleSubmit, formState, trigger } = useForm<IAddress>({

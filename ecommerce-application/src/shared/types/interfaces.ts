@@ -32,3 +32,23 @@ export interface ISecondStepForm {
   key: string;
   onSubmit: (arg: IAddress) => void;
 }
+
+export interface INewCustomerInfo {
+  email: string;
+  password: string;
+  firstName: string;
+  lastname: string;
+  dateOfBirth: string;
+  addresses: ICustomerAddress[];
+  shippingAddresses: number[];
+  defaultShippingAddress?: number;
+  billingAddresses: number[];
+  defaultBillingAddress?: number;
+}
+
+export interface ICustomerAddress {
+  country: string;
+  streetName: string;
+  city: string;
+  postalCode: string;
+}

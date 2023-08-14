@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { ICustomer, IFirstStepForm } from '../types/interfaces';
+import { ICustomer, IFirstStepForm } from '../../../shared/types/interfaces';
 
 export const FirstStepForm = (props: IFirstStepForm) => {
   const { register, handleSubmit, watch, trigger, formState } =
@@ -16,8 +16,6 @@ export const FirstStepForm = (props: IFirstStepForm) => {
       return 'User should be above a 13 years';
     }
   };
-
-  console.log(formState);
 
   return (
     <form

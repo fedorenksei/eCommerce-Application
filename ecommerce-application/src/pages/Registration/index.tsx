@@ -2,10 +2,17 @@ import React, { useState } from 'react';
 import { FirstStepForm } from './model/FirstStepForm';
 import { SecondStepForm } from './model/SecondStepForm';
 import { useDoubleStepForm } from './hooks/useDoubleStepForm';
-import { Countries } from './types/enums';
-import { IAddress, ICustomer } from './types/interfaces';
+import { Countries } from '../../shared/types/enums';
+import {
+  IAddress,
+  ICustomer,
+  INewCustomerInfo,
+} from '../../shared/types/interfaces';
+import { newCustomerTransformInfo } from '../../shared/utils/newCustomerInfoTransformer';
+import { ServerAPI } from '../../shared/api/ServerAPI';
 
 export const Registration = () => {
+  const serverAPI = ServerAPI.getInstance();
   const defaultCustomerInfo = {
     email: '',
     password: '',
@@ -30,13 +37,12 @@ export const Registration = () => {
   };
 
   const mockCreateUser = () => {
-    console.log(
-      'user with data',
-      JSON.stringify(customerInfo),
-      'and',
-      JSON.stringify(customerAddress),
-      'will be create'
+    const newCustomerData: INewCustomerInfo = newCustomerTransformInfo(
+      customerInfo,
+      customerAddress
     );
+
+    serverAPI.createNewCustomer(newCustomerData);
   };
 
   const firstStepOnSubmit = (currCustomerInfo: ICustomer) => {

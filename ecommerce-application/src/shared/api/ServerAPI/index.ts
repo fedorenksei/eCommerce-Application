@@ -93,15 +93,24 @@ export class ServerAPI {
   public async createNewCustomer(customerInfo: INewCustomerInfo) {
     console.log('creating customer...');
     const link = `${this.API_URL}/${this.KEY}/customers`;
+    let isOk = false;
+    let res = null;
 
-    const response = await fetch(link, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${this.accessToken}`,
-      },
-      body: JSON.stringify(customerInfo),
-    });
-    const res = await response.json();
-    console.log(res);
+    try {
+      const response = await fetch(link, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+        body: JSON.stringify(customerInfo),
+      });
+      isOk = response.ok;
+      res = await response.json();
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+
+    return isOk;
   }
 }

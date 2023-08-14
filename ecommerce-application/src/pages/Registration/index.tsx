@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FirstStepForm } from './model/FirstStepForm';
 import { SecondStepForm } from './model/SecondStepForm';
 import { useDoubleStepForm } from './hooks/useDoubleStepForm';
@@ -10,8 +11,12 @@ import {
 } from '../../shared/types/interfaces';
 import { newCustomerTransformInfo } from '../../shared/utils/newCustomerInfoTransformer';
 import { ServerAPI } from '../../shared/api/ServerAPI';
+import Spinner from '../../shared/components/Spinner';
 
 export const Registration = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const navigate = useNavigate();
   const serverAPI = ServerAPI.getInstance();
   const defaultCustomerInfo = {
     email: '',
@@ -36,25 +41,32 @@ export const Registration = () => {
     billingIsDefault: false,
   };
 
-  const mockCreateUser = () => {
+  const finishForm = async () => {
     const newCustomerData: INewCustomerInfo = newCustomerTransformInfo(
       customerInfo,
       customerAddress
     );
 
-    serverAPI.createNewCustomer(newCustomerData);
+    setIsLoading(true);
+    const res = await serverAPI.createNewCustomer(newCustomerData);
+    console.log(res);
+    setIsLoading(false);
+    setIsError(!res);
+
+    if (res) navigate('/');
   };
 
   const firstStepOnSubmit = (currCustomerInfo: ICustomer) => {
     setCustomerInfo({ ...currCustomerInfo });
     nextStep();
-    console.log(customerInfo);
   };
 
   const secondStepOnSubmit = (currCustomerAddress: IAddress) => {
-    console.log(customerInfo);
     customerAddress = { ...currCustomerAddress };
-    mockCreateUser();
+    finishForm();
+    setCustomerInfo((customerInfo) => {
+      return { ...customerInfo, email: '' };
+    });
   };
 
   const steps = [
@@ -70,7 +82,30 @@ export const Registration = () => {
     />,
   ];
 
-  const { currStepElem, nextStep } = useDoubleStepForm(steps);
+  const { currStepElem, nextStep, prevStep } = useDoubleStepForm(steps);
 
-  return <div className="bg-slate-800 p-10 text-white">{currStepElem}</div>;
+  return (
+    <div className="bg-slate-800 p-10 text-white">
+      {isLoading ? (
+        <div className="flex justify-center items-center">
+          <Spinner />
+        </div>
+      ) : isError ? (
+        <div className="flex flex-col mx-auto">
+          <span>User already exist</span>
+          <button
+            className="bg-white text-slate-800"
+            onClick={() => {
+              setIsError(false);
+              prevStep();
+            }}
+          >
+            To form
+          </button>
+        </div>
+      ) : (
+        currStepElem
+      )}
+    </div>
+  );
 };

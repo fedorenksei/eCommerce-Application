@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export const NotFound = () => {
   return (
@@ -15,12 +16,12 @@ export const NotFound = () => {
           alt="bottle in the water"
         />
       </div>
-      <a
-        href="/"
+      <Link
+        to="/"
         className="border border-solid border-primary-color block text-primary-color rounded-md px-10 py-4 transition duration-300 font-primary font-bold hover:text-secondary-color hover:bg-primary-color"
       >
         Go home
-      </a>
+      </Link>
     </div>
   );
 };

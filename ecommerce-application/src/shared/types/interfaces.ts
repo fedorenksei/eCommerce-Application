@@ -31,6 +31,7 @@ export interface ISecondStepForm {
   customerAddres: IAddress;
   key: string;
   onSubmit: (arg: IAddress) => void;
+  onBackClick: () => void;
 }
 
 export interface INewCustomerInfo {

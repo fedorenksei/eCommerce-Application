@@ -203,12 +203,22 @@ export const SecondStepForm = (props: ISecondStepForm) => {
         </div>
       )}
 
-      <button
-        disabled={!formState.isDirty || !formState.isValid}
-        type="submit"
-      >
-        Submit
-      </button>
+      <div className="flex justify-between w-full">
+        <button
+          className="bg-slate-300 text-cyan-900 disabled:bg-"
+          type="button"
+          onClick={() => props.onBackClick()}
+        >
+          Prev step
+        </button>
+        <button
+          className="bg-slate-300 text-cyan-900 disabled:bg-"
+          disabled={!formState.isDirty || !formState.isValid}
+          type="submit"
+        >
+          Submit
+        </button>
+      </div>
     </form>
   );
 };

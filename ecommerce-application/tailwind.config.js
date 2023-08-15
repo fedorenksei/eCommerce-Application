@@ -31,9 +31,6 @@ export default {
       fontFamily: {
         primary: ['Montserrat'],
       },
-      /* backgroundImage: {
-        'not-found': "url('/img/hero-pattern.svg')",
-      }, */
     },
   },
   plugins: [],

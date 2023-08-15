@@ -28,6 +28,12 @@ export default {
         'dt-danger-color': '#E74040',
         'dt-fade-text-color': '#737373',
       },
+      fontFamily: {
+        primary: ['Montserrat'],
+      },
+      /* backgroundImage: {
+        'not-found': "url('/img/hero-pattern.svg')",
+      }, */
     },
   },
   plugins: [],

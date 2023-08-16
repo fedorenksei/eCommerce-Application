@@ -19,7 +19,7 @@ test('There is a button for back to main', async () => {
   render(
     <MemoryRouter initialEntries={[badRoute]}>
       <AppComponent />
-    </MemoryRouter>
+    </MemoryRouter>,
   );
 
   await userEvent.click(screen.getByText('Go home'));

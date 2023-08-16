@@ -44,7 +44,7 @@ export const RegistrationForm = () => {
   const finishForm = async () => {
     const newCustomerData: NewCustomerInfo = newCustomerTransformInfo(
       customerInfo,
-      customerAddress
+      customerAddress,
     );
 
     setIsLoading(true);

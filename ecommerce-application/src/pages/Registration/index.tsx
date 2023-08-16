@@ -1,5 +1,6 @@
 import React from 'react';
+import { RegistrationForm } from '../../widgets/RegistrationForm';
 
 export const Registration = () => {
-  return <div className="text-center text-4xl">Registration page</div>;
+  return <RegistrationForm />;
 };

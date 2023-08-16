@@ -12,6 +12,21 @@ export const Basic: Story = {
   args: {
     placeholder: 'Alex',
   },
+  parameters: {
+    backgrounds: {
+      default: 'light',
+      values: [
+        {
+          name: 'light',
+          value: '#FFFFFF',
+        },
+        {
+          name: 'dark',
+          value: '#252B42',
+        },
+      ],
+    },
+  },
 };
 
 export const Disabled: Story = {

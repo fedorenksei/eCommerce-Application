@@ -5,28 +5,28 @@ export default {
   theme: {
     extend: {
       colors: {
-        'card-color': '#ECECEC',
+        'bg-color': '#FFFFFF',
+
+        'text-color': '#252B42',
+        'second-text-color': '#737373',
+
+        //DARK THEME
+        'dt-bg-color': '#252B42',
+
+        'dt-text-color': '#FFFFFF',
+        'dt-second-text-color': '#FFFFFF',
+
+        //COMMON
         'primary-color': '#23A6F0',
-        'secondary-color': '#FAFAFA',
         'accent-color': '#23856D',
         'hover-color': '#2A7CC7',
         'disable-color': '#8EC2F2',
         'success-color': '#2DC071',
         'alert-color': '#E77C40',
         'danger-color': '#E74040',
-        'fade-text-color': '#737373',
-
-        //DARK THEME
-        'dt-card-color': '#3C403D',
-        'dt-primary-color': '#23A6F0',
-        'dt-secondary-color': '#252B42',
-        'dt-accent-color': '#23856D',
-        'dt-hover-color': '#2A7CC7',
-        'dt-disable-color': '#8EC2F2',
-        'dt-success-color': '#2DC071',
-        'dt-alert-color': '#E77C40',
-        'dt-danger-color': '#E74040',
-        'dt-fade-text-color': '#737373',
+      },
+      fontFamily: {
+        primary: ['Montserrat'],
       },
     },
   },

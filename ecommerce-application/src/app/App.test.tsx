@@ -26,5 +26,5 @@ test('landing bad page', async () => {
     </MemoryRouter>
   );
 
-  expect(screen.getByText('NotFound')).toBeInTheDocument();
+  expect(screen.getByText('Not found')).toBeInTheDocument();
 });

@@ -48,7 +48,7 @@ export class ServerAPI {
   }
 
   private async updateTokens() {
-    //! Доделать
+    //!TODO Доделать
     const refreshToken = localStorage.getItem('test-customer-refresh-token');
 
     const link = `${this.AUTH_URL}/oauth/token?grant_type=refresh_token&refresh_token=${refreshToken}`;
@@ -91,10 +91,10 @@ export class ServerAPI {
   }
 
   public async createNewCustomer(customerInfo: INewCustomerInfo) {
-    console.log('creating customer...');
     const link = `${this.API_URL}/${this.KEY}/customers`;
     let isOk = false;
-    let res = null;
+    // commented code need for future auto login
+    // let res = null;
 
     try {
       const response = await fetch(link, {
@@ -105,10 +105,9 @@ export class ServerAPI {
         body: JSON.stringify(customerInfo),
       });
       isOk = response.ok;
-      res = await response.json();
-      console.log(res);
-    } catch (error) {
-      console.log(error);
+      // res = await response.json();
+    } catch (e) {
+      console.log(e);
     }
 
     return isOk;

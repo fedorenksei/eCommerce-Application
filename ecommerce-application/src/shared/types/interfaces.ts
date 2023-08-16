@@ -1,6 +1,6 @@
 import { Countries } from './enums';
 
-export interface ICustomer {
+export interface CustomerInputData {
   email: string;
   password: string;
   passwordConfirm: string;
@@ -9,13 +9,13 @@ export interface ICustomer {
   dateOfBirth: string;
 }
 
-export interface IFirstStepForm {
-  customerInfo: ICustomer;
+export interface FirstStepFormProps {
+  customerInfo: CustomerInputData;
   key: string;
-  onSubmit: (arg: ICustomer) => void;
+  onSubmit: (arg: CustomerInputData) => void;
 }
 
-export interface IAddress {
+export interface CustomerInputAddress {
   country: Countries;
   shippingCity: string;
   shippingStreet: string;
@@ -27,27 +27,27 @@ export interface IAddress {
   billingIsDefault?: boolean;
 }
 
-export interface ISecondStepForm {
-  customerAddres: IAddress;
+export interface SecondStepProps {
+  customerAddress: CustomerInputAddress;
   key: string;
-  onSubmit: (arg: IAddress) => void;
+  onSubmit: (arg: CustomerInputAddress) => void;
   onBackClick: () => void;
 }
 
-export interface INewCustomerInfo {
+export interface NewCustomerInfo {
   email: string;
   password: string;
   firstName: string;
   lastname: string;
   dateOfBirth: string;
-  addresses: ICustomerAddress[];
+  addresses: CustomerAddress[];
   shippingAddresses: number[];
   defaultShippingAddress?: number;
   billingAddresses: number[];
   defaultBillingAddress?: number;
 }
 
-export interface ICustomerAddress {
+export interface CustomerAddress {
   country: string;
   streetName: string;
   city: string;

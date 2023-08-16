@@ -1,17 +1,21 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { ICustomer, IFirstStepForm } from '../../../shared/types/interfaces';
+import {
+  CustomerInputData,
+  FirstStepFormProps,
+} from '../../../shared/types/interfaces';
 
-export const FirstStepForm = (props: IFirstStepForm) => {
+export const FirstStepForm = (props: FirstStepFormProps) => {
   const { register, handleSubmit, watch, trigger, formState } =
-    useForm<ICustomer>({
+    useForm<CustomerInputData>({
       defaultValues: props.customerInfo,
       mode: 'onChange',
     });
 
   const validateDate = (value: string) => {
     const age =
-      (new Date().getTime() - +new Date(value)) / (24 * 3600 * 365.25 * 1000);
+      (new Date().getTime() - +new Date(value)) /
+      (24 * 60 * 60 * 365.25 * 1000);
     if (age < 13) {
       return 'User should be above a 13 years';
     }

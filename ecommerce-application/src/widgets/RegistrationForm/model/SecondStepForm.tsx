@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { IAddress, ISecondStepForm } from '../../../shared/types/interfaces';
+import {
+  CustomerInputAddress,
+  SecondStepProps,
+} from '../../../shared/types/interfaces';
 
-export const SecondStepForm = (props: ISecondStepForm) => {
-  const { register, handleSubmit, formState, trigger } = useForm<IAddress>({
-    defaultValues: props.customerAddres,
-    mode: 'onChange',
-  });
+export const SecondStepForm = (props: SecondStepProps) => {
+  const { register, handleSubmit, formState, trigger } =
+    useForm<CustomerInputAddress>({
+      defaultValues: props.customerAddress,
+      mode: 'onChange',
+    });
 
   const [isAddressSame, setIsAddressSame] = useState(false);
 

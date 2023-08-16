@@ -1,22 +1,22 @@
 import {
-  IAddress,
-  ICustomer,
-  ICustomerAddress,
-  INewCustomerInfo,
+  CustomerInputAddress,
+  CustomerInputData,
+  CustomerAddress,
+  NewCustomerInfo,
 } from '../types/interfaces';
 
 export const newCustomerTransformInfo = (
-  firstFormDate: ICustomer,
-  secondFormData: IAddress
+  firstFormDate: CustomerInputData,
+  secondFormData: CustomerInputAddress
 ) => {
-  const shippingAddress: ICustomerAddress = {
+  const shippingAddress: CustomerAddress = {
     country: secondFormData.country,
     city: secondFormData.shippingCity,
     streetName: secondFormData.shippingStreet,
     postalCode: secondFormData.shippingCode,
   };
 
-  let billingAddress: ICustomerAddress | null = null;
+  let billingAddress: CustomerAddress | null = null;
 
   const isBillingAddressNotTheSame =
     secondFormData.billingCity &&
@@ -32,10 +32,10 @@ export const newCustomerTransformInfo = (
     };
   }
 
-  const addresses: ICustomerAddress[] = [shippingAddress];
+  const addresses: CustomerAddress[] = [shippingAddress];
   billingAddress && addresses.push(billingAddress);
 
-  const customerInfo: INewCustomerInfo = {
+  const customerInfo: NewCustomerInfo = {
     email: firstFormDate.email,
     password: firstFormDate.password,
     firstName: firstFormDate.firstName,

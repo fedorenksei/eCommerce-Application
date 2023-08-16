@@ -5,13 +5,13 @@ import { SecondStepForm } from './model/SecondStepForm';
 import { useDoubleStepForm } from './hooks/useDoubleStepForm';
 import { Countries } from '../../shared/types/enums';
 import {
-  IAddress,
-  ICustomer,
-  INewCustomerInfo,
+  CustomerInputAddress,
+  CustomerInputData,
+  NewCustomerInfo,
 } from '../../shared/types/interfaces';
 import { newCustomerTransformInfo } from '../../shared/utils/newCustomerInfoTransformer';
 import { ServerAPI } from '../../shared/api/ServerAPI';
-import Spinner from '../../shared/components/Spinner';
+import Spinner from '../../shared/ui/Spinner';
 
 export const RegistrationForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +29,7 @@ export const RegistrationForm = () => {
 
   const [customerInfo, setCustomerInfo] = useState(defaultCustomerInfo);
 
-  let customerAddress: IAddress = {
+  let customerAddress: CustomerInputAddress = {
     country: Countries.US,
     shippingCity: '',
     shippingStreet: '',
@@ -42,7 +42,7 @@ export const RegistrationForm = () => {
   };
 
   const finishForm = async () => {
-    const newCustomerData: INewCustomerInfo = newCustomerTransformInfo(
+    const newCustomerData: NewCustomerInfo = newCustomerTransformInfo(
       customerInfo,
       customerAddress
     );
@@ -56,7 +56,7 @@ export const RegistrationForm = () => {
     if (res) navigate('/');
   };
 
-  const firstStepOnSubmit = (currCustomerInfo: ICustomer) => {
+  const firstStepOnSubmit = (currCustomerInfo: CustomerInputData) => {
     setCustomerInfo({ ...currCustomerInfo });
     nextStep();
   };
@@ -68,7 +68,7 @@ export const RegistrationForm = () => {
     prevStep();
   };
 
-  const secondStepOnSubmit = (currCustomerAddress: IAddress) => {
+  const secondStepOnSubmit = (currCustomerAddress: CustomerInputAddress) => {
     customerAddress = { ...currCustomerAddress };
     finishForm();
     setCustomerInfo((customerInfo) => {
@@ -85,35 +85,38 @@ export const RegistrationForm = () => {
     <SecondStepForm
       onSubmit={secondStepOnSubmit}
       onBackClick={secondStepOnBackClick}
-      customerAddres={customerAddress}
+      customerAddress={customerAddress}
       key={'2'}
     />,
   ];
 
   const { currStepElem, nextStep, prevStep } = useDoubleStepForm(steps);
 
-  return (
-    <div className="bg-slate-800 p-10 text-white">
-      {isLoading ? (
-        <div className="flex justify-center items-center">
-          <Spinner />
-        </div>
-      ) : isError ? (
-        <div className="flex flex-col mx-auto">
-          <span>User already exist</span>
-          <button
-            className="bg-white text-slate-800"
-            onClick={() => {
-              setIsError(false);
-              prevStep();
-            }}
-          >
-            To form
-          </button>
-        </div>
-      ) : (
-        currStepElem
-      )}
-    </div>
-  );
+  let elem = null;
+  if (isLoading) {
+    elem = (
+      <div className="flex justify-center items-center">
+        <Spinner />
+      </div>
+    );
+  } else if (isError) {
+    elem = (
+      <div className="flex flex-col mx-auto">
+        <span>User already exist</span>
+        <button
+          className="bg-white text-slate-800"
+          onClick={() => {
+            setIsError(false);
+            prevStep();
+          }}
+        >
+          To form
+        </button>
+      </div>
+    );
+  } else {
+    elem = currStepElem;
+  }
+
+  return <div className="bg-slate-800 p-10 text-white">{elem}</div>;
 };

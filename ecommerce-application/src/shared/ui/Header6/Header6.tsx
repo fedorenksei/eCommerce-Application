@@ -1,13 +1,15 @@
 import React from 'react';
+import { TextComponentProps } from '../../types/interfaces';
+import clsx from 'clsx';
 
-type Props = React.ComponentPropsWithoutRef<'p'>;
-
-/**
- * Wrap content into this component to apply styles of 6th header.
- */
-export const Header6 = ({ children }: Props) => {
+export const Header6 = ({ children }: TextComponentProps) => {
   return (
-    <h6 className="text-slate-800 text-sm font-bold leading-normal tracking-tight">
+    <h6
+      className={clsx(
+        'text-base font-bold',
+        'text-text-color dark:text-dt-text-color',
+      )}
+    >
       {children}
     </h6>
   );

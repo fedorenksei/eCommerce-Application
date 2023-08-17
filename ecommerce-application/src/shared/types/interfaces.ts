@@ -53,7 +53,3 @@ export interface CustomerAddress {
   city: string;
   postalCode: string;
 }
-
-export interface TextComponentProps {
-  children: string;
-}

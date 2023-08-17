@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
-import { Header6 } from '.';
+import { Text } from './Text';
 
 test('Element renders', () => {
   const text = 'A test header';
-  render(<Header6>{text}</Header6>);
+  render(<Text type="h1">{text}</Text>);
   expect(screen.getByText(text)).toBeInTheDocument();
 });

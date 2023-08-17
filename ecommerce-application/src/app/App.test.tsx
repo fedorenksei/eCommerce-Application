@@ -14,7 +14,7 @@ test('component just rendering', async () => {
   expect(screen.getByText('Login page')).toBeInTheDocument();
 
   await userEvent.click(screen.getByText('Registration'));
-  expect(screen.getByText('Registration page')).toBeInTheDocument();
+  expect(screen.getByText('Confirm password')).toBeInTheDocument();
 });
 
 test('landing bad page', async () => {
@@ -23,7 +23,7 @@ test('landing bad page', async () => {
   render(
     <MemoryRouter initialEntries={[badRoute]}>
       <AppComponent />
-    </MemoryRouter>
+    </MemoryRouter>,
   );
 
   expect(screen.getByText('Not found')).toBeInTheDocument();

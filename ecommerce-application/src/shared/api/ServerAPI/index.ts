@@ -152,12 +152,22 @@ export class ServerAPI {
       console.log(e);
     }
 
+    if (isOk) {
+      this.loginCustomer({
+        email: customerInfo.email,
+        password: customerInfo.password,
+      });
+    }
+
     console.log(res);
     return isOk;
   }
 
   public async loginCustomer(loginData: LoginData) {
-    const link = `${this.AUTH_URL}/oauth/${this.KEY}/customers/token?grant_type=password&username=${loginData.email}&password=${loginData.password}`;
+    const email = encodeURIComponent(loginData.email);
+    const password = encodeURIComponent(loginData.password);
+    const link = `${this.AUTH_URL}/oauth/${this.KEY}/customers/token?grant_type=password&username=${email}&password=${password}`;
+    console.log(link);
     let isOk = false;
     let res = null;
 

@@ -73,12 +73,12 @@ export const LoginForm = () => {
               value: true,
               message: 'Field is require',
             },
-            /* pattern: {
+            pattern: {
               value:
                 /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
               message:
                 'Password should contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (such as @$!%*?&)',
-            }, */
+            },
           })}
           type="password"
           className="text-blue-950"

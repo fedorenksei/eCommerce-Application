@@ -5,6 +5,6 @@ import { Text } from './Text';
 
 test('Element renders', () => {
   const text = 'A test header';
-  render(<Text type="h1">{text}</Text>);
+  render(<Text tag="h5">{text}</Text>);
   expect(screen.getByText(text)).toBeInTheDocument();
 });

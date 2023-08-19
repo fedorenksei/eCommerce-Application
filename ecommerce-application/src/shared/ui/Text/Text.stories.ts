@@ -15,21 +15,21 @@ const LOREM_IPSUM = {
 
 export const Header3: Story = {
   args: {
-    text: LOREM_IPSUM.short,
+    children: LOREM_IPSUM.short,
     tag: 'h3',
   },
 };
 
 export const Paragraph: Story = {
   args: {
-    text: LOREM_IPSUM.long,
+    children: LOREM_IPSUM.long,
     tag: 'p',
   },
 };
 
 export const Example: Story = {
   args: {
-    text: 'paragraph',
+    children: 'paragraph',
     tag: 'p',
   },
 };

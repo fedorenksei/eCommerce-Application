@@ -4,7 +4,7 @@ import clsx from 'clsx';
 type HeaderTag = 'h3' | 'h5';
 
 type TextComponentProps = {
-  text: string;
+  children: string;
   tag: HeaderTag | 'p' | 'span';
   font?: HeaderTag | 'simple';
   color?: 'default' | 'second' | 'light' | 'primary';
@@ -12,12 +12,12 @@ type TextComponentProps = {
 
 /**
  * Abstract text component
- * @prop text - content of element
+ * @prop children - content of element
  * @prop tag - html tag (as string): `p`, `span`, `h1` - `h5`
  * @prop font (opt) - font styling: `'simple'` (default) as in paragraphs (default) and `h1` - `h5`
  */
 export const Text = ({
-  text,
+  children,
   tag,
   font,
   color = 'default',
@@ -46,7 +46,7 @@ export const Text = ({
         }[color],
       )}
     >
-      {text}
+      {children}
     </Tag>
   );
 };

@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { ServerAPI } from '../../shared/api/ServerAPI';
 import Spinner from '../../shared/ui/Spinner';
 import { LoginData } from '../../shared/types/interfaces';
+import { RootState } from '../../app/store';
 
 export const LoginForm = () => {
+  const auth = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (auth.isAuth) navigate('/');
+  }, [navigate, auth]);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const navigate = useNavigate();
   const serverAPI = ServerAPI.getInstance();
   const { register, handleSubmit, formState, resetField } = useForm({
     defaultValues: {

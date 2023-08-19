@@ -40,7 +40,6 @@ test('landing bad page', async () => {
       <MemoryRouter initialEntries={[badRoute]}>
         <AppComponent />
       </MemoryRouter>
-      ,
     </Provider>,
   );
 

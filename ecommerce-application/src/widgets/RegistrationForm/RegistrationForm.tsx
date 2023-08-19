@@ -104,7 +104,7 @@ export const RegistrationForm = () => {
       <div className="flex flex-col mx-auto">
         <span>User already exist</span>
         <button
-          className="bg-white text-slate-800"
+          className="bg-bg-color"
           onClick={() => {
             setIsError(false);
             prevStep();
@@ -118,5 +118,5 @@ export const RegistrationForm = () => {
     elem = currStepElem;
   }
 
-  return <div className="bg-slate-800 p-10 text-white">{elem}</div>;
+  return <div className="form-bp:p-10 p-5">{elem}</div>;
 };

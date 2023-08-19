@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 
 type TextStyleParams = {
-  font?: 'simple' | 'h3' | 'h5';
+  font?: 'simple' | 'h2' | 'h3' | 'h5';
   color?: 'default' | 'second' | 'light' | 'primary';
 };
 
@@ -12,6 +12,7 @@ export function getTextStyles({
   return clsx(
     'font-[Montserrat] tracking-[0.2px]',
     {
+      h2: 'text-[40px] leading-[57px] font-bold',
       h3: 'text-2xl font-bold',
       h5: 'text-base font-bold',
       simple: 'text-sm font-medium',
@@ -44,7 +45,7 @@ export function getButtonStyles({
   });
 
   return clsx(
-    'items-center inline-flex',
+    'w-max inline-flex justify-center items-center',
     'transition-all',
     [
       size === 'small' && 'px-[20px] py-[10px] gap-[10px]',
@@ -53,8 +54,8 @@ export function getButtonStyles({
     '!outline-none',
     {
       filled: [
-        'bg-primary-color',
-        !disabled && 'hover:bg-hover-color',
+        !disabled && 'bg-primary-color hover:bg-hover-color',
+        disabled && 'bg-disabled-color',
         'focus:ring-2 focus:ring-dt-bg-color dark:focus:ring-bg-color',
       ],
       transparent: [

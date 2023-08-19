@@ -4,6 +4,10 @@ import {
   CustomerInputData,
   FirstStepFormProps,
 } from '../../../shared/types/interfaces';
+import { TextInputGroup } from '../../../shared/ui/forms/TextInputGroup';
+import { Form } from '../../../shared/ui/forms/Form';
+import { FormButton } from '../../../shared/ui/forms/FormButton';
+import { Header2 } from '../../../shared/ui/Header2';
 
 export const FirstStepForm = (props: FirstStepFormProps) => {
   const { register, handleSubmit, watch, trigger, formState } =
@@ -22,14 +26,14 @@ export const FirstStepForm = (props: FirstStepFormProps) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(props.onSubmit)}
-      className="flex flex-col gap-10 items-center w-96 mx-auto"
-    >
-      <label className="flex justify-between w-full gap-3 relative">
-        Email
-        <input
-          {...register('email', {
+    <>
+      <div className="flex justify-center mb-10">
+        <Header2>Registration</Header2>
+      </div>
+      <Form onSubmit={handleSubmit(props.onSubmit)}>
+        <TextInputGroup
+          label="Email"
+          register={register('email', {
             required: {
               value: true,
               message: 'Field is require',
@@ -40,19 +44,12 @@ export const FirstStepForm = (props: FirstStepFormProps) => {
               message: 'Invalid email',
             },
           })}
-          type="text"
-          className="text-blue-950"
+          error={formState.errors?.email?.message}
         />
-        {formState.errors?.email && (
-          <div className="text-red-600 absolute top-0 left-full w-full mx-4">
-            {formState.errors.email.message}
-          </div>
-        )}
-      </label>
-      <label className="flex justify-between w-full gap-3 relative">
-        Password
-        <input
-          {...register('password', {
+
+        <TextInputGroup
+          label="Password"
+          register={register('password', {
             onChange: async () => await trigger('passwordConfirm'),
             required: {
               value: true,
@@ -66,18 +63,12 @@ export const FirstStepForm = (props: FirstStepFormProps) => {
             },
           })}
           type="password"
-          className="text-blue-950"
+          error={formState.errors?.password?.message}
         />
-        {formState.errors?.password && (
-          <div className="text-red-600 absolute top-0 left-full w-full mx-4">
-            {formState.errors.password.message}
-          </div>
-        )}
-      </label>
-      <label className="flex justify-between w-full gap-3 relative">
-        Confirm password
-        <input
-          {...register('passwordConfirm', {
+
+        <TextInputGroup
+          label="Confirm password"
+          register={register('passwordConfirm', {
             required: {
               value: true,
               message: 'Field is require',
@@ -89,18 +80,12 @@ export const FirstStepForm = (props: FirstStepFormProps) => {
             },
           })}
           type="password"
-          className="text-blue-950"
+          error={formState.errors?.passwordConfirm?.message}
         />
-        {formState.errors?.passwordConfirm && (
-          <div className="text-red-600 absolute top-0 left-full w-full mx-4">
-            {formState.errors.passwordConfirm.message}
-          </div>
-        )}
-      </label>
-      <label className="flex justify-between w-full gap-3 relative">
-        First name
-        <input
-          {...register('firstName', {
+
+        <TextInputGroup
+          label="First name"
+          register={register('firstName', {
             required: {
               value: true,
               message: 'Field is require',
@@ -111,19 +96,12 @@ export const FirstStepForm = (props: FirstStepFormProps) => {
                 'Must contain at least one character and no special characters or numbers',
             },
           })}
-          type="text"
-          className="text-blue-950"
+          error={formState.errors?.firstName?.message}
         />
-        {formState.errors?.firstName && (
-          <div className="text-red-600 absolute top-0 left-full w-full mx-4">
-            {formState.errors.firstName.message}
-          </div>
-        )}
-      </label>
-      <label className="flex justify-between w-full gap-3 relative">
-        Last name
-        <input
-          {...register('lastName', {
+
+        <TextInputGroup
+          label="Last name"
+          register={register('lastName', {
             required: {
               value: true,
               message: 'Field is require',
@@ -134,19 +112,12 @@ export const FirstStepForm = (props: FirstStepFormProps) => {
                 'Must contain at least one character and no special characters or numbers',
             },
           })}
-          type="text"
-          className="text-blue-950"
+          error={formState.errors?.lastName?.message}
         />
-        {formState.errors?.lastName && (
-          <div className="text-red-600 absolute top-0 left-full w-full mx-4">
-            {formState.errors.lastName.message}
-          </div>
-        )}
-      </label>
-      <label className="flex justify-between w-full gap-3 relative">
-        Date of birth
-        <input
-          {...register('dateOfBirth', {
+
+        <TextInputGroup
+          label="Date of birth"
+          register={register('dateOfBirth', {
             required: {
               value: true,
               message: 'Field is require',
@@ -154,20 +125,18 @@ export const FirstStepForm = (props: FirstStepFormProps) => {
             validate: validateDate,
           })}
           type="date"
-          className="text-blue-950"
+          error={formState.errors?.dateOfBirth?.message}
         />
-        {formState.errors?.dateOfBirth && (
-          <div className="text-red-600 absolute top-0 left-full w-full mx-4">
-            {formState.errors.dateOfBirth.message}
-          </div>
-        )}
-      </label>
-      <button
-        disabled={!formState.isDirty || !formState.isValid}
-        type="submit"
-      >
-        Next step
-      </button>
-    </form>
+
+        <div className="form-bp:col-span-2 justify-self-end">
+          <FormButton
+            disabled={!formState.isDirty || !formState.isValid}
+            type="submit"
+          >
+            Next step
+          </FormButton>
+        </div>
+      </Form>
+    </>
   );
 };

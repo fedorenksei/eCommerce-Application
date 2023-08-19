@@ -1,11 +1,16 @@
 import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
 import { Main } from '../../pages/Main';
 import { Registration } from '../../pages/Registration';
 import { Login } from '../../pages/Login';
 import { NotFound } from '../../pages/NotFound';
 
 export const Header = () => {
+  const auth = useSelector((state: RootState) => state.auth);
+  const customerData = useSelector((state: RootState) => state.customerData);
+
   return (
     <>
       <header>
@@ -13,14 +18,22 @@ export const Header = () => {
           <li>
             <Link to="/">Main</Link>
           </li>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-          <li>
-            <Link to="/registration">Registration</Link>
-          </li>
+          {!auth.isAuth && (
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+          )}
+          {!auth.isAuth && (
+            <li>
+              <Link to="/registration">Registration</Link>
+            </li>
+          )}
         </ul>
       </header>
+      {<div>Is user login: {String(auth.isAuth)}</div>}
+      {customerData.customerData && (
+        <div>{JSON.stringify(customerData.customerData)}</div>
+      )}
       <Routes>
         <Route
           path="/"

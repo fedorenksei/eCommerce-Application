@@ -1,9 +1,18 @@
-import { LoginData, NewCustomerInfo } from '../../types/interfaces';
+import store from '../../../app/store';
+import {
+  CustomerData,
+  LoginData,
+  NewCustomerInfo,
+} from '../../types/interfaces';
+import { setAuth } from '../../store/isAuthSlice';
+import { setCustomerData } from '../../store/customerDataSlice';
 
 export class ServerAPI {
   private static instance: ServerAPI;
   private accessToken: string | null;
   private refreshToken: string | null;
+  private customerID: string | null;
+  private customerInfo: null | CustomerData;
   private readonly prefix: string;
   private readonly KEY: string;
   private readonly CLIENT_ID: string;
@@ -16,6 +25,8 @@ export class ServerAPI {
   constructor() {
     this.accessToken = null;
     this.refreshToken = null;
+    this.customerID = null;
+    this.customerInfo = null;
     this.prefix = 'nkj1k238sadQ';
     this.KEY = 'ecommerce-application-creative-team';
     this.CLIENT_ID = '2S2FwbXYw3IAoCFUFaIeHqAi';
@@ -35,9 +46,12 @@ export class ServerAPI {
 
   public async preflight() {
     this.loadTokens();
+
     if (this.refreshToken) {
-      // this.updateTokens();
-      console.log('Updating token coming soon :)');
+      const res = await this.updateTokens();
+      if (res === false) {
+        this.getCommonToken();
+      }
     } else {
       this.getCommonToken();
     }
@@ -48,24 +62,46 @@ export class ServerAPI {
     this.refreshToken = localStorage.getItem(`${this.prefix}-refresh-token`);
   }
 
-  /*   private async updateTokens() {
-    //!TODO Доделать
-    const refreshToken = localStorage.getItem('test-customer-refresh-token');
+  private async updateTokens() {
+    const link = `${this.AUTH_URL}/oauth/token?grant_type=refresh_token&refresh_token=${this.refreshToken}`;
 
-    const link = `${this.AUTH_URL}/oauth/token?grant_type=refresh_token&refresh_token=${refreshToken}`;
+    let isOk = false;
+    let res = null;
 
-    const response = await fetch(link, {
-      method: 'POST',
-      headers: {
-        Authorization: `Basic ${btoa(
-          `${this.CLIENT_ID}:${this.CLIENT_SECRET}`,
-        )}`,
-      },
-    });
+    try {
+      const response = await fetch(link, {
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${btoa(
+            `${this.CLIENT_ID}:${this.CLIENT_SECRET}`,
+          )}`,
+        },
+      });
 
-    const res = await response.json();
-    console.log(res);
-  } */
+      isOk = response.ok;
+
+      if (isOk) {
+        res = await response.json();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (isOk) {
+      localStorage.setItem(`${this.prefix}-access-token`, res.access_token);
+      this.accessToken = res.access_token;
+      await this.getCustomerInfo();
+      console.log(this.customerInfo);
+      store.dispatch(
+        setAuth({
+          isAuth: true,
+        }),
+      );
+      return isOk;
+    }
+
+    return isOk;
+  }
 
   private async getCommonToken() {
     const link = `${this.AUTH_URL}/oauth/token?grant_type=client_credentials`;
@@ -94,8 +130,7 @@ export class ServerAPI {
   public async createNewCustomer(customerInfo: NewCustomerInfo) {
     const link = `${this.API_URL}/${this.KEY}/customers`;
     let isOk = false;
-    // commented code need for future auto login
-    // let res = null;
+    let res = null;
 
     try {
       const response = await fetch(link, {
@@ -106,17 +141,19 @@ export class ServerAPI {
         body: JSON.stringify(customerInfo),
       });
       isOk = response.ok;
-      // res = await response.json();
+      res = await response.json();
     } catch (e) {
       console.log(e);
     }
 
+    console.log(res);
     return isOk;
   }
 
   public async loginCustomer(loginData: LoginData) {
     const link = `${this.AUTH_URL}/oauth/${this.KEY}/customers/token?grant_type=password&username=${loginData.email}&password=${loginData.password}`;
     let isOk = false;
+    let res = null;
 
     try {
       const response = await fetch(link, {
@@ -128,18 +165,65 @@ export class ServerAPI {
         },
       });
       isOk = response.ok;
-      const res = await response.json();
-      console.log(res);
+
+      if (isOk) {
+        res = await response.json();
+      }
     } catch (e) {
       console.log(e);
     }
 
-    /* this.accessToken = res.access_token;
-    this.refreshToken = res.refresh_token; */
-
-    /*     localStorage.setItem('test-customer-acc-token', res.access_token);
-    localStorage.setItem('test-customer-refresh-token', res.refresh_token); */
+    if (isOk) {
+      console.log(res);
+      localStorage.setItem(`${this.prefix}-access-token`, res.access_token);
+      localStorage.setItem(`${this.prefix}-refresh-token`, res.refresh_token);
+      this.accessToken = res.access_token;
+      this.refreshToken = res.refresh_token;
+      store.dispatch(
+        setAuth({
+          isAuth: true,
+        }),
+      );
+    }
 
     return isOk;
   }
+
+  private async getCustomerInfo() {
+    const link = `${this.API_URL}/${this.KEY}/me`;
+    let isOk = false;
+    let res = null;
+
+    try {
+      const response = await fetch(link, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+
+      isOk = response.ok;
+
+      if (isOk) {
+        res = await response.json();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (isOk) {
+      this.customerID = res.id;
+      this.customerInfo = {
+        email: res.email,
+      };
+      store.dispatch(
+        setCustomerData({
+          customerInfo: { ...this.customerInfo },
+        }),
+      );
+      console.log(res);
+    }
+  }
 }
+
+//! TODO удалить лишние консоль логи

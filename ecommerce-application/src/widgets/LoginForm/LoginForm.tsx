@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { ServerAPI } from '../../shared/api/ServerAPI';
 import Spinner from '../../shared/ui/Spinner';
 import { LoginData } from '../../shared/types/interfaces';
+import { RootState } from '../../app/store';
 
 export const LoginForm = () => {
+  const auth = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (auth.isAuth) navigate('/');
+  }, [navigate, auth]);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const navigate = useNavigate();
   const serverAPI = ServerAPI.getInstance();
   const { register, handleSubmit, formState, resetField } = useForm({
     defaultValues: {
@@ -66,12 +73,12 @@ export const LoginForm = () => {
               value: true,
               message: 'Field is require',
             },
-            pattern: {
+            /* pattern: {
               value:
                 /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
               message:
                 'Password should contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (such as @$!%*?&)',
-            },
+            }, */
           })}
           type="password"
           className="text-blue-950"
@@ -86,7 +93,7 @@ export const LoginForm = () => {
         disabled={!formState.isDirty || !formState.isValid}
         type="submit"
       >
-        Next step
+        Login
       </button>
     </form>
   );

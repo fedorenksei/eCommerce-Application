@@ -1,4 +1,4 @@
-import { INewCustomerInfo } from '../../types/interfaces';
+import { LoginData, NewCustomerInfo } from '../../types/interfaces';
 
 export class ServerAPI {
   private static instance: ServerAPI;
@@ -36,7 +36,8 @@ export class ServerAPI {
   public async preflight() {
     this.loadTokens();
     if (this.refreshToken) {
-      this.updateTokens();
+      // this.updateTokens();
+      console.log('Updating token coming soon :)');
     } else {
       this.getCommonToken();
     }
@@ -47,7 +48,7 @@ export class ServerAPI {
     this.refreshToken = localStorage.getItem(`${this.prefix}-refresh-token`);
   }
 
-  private async updateTokens() {
+  /*   private async updateTokens() {
     //!TODO Доделать
     const refreshToken = localStorage.getItem('test-customer-refresh-token');
 
@@ -57,14 +58,14 @@ export class ServerAPI {
       method: 'POST',
       headers: {
         Authorization: `Basic ${btoa(
-          `${this.CLIENT_ID}:${this.CLIENT_SECRET}`
+          `${this.CLIENT_ID}:${this.CLIENT_SECRET}`,
         )}`,
       },
     });
 
     const res = await response.json();
     console.log(res);
-  }
+  } */
 
   private async getCommonToken() {
     const link = `${this.AUTH_URL}/oauth/token?grant_type=client_credentials`;
@@ -75,7 +76,7 @@ export class ServerAPI {
         method: 'POST',
         headers: {
           Authorization: `Basic ${btoa(
-            `${this.CLIENT_ID}:${this.CLIENT_SECRET}`
+            `${this.CLIENT_ID}:${this.CLIENT_SECRET}`,
           )}`,
         },
       });
@@ -90,7 +91,7 @@ export class ServerAPI {
     localStorage.setItem(`${this.prefix}-access-token`, token);
   }
 
-  public async createNewCustomer(customerInfo: INewCustomerInfo) {
+  public async createNewCustomer(customerInfo: NewCustomerInfo) {
     const link = `${this.API_URL}/${this.KEY}/customers`;
     let isOk = false;
     // commented code need for future auto login
@@ -109,6 +110,35 @@ export class ServerAPI {
     } catch (e) {
       console.log(e);
     }
+
+    return isOk;
+  }
+
+  public async loginCustomer(loginData: LoginData) {
+    const link = `${this.AUTH_URL}/oauth/${this.KEY}/customers/token?grant_type=password&username=${loginData.email}&password=${loginData.password}`;
+    let isOk = false;
+
+    try {
+      const response = await fetch(link, {
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${btoa(
+            `${this.CLIENT_ID}:${this.CLIENT_SECRET}`,
+          )}`,
+        },
+      });
+      isOk = response.ok;
+      const res = await response.json();
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+
+    /* this.accessToken = res.access_token;
+    this.refreshToken = res.refresh_token; */
+
+    /*     localStorage.setItem('test-customer-acc-token', res.access_token);
+    localStorage.setItem('test-customer-refresh-token', res.refresh_token); */
 
     return isOk;
   }

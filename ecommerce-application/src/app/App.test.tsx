@@ -14,7 +14,7 @@ test('component just rendering', async () => {
   expect(screen.getByText('Login page')).toBeInTheDocument();
 
   await userEvent.click(screen.getByText('Registration'));
-  expect(screen.getByText('Confirm password')).toBeInTheDocument();
+  expect(screen.getByText('Email')).toBeInTheDocument();
 });
 
 test('landing bad page', async () => {

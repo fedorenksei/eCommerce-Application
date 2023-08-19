@@ -86,7 +86,7 @@ export const LoginForm = () => {
         disabled={!formState.isDirty || !formState.isValid}
         type="submit"
       >
-        Next step
+        Login
       </button>
     </form>
   );

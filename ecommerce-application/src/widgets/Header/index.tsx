@@ -6,10 +6,12 @@ import { Main } from '../../pages/Main';
 import { Registration } from '../../pages/Registration';
 import { Login } from '../../pages/Login';
 import { NotFound } from '../../pages/NotFound';
+import { ServerAPI } from '../../shared/api/ServerAPI';
 
 export const Header = () => {
   const auth = useSelector((state: RootState) => state.auth);
   const customerData = useSelector((state: RootState) => state.customerData);
+  const serverAPI = ServerAPI.getInstance();
 
   return (
     <>
@@ -26,6 +28,11 @@ export const Header = () => {
           {!auth.isAuth && (
             <li>
               <Link to="/registration">Registration</Link>
+            </li>
+          )}
+          {auth.isAuth && (
+            <li>
+              <button onClick={() => serverAPI.logout()}>Logout</button>
             </li>
           )}
         </ul>

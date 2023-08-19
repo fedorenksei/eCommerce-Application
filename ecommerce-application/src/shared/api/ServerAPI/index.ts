@@ -48,8 +48,8 @@ export class ServerAPI {
     this.loadTokens();
 
     if (this.refreshToken) {
-      const res = await this.updateTokens();
-      if (res === false) {
+      const isUpdated = await this.updateTokens();
+      if (isUpdated === false) {
         this.getCommonToken();
       }
     } else {
@@ -60,6 +60,15 @@ export class ServerAPI {
   private loadTokens() {
     this.accessToken = localStorage.getItem(`${this.prefix}-access-token`);
     this.refreshToken = localStorage.getItem(`${this.prefix}-refresh-token`);
+  }
+
+  private saveTokens(accessToken: string, refreshToken?: string) {
+    localStorage.setItem(`${this.prefix}-access-token`, accessToken);
+    this.accessToken = accessToken;
+    if (refreshToken) {
+      localStorage.setItem(`${this.prefix}-refresh-token`, refreshToken);
+      this.refreshToken = refreshToken;
+    }
   }
 
   private async updateTokens() {
@@ -88,10 +97,8 @@ export class ServerAPI {
     }
 
     if (isOk) {
-      localStorage.setItem(`${this.prefix}-access-token`, res.access_token);
-      this.accessToken = res.access_token;
+      this.saveTokens(res.access_token);
       await this.getCustomerInfo();
-      console.log(this.customerInfo);
       store.dispatch(
         setAuth({
           isAuth: true,
@@ -123,8 +130,7 @@ export class ServerAPI {
     }
 
     if (!token) return;
-    this.accessToken = token;
-    localStorage.setItem(`${this.prefix}-access-token`, token);
+    this.saveTokens(token);
   }
 
   public async createNewCustomer(customerInfo: NewCustomerInfo) {
@@ -174,11 +180,8 @@ export class ServerAPI {
     }
 
     if (isOk) {
-      console.log(res);
-      localStorage.setItem(`${this.prefix}-access-token`, res.access_token);
-      localStorage.setItem(`${this.prefix}-refresh-token`, res.refresh_token);
-      this.accessToken = res.access_token;
-      this.refreshToken = res.refresh_token;
+      this.saveTokens(res.access_token, res.refresh_token);
+      await this.getCustomerInfo();
       store.dispatch(
         setAuth({
           isAuth: true,
@@ -223,6 +226,24 @@ export class ServerAPI {
       );
       console.log(res);
     }
+  }
+
+  public async logout() {
+    localStorage.removeItem(`${this.prefix}-access-token`);
+    localStorage.removeItem(`${this.prefix}-refresh-token`);
+    this.accessToken = null;
+    this.refreshToken = null;
+    store.dispatch(
+      setAuth({
+        isAuth: false,
+      }),
+    );
+    store.dispatch(
+      setCustomerData({
+        customerInfo: null,
+      }),
+    );
+    await this.getCommonToken();
   }
 }
 

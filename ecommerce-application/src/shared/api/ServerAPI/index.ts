@@ -136,7 +136,6 @@ export class ServerAPI {
   public async createNewCustomer(customerInfo: NewCustomerInfo) {
     const link = `${this.API_URL}/${this.KEY}/customers`;
     let isOk = false;
-    let res = null;
 
     try {
       const response = await fetch(link, {
@@ -147,7 +146,6 @@ export class ServerAPI {
         body: JSON.stringify(customerInfo),
       });
       isOk = response.ok;
-      res = await response.json();
     } catch (e) {
       console.log(e);
     }
@@ -158,8 +156,6 @@ export class ServerAPI {
         password: customerInfo.password,
       });
     }
-
-    console.log(res);
     return isOk;
   }
 
@@ -167,7 +163,6 @@ export class ServerAPI {
     const email = encodeURIComponent(loginData.email);
     const password = encodeURIComponent(loginData.password);
     const link = `${this.AUTH_URL}/oauth/${this.KEY}/customers/token?grant_type=password&username=${email}&password=${password}`;
-    console.log(link);
     let isOk = false;
     let res = null;
 
@@ -234,7 +229,6 @@ export class ServerAPI {
           customerInfo: { ...this.customerInfo },
         }),
       );
-      console.log(res);
     }
   }
 

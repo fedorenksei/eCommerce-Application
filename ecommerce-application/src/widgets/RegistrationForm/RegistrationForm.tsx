@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FirstStepForm } from './model/FirstStepForm';
 import { SecondStepForm } from './model/SecondStepForm';
 import { useDoubleStepForm } from './hooks/useDoubleStepForm';
@@ -118,5 +118,18 @@ export const RegistrationForm = () => {
     elem = currStepElem;
   }
 
-  return <div className="bg-slate-800 p-10 text-white">{elem}</div>;
+  return (
+    <div className="bg-slate-800 p-10 text-white">
+      {elem}
+      <span>
+        Already have an account?&nbsp;
+        <Link
+          className="text-primary-color hover:underline"
+          to={'/login'}
+        >
+          Sign in!
+        </Link>
+      </span>
+    </div>
+  );
 };

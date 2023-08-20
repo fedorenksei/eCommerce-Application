@@ -30,7 +30,7 @@ export const RegistrationForm = () => {
   const [customerInfo, setCustomerInfo] = useState(defaultCustomerInfo);
 
   let customerAddress: CustomerInputAddress = {
-    country: Countries.US,
+    country: Countries.DE,
     shippingCity: '',
     shippingStreet: '',
     shippingCode: '',

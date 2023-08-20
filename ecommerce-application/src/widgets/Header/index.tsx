@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
-import { Main } from '../../pages/Main';
-import { Registration } from '../../pages/Registration';
-import { Login } from '../../pages/Login';
-import { NotFound } from '../../pages/NotFound';
 import { ServerAPI } from '../../shared/api/ServerAPI';
 import { CustomerData } from '../../shared/types/interfaces';
 
@@ -94,24 +90,6 @@ export const Header = () => {
           <span className="w-full h-[2px] bg-text-color"></span>
         </button>
       </header>
-      <Routes>
-        <Route
-          path="/"
-          element={<Main />}
-        />
-        <Route
-          path="/login"
-          element={<Login />}
-        />
-        <Route
-          path="/registration"
-          element={<Registration />}
-        />
-        <Route
-          path="*"
-          element={<NotFound />}
-        />
-      </Routes>
     </>
   );
 };

@@ -35,8 +35,8 @@ export const SecondStepForm = (props: SecondStepProps) => {
           form="addressform"
           className="text-slate-900"
         >
-          <option value="US">United States</option>
           <option value="DE">Germany</option>
+          <option value="IT">Italy</option>
         </select>
       </CheckboxGroup>
 
@@ -79,8 +79,8 @@ export const SecondStepForm = (props: SecondStepProps) => {
             message: 'Field is require',
           },
           pattern: {
-            value: /(^\d{5}$)|(^\d{5}-\d{4}$)/,
-            message: 'Code format should be like 54321 or 12345-1234',
+            value: /(^\d{5}$)/,
+            message: 'Code format should be like 54321',
           },
         })}
         error={formState.errors?.shippingCode?.message}

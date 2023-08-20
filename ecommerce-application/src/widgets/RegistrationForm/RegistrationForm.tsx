@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FirstStepForm } from './model/FirstStepForm';
 import { SecondStepForm } from './model/SecondStepForm';
 import { useDoubleStepForm } from './hooks/useDoubleStepForm';
@@ -31,7 +31,7 @@ export const RegistrationForm = () => {
   const [customerInfo, setCustomerInfo] = useState(defaultCustomerInfo);
 
   let customerAddress: CustomerInputAddress = {
-    country: Countries.US,
+    country: Countries.DE,
     shippingCity: '',
     shippingStreet: '',
     shippingCode: '',
@@ -124,7 +124,18 @@ export const RegistrationForm = () => {
       <div className="flex justify-center mb-10">
         <Header2>Registration</Header2>
       </div>
+
       {elem}
+
+      <span>
+        Already have an account?&nbsp;
+        <Link
+          className="text-primary-color hover:underline"
+          to={'/login'}
+        >
+          Sign in!
+        </Link>
+      </span>
     </div>
   );
 };

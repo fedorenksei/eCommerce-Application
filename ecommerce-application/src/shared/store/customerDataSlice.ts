@@ -7,7 +7,6 @@ const customerDataSlice = createSlice({
   },
   reducers: {
     setCustomerData(state, action) {
-      console.log(action);
       state.customerData = action.payload.customerInfo;
     },
   },

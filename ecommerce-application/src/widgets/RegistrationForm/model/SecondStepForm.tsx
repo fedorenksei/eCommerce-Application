@@ -4,6 +4,11 @@ import {
   CustomerInputAddress,
   SecondStepProps,
 } from '../../../shared/types/interfaces';
+import { Form } from '../../../shared/ui/forms/Form';
+import { Header3 } from '../../../shared/ui/text/Header3';
+import { TextInputGroup } from '../../../shared/ui/forms/TextInputGroup';
+import { FormButton } from '../../../shared/ui/forms/FormButton';
+import { CheckboxGroup } from '../../../shared/ui/forms/CheckboxGroup';
 
 export const SecondStepForm = (props: SecondStepProps) => {
   const { register, handleSubmit, formState, trigger } =
@@ -20,13 +25,11 @@ export const SecondStepForm = (props: SecondStepProps) => {
   };
 
   return (
-    <form
+    <Form
       id="addressform"
       onSubmit={handleSubmit(props.onSubmit)}
-      className="flex flex-col gap-10 items-center w-96 mx-auto"
     >
-      <label className="flex justify-between w-full gap-3 relative">
-        Country
+      <CheckboxGroup label="Choose the Country">
         <select
           name="user_profile_color_1"
           form="addressform"
@@ -35,13 +38,81 @@ export const SecondStepForm = (props: SecondStepProps) => {
           <option value="DE">Germany</option>
           <option value="IT">Italy</option>
         </select>
-      </label>
-      <div className="flex flex-col gap-10 items-center w-96 mx-auto">
-        <h3>Shipping address</h3>
-        <label className="flex justify-between w-full gap-3 relative">
-          City
-          <input
-            {...register('shippingCity', {
+      </CheckboxGroup>
+
+      <div className="form-bp:col-span-2">
+        <Header3>Shipping address</Header3>
+      </div>
+
+      <TextInputGroup
+        label="City"
+        register={register('shippingCity', {
+          required: {
+            value: true,
+            message: 'Field is require',
+          },
+          pattern: {
+            value: /^[a-zA-Z]*$/,
+            message:
+              'Must contain at least one character and no special characters or numbers',
+          },
+        })}
+        error={formState.errors?.shippingCity?.message}
+      />
+
+      <TextInputGroup
+        label="Street"
+        register={register('shippingStreet', {
+          required: {
+            value: true,
+            message: 'Field is require',
+          },
+        })}
+        error={formState.errors?.shippingStreet?.message}
+      />
+
+      <TextInputGroup
+        label="Postal code"
+        register={register('shippingCode', {
+          required: {
+            value: true,
+            message: 'Field is require',
+          },
+          pattern: {
+            value: /(^\d{5}$)/,
+            message: 'Code format should be like 54321',
+          },
+        })}
+        error={formState.errors?.shippingCode?.message}
+      />
+
+      <CheckboxGroup
+        label="Set address as default"
+        error={formState.errors?.shippingIsDefault?.message}
+      >
+        <input
+          type="checkbox"
+          {...register('shippingIsDefault', {})}
+        />
+      </CheckboxGroup>
+
+      <CheckboxGroup label="My billing and shipping address is the same">
+        <input
+          type="checkbox"
+          checked={isAddressSame}
+          onChange={toggleIsAddressSame}
+        />
+      </CheckboxGroup>
+
+      {!isAddressSame && (
+        <>
+          <div className="form-bp:col-span-2">
+            <Header3>Billing address</Header3>
+          </div>
+
+          <TextInputGroup
+            label="City"
+            register={register('billingCity', {
               required: {
                 value: true,
                 message: 'Field is require',
@@ -52,37 +123,23 @@ export const SecondStepForm = (props: SecondStepProps) => {
                   'Must contain at least one character and no special characters or numbers',
               },
             })}
-            type="text"
-            className="text-blue-950"
+            error={formState.errors?.billingCity?.message}
           />
-          {formState.errors?.shippingCity && (
-            <div className="text-red-600 absolute top-0 left-full w-full mx-4">
-              {formState.errors.shippingCity.message}
-            </div>
-          )}
-        </label>
-        <label className="flex justify-between w-full gap-3 relative">
-          Street
-          <input
-            {...register('shippingStreet', {
+
+          <TextInputGroup
+            label="Street"
+            register={register('billingStreet', {
               required: {
                 value: true,
                 message: 'Field is require',
               },
             })}
-            type="text"
-            className="text-blue-950"
+            error={formState.errors?.billingStreet?.message}
           />
-          {formState.errors?.shippingStreet && (
-            <div className="text-red-600 absolute top-0 left-full w-full mx-4">
-              {formState.errors.shippingStreet.message}
-            </div>
-          )}
-        </label>
-        <label className="flex justify-between w-full gap-3 relative">
-          Postal code
-          <input
-            {...register('shippingCode', {
+
+          <TextInputGroup
+            label="Postal code"
+            register={register('billingCode', {
               required: {
                 value: true,
                 message: 'Field is require',
@@ -92,137 +149,36 @@ export const SecondStepForm = (props: SecondStepProps) => {
                 message: 'Code format should be like 54321',
               },
             })}
-            type="text"
-            className="text-blue-950"
+            error={formState.errors?.billingCode?.message}
           />
-          {formState.errors?.shippingCode && (
-            <div className="text-red-600 absolute top-0 left-full w-full mx-4">
-              {formState.errors.shippingCode.message}
-            </div>
-          )}
-        </label>
-        <label className="flex justify-between w-full gap-3 relative">
-          Set address as default
-          <input
-            {...register('shippingIsDefault', {})}
-            type="checkbox"
-            className="text-blue-950"
-          />
-          {formState.errors?.shippingIsDefault && (
-            <div className="text-red-600 absolute top-0 left-full w-full mx-4">
-              {formState.errors.shippingIsDefault.message}
-            </div>
-          )}
-        </label>
-      </div>
 
-      <div className="w-full flex flex-row-reverse justify-between">
-        <input
-          type="checkbox"
-          checked={isAddressSame}
-          onChange={toggleIsAddressSame}
-        />
-        <span>My billing and shipping address is the same</span>
-      </div>
-
-      {!isAddressSame && (
-        <div className="flex flex-col gap-10 items-center w-96 mx-auto">
-          <h3>Billing address</h3>
-          <label className="flex justify-between w-full gap-3 relative">
-            City
+          <CheckboxGroup
+            label="Set address as default"
+            error={formState.errors?.billingIsDefault?.message}
+          >
             <input
-              {...register('billingCity', {
-                required: {
-                  value: true,
-                  message: 'Field is require',
-                },
-                pattern: {
-                  value: /^[a-zA-Z]*$/,
-                  message:
-                    'Must contain at least one character and no special characters or numbers',
-                },
-              })}
-              type="text"
-              className="text-blue-950"
-            />
-            {formState.errors?.billingCity && (
-              <div className="text-red-600 absolute top-0 left-full w-full mx-4">
-                {formState.errors.billingCity.message}
-              </div>
-            )}
-          </label>
-          <label className="flex justify-between w-full gap-3 relative">
-            Street
-            <input
-              {...register('billingStreet', {
-                required: {
-                  value: true,
-                  message: 'Field is require',
-                },
-              })}
-              type="text"
-              className="text-blue-950"
-            />
-            {formState.errors?.billingStreet && (
-              <div className="text-red-600 absolute top-0 left-full w-full mx-4">
-                {formState.errors.billingStreet.message}
-              </div>
-            )}
-          </label>
-          <label className="flex justify-between w-full gap-3 relative">
-            Postal code
-            <input
-              {...register('billingCode', {
-                required: {
-                  value: true,
-                  message: 'Field is require',
-                },
-                pattern: {
-                  value: /(^\d{5}$)|(^\d{5}-\d{4}$)/,
-                  message: 'Code format should be like 12345-1234',
-                },
-              })}
-              type="text"
-              className="text-blue-950"
-            />
-            {formState.errors?.billingCode && (
-              <div className="text-red-600 absolute top-0 left-full w-full mx-4">
-                {formState.errors.billingCode.message}
-              </div>
-            )}
-          </label>
-          <label className="flex justify-between w-full gap-3 relative">
-            Set address as default
-            <input
-              {...register('billingIsDefault', {})}
               type="checkbox"
-              className="text-blue-950"
+              {...register('billingIsDefault', {})}
             />
-            {formState.errors?.billingIsDefault && (
-              <div className="text-red-600 absolute top-0 left-full w-full mx-4">
-                {formState.errors.billingIsDefault.message}
-              </div>
-            )}
-          </label>
-        </div>
+          </CheckboxGroup>
+        </>
       )}
 
-      <div className="flex justify-between w-full">
-        <button
-          className="bg-slate-300 text-cyan-900 disabled:bg-"
+      <div className="form-bp:col-span-2 flex justify-between w-full">
+        <FormButton
           type="button"
           onClick={() => props.onBackClick()}
+          secondary={true}
         >
           Prev step
-        </button>
-        <button
-          className="bg-slate-300 text-cyan-900 disabled:bg-"
+        </FormButton>
+        <FormButton
           disabled={!formState.isDirty || !formState.isValid}
           type="submit"
         >
           Submit
-        </button>
+        </FormButton>
       </div>
-    </form>
+    </Form>
   );
 };

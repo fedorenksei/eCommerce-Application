@@ -20,7 +20,7 @@ export default {
         'primary-color': '#23A6F0',
         'accent-color': '#23856D',
         'hover-color': '#2A7CC7',
-        'disable-color': '#8EC2F2',
+        'disabled-color': '#8EC2F2',
         'success-color': '#2DC071',
         'alert-color': '#E77C40',
         'danger-color': '#E74040',
@@ -28,6 +28,14 @@ export default {
       fontFamily: {
         primary: ['Montserrat'],
       },
+    },
+    screens: {
+      'form-bp': '400px',
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
     },
   },
   plugins: [],

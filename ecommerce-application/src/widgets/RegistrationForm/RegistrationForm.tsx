@@ -12,6 +12,9 @@ import {
 import { newCustomerTransformInfo } from '../../shared/utils/newCustomerInfoTransformer';
 import { ServerAPI } from '../../shared/api/ServerAPI';
 import Spinner from '../../shared/ui/Spinner';
+import { Header2 } from '../../shared/ui/text/Header2';
+import { Paragraph } from '../../shared/ui/text/Paragraph';
+import { FormButton } from '../../shared/ui/forms/FormButton';
 
 export const RegistrationForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -101,17 +104,18 @@ export const RegistrationForm = () => {
     );
   } else if (isError) {
     elem = (
-      <div className="flex flex-col mx-auto">
-        <span>User already exist</span>
-        <button
-          className="bg-white text-slate-800"
+      <div className="flex flex-col items-center mx-auto gap-5">
+        <Paragraph>User already exist</Paragraph>
+        <FormButton
+          type="button"
+          secondary={true}
           onClick={() => {
             setIsError(false);
             prevStep();
           }}
         >
-          To form
-        </button>
+          Try again
+        </FormButton>
       </div>
     );
   } else {
@@ -119,9 +123,12 @@ export const RegistrationForm = () => {
   }
 
   return (
-    <div className="bg-slate-800 p-10 text-white">
+    <div className="form-bp:p-10 p-5 flex flex-col gap-10 items-center">
+      <Header2>Registration</Header2>
+
       {elem}
-      <span>
+
+      <Paragraph>
         Already have an account?&nbsp;
         <Link
           className="text-primary-color hover:underline"
@@ -129,7 +136,7 @@ export const RegistrationForm = () => {
         >
           Sign in!
         </Link>
-      </span>
+      </Paragraph>
     </div>
   );
 };

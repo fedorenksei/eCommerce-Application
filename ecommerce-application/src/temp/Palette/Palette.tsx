@@ -6,7 +6,7 @@ export const Palette = () => {
   const commonColors = [
     'primary-color',
     'hover-color',
-    'disable-color',
+    'disabled-color',
     'accent-color',
     'success-color',
     'alert-color',

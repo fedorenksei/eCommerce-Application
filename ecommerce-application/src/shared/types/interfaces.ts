@@ -62,7 +62,3 @@ export interface CustomerAddress {
 export interface CustomerData {
   email: string;
 }
-
-export interface TextComponentProps {
-  children: string;
-}

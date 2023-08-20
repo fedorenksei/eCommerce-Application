@@ -1,25 +1,33 @@
 import React from 'react';
 import clsx from 'clsx';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 type TextInputProps = {
-  placeholder: string;
+  type?: 'text' | 'password' | 'date';
+  placeholder?: string;
   defaultValue?: string;
   disabled?: boolean;
+  register?: UseFormRegisterReturn;
+  inputId: string;
 };
 
 export const TextInput = ({
+  type = 'text',
   disabled,
   placeholder,
   defaultValue,
+  register,
+  inputId,
 }: TextInputProps) => {
   return (
     <input
-      type="text"
+      id={inputId}
+      type={type}
       disabled={disabled}
       placeholder={placeholder}
       defaultValue={defaultValue}
       className={clsx(
-        'px-4 py-3 w-full',
+        'px-4 py-3 max-w-[400px]',
         'bg-bg-color dark:bg-[#394267]',
         [
           'rounded-md',
@@ -40,6 +48,7 @@ export const TextInput = ({
         'placeholder:text-gray-400',
         disabled && 'placeholder:text-gray-300 dark:placeholder:text-slate-800',
       )}
+      {...register}
     />
   );
 };

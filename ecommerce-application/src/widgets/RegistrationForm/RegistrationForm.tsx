@@ -78,16 +78,16 @@ export const RegistrationForm = () => {
   };
 
   const steps = [
+    <FirstStepForm
+      onSubmit={firstStepOnSubmit}
+      customerInfo={customerInfo}
+      key={'1'}
+    />,
     <SecondStepForm
       onSubmit={secondStepOnSubmit}
       onBackClick={secondStepOnBackClick}
       customerAddress={customerAddress}
       key={'2'}
-    />,
-    <FirstStepForm
-      onSubmit={firstStepOnSubmit}
-      customerInfo={customerInfo}
-      key={'1'}
     />,
   ];
 

@@ -13,6 +13,7 @@ import { newCustomerTransformInfo } from '../../shared/utils/newCustomerInfoTran
 import { ServerAPI } from '../../shared/api/ServerAPI';
 import Spinner from '../../shared/ui/Spinner';
 import { Header2 } from '../../shared/ui/text/Header2';
+import { Paragraph } from '../../shared/ui/text/Paragraph';
 
 export const RegistrationForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -120,14 +121,12 @@ export const RegistrationForm = () => {
   }
 
   return (
-    <div className="form-bp:p-10 p-5">
-      <div className="flex justify-center mb-10">
-        <Header2>Registration</Header2>
-      </div>
+    <div className="form-bp:p-10 p-5 flex flex-col gap-10 items-center">
+      <Header2>Registration</Header2>
 
       {elem}
 
-      <span>
+      <Paragraph>
         Already have an account?&nbsp;
         <Link
           className="text-primary-color hover:underline"
@@ -135,7 +134,7 @@ export const RegistrationForm = () => {
         >
           Sign in!
         </Link>
-      </span>
+      </Paragraph>
     </div>
   );
 };

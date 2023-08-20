@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ServerAPI } from '../../shared/api/ServerAPI';
 import Spinner from '../../shared/ui/Spinner';
 import { LoginData } from '../../shared/types/interfaces';
@@ -122,5 +122,18 @@ export const LoginForm = () => {
     elem = form;
   }
 
-  return <div className="bg-slate-800 p-10 text-white">{elem}</div>;
+  return (
+    <div className="bg-slate-800 p-10 text-white">
+      {elem}
+      <span>
+        Don&apos;t have an account?&nbsp;
+        <Link
+          className="text-primary-color hover:underline"
+          to={'/registration'}
+        >
+          Sign up!
+        </Link>
+      </span>
+    </div>
+  );
 };

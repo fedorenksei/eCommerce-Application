@@ -94,6 +94,10 @@ export const Header = () => {
           <span className="w-full h-[2px] bg-text-color"></span>
         </button>
       </header>
+      {<div>Is user login: {String(auth.isAuth)}</div>}
+      {customerData.customerData && (
+        <div>{JSON.stringify(customerData.customerData)}</div>
+      )}
       <Routes>
         <Route
           path="/"

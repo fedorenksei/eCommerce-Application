@@ -14,6 +14,7 @@ import { ServerAPI } from '../../shared/api/ServerAPI';
 import Spinner from '../../shared/ui/Spinner';
 import { Header2 } from '../../shared/ui/text/Header2';
 import { Paragraph } from '../../shared/ui/text/Paragraph';
+import { FormButton } from '../../shared/ui/forms/FormButton';
 
 export const RegistrationForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -103,17 +104,18 @@ export const RegistrationForm = () => {
     );
   } else if (isError) {
     elem = (
-      <div className="flex flex-col mx-auto">
-        <span>User already exist</span>
-        <button
-          className="bg-bg-color"
+      <div className="flex flex-col items-center mx-auto gap-5">
+        <Paragraph>User already exist</Paragraph>
+        <FormButton
+          type="button"
+          secondary={true}
           onClick={() => {
             setIsError(false);
             prevStep();
           }}
         >
-          To form
-        </button>
+          Try again
+        </FormButton>
       </div>
     );
   } else {

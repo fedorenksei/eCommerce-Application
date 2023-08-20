@@ -1,5 +1,10 @@
 import { Countries } from './enums';
 
+export interface LoginData {
+  email: string;
+  password: string;
+}
+
 export interface CustomerInputData {
   email: string;
   password: string;
@@ -52,6 +57,10 @@ export interface CustomerAddress {
   streetName: string;
   city: string;
   postalCode: string;
+}
+
+export interface CustomerData {
+  email: string;
 }
 
 export interface TextComponentProps {

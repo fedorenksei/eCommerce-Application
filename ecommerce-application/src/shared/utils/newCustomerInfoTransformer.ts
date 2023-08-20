@@ -7,7 +7,7 @@ import {
 
 export const newCustomerTransformInfo = (
   firstFormDate: CustomerInputData,
-  secondFormData: CustomerInputAddress
+  secondFormData: CustomerInputAddress,
 ) => {
   const shippingAddress: CustomerAddress = {
     country: secondFormData.country,

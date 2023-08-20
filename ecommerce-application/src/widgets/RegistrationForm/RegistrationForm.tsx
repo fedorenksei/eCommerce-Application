@@ -12,6 +12,7 @@ import {
 import { newCustomerTransformInfo } from '../../shared/utils/newCustomerInfoTransformer';
 import { ServerAPI } from '../../shared/api/ServerAPI';
 import Spinner from '../../shared/ui/Spinner';
+import { Header2 } from '../../shared/ui/text/Header2';
 
 export const RegistrationForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -77,16 +78,16 @@ export const RegistrationForm = () => {
   };
 
   const steps = [
-    <FirstStepForm
-      onSubmit={firstStepOnSubmit}
-      customerInfo={customerInfo}
-      key={'1'}
-    />,
     <SecondStepForm
       onSubmit={secondStepOnSubmit}
       onBackClick={secondStepOnBackClick}
       customerAddress={customerAddress}
       key={'2'}
+    />,
+    <FirstStepForm
+      onSubmit={firstStepOnSubmit}
+      customerInfo={customerInfo}
+      key={'1'}
     />,
   ];
 
@@ -118,5 +119,12 @@ export const RegistrationForm = () => {
     elem = currStepElem;
   }
 
-  return <div className="form-bp:p-10 p-5">{elem}</div>;
+  return (
+    <div className="form-bp:p-10 p-5">
+      <div className="flex justify-center mb-10">
+        <Header2>Registration</Header2>
+      </div>
+      {elem}
+    </div>
+  );
 };

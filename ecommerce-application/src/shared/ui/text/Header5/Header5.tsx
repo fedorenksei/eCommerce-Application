@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { getTextStyles } from '../styles';
+import { getTextStyles } from '../../styles';
 
 export const Header5 = ({ children }: PropsWithChildren) => {
   return (

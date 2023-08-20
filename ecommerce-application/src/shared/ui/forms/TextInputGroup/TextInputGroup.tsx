@@ -1,5 +1,5 @@
 import { useId } from 'react';
-import { Header5 } from '../../Header5';
+import { Header5 } from '../../text/Header5';
 import { TextInput } from '../TextInput';
 import { UseFormRegisterReturn } from 'react-hook-form';
 

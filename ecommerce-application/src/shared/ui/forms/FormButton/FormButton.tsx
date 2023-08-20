@@ -3,20 +3,31 @@ import { getButtonStyles } from '../../styles';
 
 type FormButtonProps = PropsWithChildren<{
   type: 'submit' | 'button';
+  secondary?: boolean;
+  onClick?: () => void;
   disabled?: boolean;
 }>;
 
-export const FormButton = ({ children, type, disabled }: FormButtonProps) => {
+export const FormButton = ({
+  children,
+  type,
+  onClick,
+  disabled,
+  secondary,
+}: FormButtonProps) => {
+  const styles = getButtonStyles({
+    size: 'medium',
+    shape: 'round',
+    color: secondary ? 'transparent' : 'filled',
+    disabled: disabled,
+  });
+
   return (
     <button
       disabled={disabled}
       type={type}
-      className={getButtonStyles({
-        size: 'small',
-        shape: 'round',
-        color: 'filled',
-        disabled: disabled,
-      })}
+      onClick={onClick}
+      className={styles}
     >
       {children}
     </button>

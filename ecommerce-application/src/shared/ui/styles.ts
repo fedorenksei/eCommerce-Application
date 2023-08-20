@@ -48,8 +48,8 @@ export function getButtonStyles({
     'w-max inline-flex justify-center items-center',
     'transition-all',
     [
-      size === 'small' && 'px-[20px] py-[10px] gap-[10px]',
-      size !== 'small' && 'px-[40px] py-[15px] gap-[15px]',
+      size !== 'small' && 'md:px-[40px] md:py-[15px] md:gap-[15px]',
+      'px-[20px] py-[10px] gap-[10px]',
     ],
     '!outline-none',
     {
@@ -61,7 +61,7 @@ export function getButtonStyles({
       transparent: [
         'bg-transparent',
         'border border-primary-color',
-        !disabled && 'hover:border-hover-color',
+        !disabled && 'hover:border-hover-color hover:text-hover-color',
         'focus:border-2 focus:border-dt-bg-color dark:focus:border-bg-color',
       ],
     }[color],

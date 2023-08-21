@@ -21,7 +21,7 @@ export const TextInputGroup = ({
     <>
       <label
         htmlFor={inputId}
-        className="place-self-start form-bp:h-[52px] flex items-center"
+        className="place-self-start form-bp:h-[52px] flex items-center cursor-pointer"
       >
         <Header5>{label}</Header5>
       </label>

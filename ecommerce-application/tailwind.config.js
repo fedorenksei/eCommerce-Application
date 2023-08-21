@@ -30,7 +30,7 @@ export default {
       },
     },
     screens: {
-      'form-bp': '400px',
+      'form-bp': '600px',
       sm: '640px',
       md: '768px',
       lg: '1024px',

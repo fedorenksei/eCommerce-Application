@@ -14,7 +14,7 @@ export const Form = ({ children, onSubmit, id }: FormProps) => {
       className={clsx(
         'w-full',
         'grid form-bp:gap-y-10 gap-y-5 gap-x-10 justify-center items-center',
-        'form-bp:grid-cols-[max-content_minmax(200px,_400px)] grid-cols-1',
+        'form-bp:grid-cols-[max-content_minmax(200px,_400px)] grid-cols-[minmax(200px,_400px)]',
       )}
     >
       {children}

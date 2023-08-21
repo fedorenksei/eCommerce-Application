@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { UseFormRegisterReturn } from 'react-hook-form';
+import { getInputStyles } from '../../styles';
 
 type TextInputProps = {
   type?: 'text' | 'password' | 'date';
@@ -19,36 +20,28 @@ export const TextInput = ({
   register,
   inputId,
 }: TextInputProps) => {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
-    <input
-      id={inputId}
-      type={type}
-      disabled={disabled}
-      placeholder={placeholder}
-      defaultValue={defaultValue}
-      className={clsx(
-        'px-4 py-3 max-w-[400px]',
-        'bg-bg-color dark:bg-[#394267]',
-        [
-          'rounded-md',
-          'border-0 !outline-none',
-          ['ring-1 ring-inset', 'ring-neutral-200 dark:ring-slate-600'],
-          [
-            'focus:ring-2',
-            'focus:ring-primary-color dark:focus:ring-primary-color',
-          ],
-        ],
-        !disabled && [
-          'focus:shadow-lg hover:shadow-md transition-shadow',
-          'dark:shadow-slate-700',
-          'hover:ring-hover-color dark:hover:ring-hover-color',
-        ],
-        'text-sm font-sans font-normal leading-7 tracking-wider',
-        'text-neutral-600 dark:text-dt-text-color',
-        'placeholder:text-gray-400',
-        disabled && 'placeholder:text-gray-300 dark:placeholder:text-slate-800',
+    <div className="relative mr-5">
+      <input
+        id={inputId}
+        type={showPassword ? 'text' : type}
+        disabled={disabled}
+        placeholder={placeholder}
+        defaultValue={defaultValue}
+        className={getInputStyles({ disabled })}
+        {...register}
+      />
+      {type === 'password' && (
+        <button onClick={() => setShowPassword((c) => !c)}>
+          <img
+            className="w-6 absolute left-full -right-10 top-0 bottom-0 m-auto cursor-pointer"
+            src="/images/eye-password-hide.svg"
+            alt="show or hide"
+          />
+        </button>
       )}
-      {...register}
-    />
+    </div>
   );
 };

@@ -25,6 +25,7 @@ export interface CustomerInputAddress {
   shippingCity: string;
   shippingStreet: string;
   shippingCode: string;
+  isBillingAddressTheSame?: boolean;
   shippingIsDefault?: boolean;
   billingCity?: string;
   billingStreet?: string;

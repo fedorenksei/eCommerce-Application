@@ -11,7 +11,7 @@ import { FormButton } from '../../../shared/ui/forms/FormButton';
 import { CheckboxGroup } from '../../../shared/ui/forms/CheckboxGroup';
 
 export const SecondStepForm = (props: SecondStepProps) => {
-  const { register, handleSubmit, formState, trigger } =
+  const { register, handleSubmit, formState, trigger, setValue } =
     useForm<CustomerInputAddress>({
       defaultValues: props.customerAddress,
       mode: 'onChange',
@@ -20,6 +20,7 @@ export const SecondStepForm = (props: SecondStepProps) => {
   const [isAddressSame, setIsAddressSame] = useState(false);
 
   const toggleIsAddressSame = () => {
+    setValue('isBillingAddressTheSame', !isAddressSame);
     setIsAddressSame((state) => !state);
     trigger();
   };
@@ -100,7 +101,10 @@ export const SecondStepForm = (props: SecondStepProps) => {
         <input
           type="checkbox"
           checked={isAddressSame}
-          onChange={toggleIsAddressSame}
+          {...(register('isBillingAddressTheSame'),
+          {
+            onChange: toggleIsAddressSame,
+          })}
         />
       </CheckboxGroup>
 

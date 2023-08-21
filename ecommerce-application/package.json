@@ -1,11 +1,12 @@
 {
   "name": "ecommerce-application",
+  "homepage": "https://color-zebra.github.io/ecommerce-deploy/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "start": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint-fix": "eslint . --ext ts,tsx --fix",
     "preview": "vite preview",

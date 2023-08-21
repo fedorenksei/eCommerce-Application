@@ -22,7 +22,7 @@ export const Header = () => {
             <div className="flex w-14 justify-center items-center">
               <img
                 className="w-14 object-cover"
-                src="/images/logo.png"
+                src="./images/logo.png"
                 alt="bike logo"
               />
             </div>

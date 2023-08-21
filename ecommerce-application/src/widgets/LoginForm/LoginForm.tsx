@@ -11,10 +11,13 @@ import { TextInputGroup } from '../../shared/ui/forms/TextInputGroup';
 import { FormButton } from '../../shared/ui/forms/FormButton';
 import { Paragraph } from '../../shared/ui/text/Paragraph';
 import { Header2 } from '../../shared/ui/text/Header2';
+import { useDispatch } from 'react-redux';
+import { setIsShown, setText } from '../../shared/store/modalSlice';
 
 export const LoginForm = () => {
   const auth = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   useEffect(() => {
     if (auth.isAuth) navigate('/');
   }, [navigate, auth]);
@@ -37,7 +40,15 @@ export const LoginForm = () => {
     setIsError(!res);
     resetField('password');
 
-    if (res) navigate('/');
+    if (res) {
+      dispatch(setIsShown({ isShown: true }));
+      dispatch(
+        setText({
+          text: 'You are successfully logged in',
+        }),
+      );
+      navigate('/');
+    }
   };
 
   let elem = null;
@@ -54,7 +65,14 @@ export const LoginForm = () => {
           pattern: {
             value:
               /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
-            message: 'Invalid email',
+            message:
+              "Email must be properly formatted, contain a domain name, contain an '@' symbol separating local part and domain name (e.g., user@example.com)",
+          },
+          validate: (val: string) => {
+            const trimmed = val.trim();
+            if (trimmed.length !== val.length) {
+              return 'Email address must not contain leading or trailing whitespace';
+            }
           },
         })}
         error={formState.errors?.email?.message}
@@ -68,10 +86,15 @@ export const LoginForm = () => {
             message: 'Field is require',
           },
           pattern: {
-            value:
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+            value: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/,
             message:
-              'Password should contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (such as @$!%*?&)',
+              'Password should contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (such as !@#$%^&*)',
+          },
+          validate: (val: string) => {
+            const trimmed = val.trim();
+            if (trimmed.length !== val.length) {
+              return 'Password address must not contain leading or trailing whitespace';
+            }
           },
         })}
         type="password"

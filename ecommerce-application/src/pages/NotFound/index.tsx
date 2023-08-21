@@ -12,7 +12,7 @@ export const NotFound = () => {
       </h4>
       <div className="p-4">
         <img
-          src="/public/images/not-found.png"
+          src="./images/not-found.png"
           alt="bottle in the water"
         />
       </div>

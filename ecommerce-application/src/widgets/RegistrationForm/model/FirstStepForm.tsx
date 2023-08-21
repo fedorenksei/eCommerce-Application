@@ -36,7 +36,14 @@ export const FirstStepForm = (props: FirstStepFormProps) => {
           pattern: {
             value:
               /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
-            message: 'Invalid email',
+            message:
+              "Email must be properly formatted, contain a domain name, contain an '@' symbol separating local part and domain name (e.g., user@example.com)",
+          },
+          validate: (val: string) => {
+            const trimmed = val.trim();
+            if (trimmed.length !== val.length) {
+              return 'Email address must not contain leading or trailing whitespace';
+            }
           },
         })}
         error={formState.errors?.email?.message}
@@ -51,10 +58,15 @@ export const FirstStepForm = (props: FirstStepFormProps) => {
             message: 'Field is require',
           },
           pattern: {
-            value:
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+            value: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/,
             message:
-              'Password should contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (such as @$!%*?&)',
+              'Password should contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (such as !@#$%^&*)',
+          },
+          validate: (val: string) => {
+            const trimmed = val.trim();
+            if (trimmed.length !== val.length) {
+              return 'Password address must not contain leading or trailing whitespace';
+            }
           },
         })}
         type="password"

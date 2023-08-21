@@ -11,10 +11,13 @@ import { TextInputGroup } from '../../shared/ui/forms/TextInputGroup';
 import { FormButton } from '../../shared/ui/forms/FormButton';
 import { Paragraph } from '../../shared/ui/text/Paragraph';
 import { Header2 } from '../../shared/ui/text/Header2';
+import { useDispatch } from 'react-redux';
+import { setIsShown, setText } from '../../shared/store/modalSlice';
 
 export const LoginForm = () => {
   const auth = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   useEffect(() => {
     if (auth.isAuth) navigate('/');
   }, [navigate, auth]);
@@ -37,7 +40,15 @@ export const LoginForm = () => {
     setIsError(!res);
     resetField('password');
 
-    if (res) navigate('/');
+    if (res) {
+      dispatch(setIsShown({ isShown: true }));
+      dispatch(
+        setText({
+          text: 'You are succesfully logged in',
+        }),
+      );
+      navigate('/');
+    }
   };
 
   let elem = null;

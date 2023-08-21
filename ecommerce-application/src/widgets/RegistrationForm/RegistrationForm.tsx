@@ -15,11 +15,14 @@ import Spinner from '../../shared/ui/Spinner';
 import { Header2 } from '../../shared/ui/text/Header2';
 import { Paragraph } from '../../shared/ui/text/Paragraph';
 import { FormButton } from '../../shared/ui/forms/FormButton';
+import { useDispatch } from 'react-redux';
+import { setIsShown, setText } from '../../shared/store/modalSlice';
 
 export const RegistrationForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const serverAPI = ServerAPI.getInstance();
   const defaultCustomerInfo = {
     email: '',
@@ -57,7 +60,15 @@ export const RegistrationForm = () => {
     setIsLoading(false);
     setIsError(!res);
 
-    if (res) navigate('/');
+    if (res) {
+      dispatch(setIsShown({ isShown: true }));
+      dispatch(
+        setText({
+          text: 'You are succesfully registered',
+        }),
+      );
+      navigate('/');
+    }
   };
 
   const firstStepOnSubmit = (currCustomerInfo: CustomerInputData) => {

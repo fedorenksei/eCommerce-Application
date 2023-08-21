@@ -1,12 +1,12 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
 import { NotFound } from '.';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
-import { AppComponent } from '../../app/model';
 import { Provider } from 'react-redux';
 import store from '../../app/store';
+import { AppComponent } from '../../app/model';
+import { userEvent } from '@storybook/testing-library';
 
 type Props = {
   children?: React.ReactNode;
@@ -34,7 +34,6 @@ test('There is a button for back to main', async () => {
       <MemoryRouter initialEntries={[badRoute]}>
         <AppComponent />
       </MemoryRouter>
-      ,
     </Provider>,
   );
 

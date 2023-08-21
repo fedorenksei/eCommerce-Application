@@ -44,7 +44,7 @@ export const LoginForm = () => {
       dispatch(setIsShown({ isShown: true }));
       dispatch(
         setText({
-          text: 'You are succesfully logged in',
+          text: 'You are successfully logged in',
         }),
       );
       navigate('/');

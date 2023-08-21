@@ -75,10 +75,15 @@ export const LoginForm = () => {
             message: 'Field is require',
           },
           pattern: {
-            value:
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+            value: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/,
             message:
-              'Password should contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (such as @$!%*?&)',
+              'Password should contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (such as !@#$%^&*)',
+          },
+          validate: (val: string) => {
+            const trimmed = val.trim();
+            if (trimmed.length !== val.length) {
+              return 'Password address must not contain leading or trailing whitespace';
+            }
           },
         })}
         type="password"

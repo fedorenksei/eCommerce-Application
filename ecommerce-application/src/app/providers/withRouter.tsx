@@ -7,7 +7,7 @@ import { Registration } from '../../pages/Registration';
 import { NotFound } from '../../pages/NotFound';
 
 export const withRouter = (component: JSX.Element) => (
-  <BrowserRouter>
+  <BrowserRouter basename="/ecommerce-deploy">
     <>{component}</>
     <Routes>
       <Route
@@ -23,7 +23,7 @@ export const withRouter = (component: JSX.Element) => (
         element={<Registration />}
       />
       <Route
-        path="*"
+        path="/*"
         element={<NotFound />}
       />
     </Routes>

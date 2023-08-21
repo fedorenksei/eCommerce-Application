@@ -64,7 +64,7 @@ export const RegistrationForm = () => {
       dispatch(setIsShown({ isShown: true }));
       dispatch(
         setText({
-          text: 'You are succesfully registered',
+          text: 'You are successfully registered',
         }),
       );
       navigate('/');

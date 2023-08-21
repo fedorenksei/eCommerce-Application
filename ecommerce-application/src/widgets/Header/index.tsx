@@ -14,10 +14,7 @@ export const Header = () => {
   return (
     <>
       <header className="shadow-md z-10 bg-bg-color flex justify-between items-center px-2 h-20 relative">
-        <Link
-          onClick={() => setBurgerShown((state) => !state)}
-          to="/"
-        >
+        <Link to="/">
           <div className="flex items-center">
             <div className="flex w-14 justify-center items-center">
               <img

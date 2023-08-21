@@ -38,6 +38,7 @@ export const RegistrationForm = () => {
     shippingStreet: '',
     shippingCode: '',
     shippingIsDefault: false,
+    isBillingAddressTheSame: false,
     billingCity: '',
     billingStreet: '',
     billingCode: '',

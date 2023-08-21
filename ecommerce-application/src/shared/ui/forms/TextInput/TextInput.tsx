@@ -34,7 +34,10 @@ export const TextInput = ({
         {...register}
       />
       {type === 'password' && (
-        <button onClick={() => setShowPassword((c) => !c)}>
+        <button
+          type="button"
+          onClick={() => setShowPassword((c) => !c)}
+        >
           <img
             className="w-6 absolute left-full -right-10 top-0 bottom-0 m-auto cursor-pointer"
             src="/images/eye-password-hide.svg"

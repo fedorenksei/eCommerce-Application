@@ -7,6 +7,10 @@ import { Provider } from 'react-redux';
 import store from '../../app/store';
 import { AppComponent } from '../../app/model';
 import { userEvent } from '@storybook/testing-library';
+import { Route, Routes } from 'react-router-dom';
+import { Main } from '../Main';
+import { Login } from '../Login';
+import { Registration } from '../Registration';
 
 type Props = {
   children?: React.ReactNode;
@@ -16,7 +20,27 @@ test('Component just rendering', async () => {
   const AllTheProviders = ({ children }: Props) => {
     return (
       <Provider store={store}>
-        <BrowserRouter>{children}</BrowserRouter>
+        <BrowserRouter>
+          {children}
+          <Routes>
+            <Route
+              path="/"
+              element={<Main />}
+            />
+            <Route
+              path="/login"
+              element={<Login />}
+            />
+            <Route
+              path="/registration"
+              element={<Registration />}
+            />
+            <Route
+              path="*"
+              element={<NotFound />}
+            />
+          </Routes>
+        </BrowserRouter>
       </Provider>
     );
   };
@@ -33,6 +57,24 @@ test('There is a button for back to main', async () => {
     <Provider store={store}>
       <MemoryRouter initialEntries={[badRoute]}>
         <AppComponent />
+        <Routes>
+          <Route
+            path="/"
+            element={<Main />}
+          />
+          <Route
+            path="/login"
+            element={<Login />}
+          />
+          <Route
+            path="/registration"
+            element={<Registration />}
+          />
+          <Route
+            path="*"
+            element={<NotFound />}
+          />
+        </Routes>
       </MemoryRouter>
     </Provider>,
   );

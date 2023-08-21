@@ -6,6 +6,11 @@ import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store';
 import { AppComponent } from './model';
+import { Route, Routes } from 'react-router-dom';
+import { Main } from '../pages/Main';
+import { Login } from '../pages/Login';
+import { Registration } from '../pages/Registration';
+import { NotFound } from '../pages/NotFound';
 
 /* type Props = {
   children?: React.ReactNode;
@@ -24,6 +29,24 @@ test('component just rendering', async () => {
     <Provider store={store}>
       <BrowserRouter>
         <AppComponent />
+        <Routes>
+          <Route
+            path="/"
+            element={<Main />}
+          />
+          <Route
+            path="/login"
+            element={<Login />}
+          />
+          <Route
+            path="/registration"
+            element={<Registration />}
+          />
+          <Route
+            path="*"
+            element={<NotFound />}
+          />
+        </Routes>
       </BrowserRouter>
     </Provider>,
   );
@@ -44,6 +67,24 @@ test('landing bad page', async () => {
     <Provider store={store}>
       <MemoryRouter initialEntries={[badRoute]}>
         <AppComponent />
+        <Routes>
+          <Route
+            path="/"
+            element={<Main />}
+          />
+          <Route
+            path="/login"
+            element={<Login />}
+          />
+          <Route
+            path="/registration"
+            element={<Registration />}
+          />
+          <Route
+            path="*"
+            element={<NotFound />}
+          />
+        </Routes>
       </MemoryRouter>
     </Provider>,
   );

@@ -9,7 +9,6 @@ export const NotFound = () => {
     <div className="flex flex-col justify-between items-center min-h-[80vh] p-10 gap-3">
       <Header2>Not found</Header2>
       <Header5>Oops! You are lost.</Header5>
-      {/* <h4 className="text-primary-color text-2xl font-semibold font-primary"></h4> */}
       <div className="p-10">
         <img
           src="/public/images/not-found.png"

@@ -36,7 +36,14 @@ export const FirstStepForm = (props: FirstStepFormProps) => {
           pattern: {
             value:
               /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
-            message: 'Invalid email',
+            message:
+              "Email must be properly formatted, contain a domain name, contain an '@' symbol separating local part and domain name (e.g., user@example.com)",
+          },
+          validate: (val: string) => {
+            const trimmed = val.trim();
+            if (trimmed.length !== val.length) {
+              return 'Email address must not contain leading or trailing whitespace';
+            }
           },
         })}
         error={formState.errors?.email?.message}

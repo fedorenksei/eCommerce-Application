@@ -12,19 +12,7 @@ import { Login } from '../pages/Login';
 import { Registration } from '../pages/Registration';
 import { NotFound } from '../pages/NotFound';
 
-/* type Props = {
-  children?: React.ReactNode;
-}; */
-
 test('component just rendering', async () => {
-  /* const AllTheProviders = ({ children }: Props) => {
-    return (
-      <Provider store={store}>
-        <BrowserRouter>{children}</BrowserRouter>
-      </Provider>
-    );
-  }; */
-  // render(<AppComponent />, { wrapper: AllTheProviders });
   render(
     <Provider store={store}>
       <BrowserRouter>

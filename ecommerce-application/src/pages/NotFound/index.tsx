@@ -1,26 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { getButtonStyles } from '../../shared/ui/styles';
+import { Header2 } from '../../shared/ui/text/Header2';
+import { Header5 } from '../../shared/ui/text/Header5';
 
 export const NotFound = () => {
   return (
-    <div className="flex flex-col justify-between items-center min-h-[80vh] p-4">
-      <h2 className="text-primary-color text-4xl font-bold font-primary">
-        Not found
-      </h2>
-      <h4 className="text-primary-color text-2xl font-semibold font-primary">
-        Oops! You are lost.
-      </h4>
-      <div className="p-4">
+    <div className="flex flex-col justify-between items-center min-h-[80vh] p-10 gap-3">
+      <Header2>Not found</Header2>
+      <Header5>Oops! You are lost.</Header5>
+      {/* <h4 className="text-primary-color text-2xl font-semibold font-primary"></h4> */}
+      <div className="p-10">
         <img
           src="/public/images/not-found.png"
           alt="bottle in the water"
         />
       </div>
-      <Link
-        to="/"
-        className="border border-solid border-primary-color block text-primary-color rounded-md px-10 py-4 transition duration-300 font-primary font-bold hover:text-secondary-color hover:bg-primary-color"
-      >
-        Go home
+      <Link to="/">
+        <button
+          className={getButtonStyles({
+            size: 'large',
+            color: 'filled',
+            shape: 'round',
+          })}
+        >
+          Go home
+        </button>
       </Link>
     </div>
   );

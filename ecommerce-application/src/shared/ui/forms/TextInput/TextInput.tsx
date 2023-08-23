@@ -40,7 +40,7 @@ export const TextInput = ({
         >
           <img
             className="w-6 absolute left-full -right-10 top-0 bottom-0 m-auto cursor-pointer"
-            src="/images/eye-password-hide.svg"
+            src="./images/eye-password-hide.svg"
             alt="show or hide"
           />
         </button>

@@ -9,6 +9,8 @@ import { Header3 } from '../../../shared/ui/text/Header3';
 import { TextInputGroup } from '../../../shared/ui/forms/TextInputGroup';
 import { FormButton } from '../../../shared/ui/forms/FormButton';
 import { CheckboxGroup } from '../../../shared/ui/forms/CheckboxGroup';
+import { customerRegExps } from '../../../shared/data/regExps';
+import { validationErrors } from '../../../shared/data/validationErrors';
 
 export const SecondStepForm = (props: SecondStepProps) => {
   const { register, handleSubmit, formState, trigger, setValue } =
@@ -50,12 +52,11 @@ export const SecondStepForm = (props: SecondStepProps) => {
         register={register('shippingCity', {
           required: {
             value: true,
-            message: 'Field is require',
+            message: validationErrors.required,
           },
           pattern: {
-            value: /^[a-zA-Z]*$/,
-            message:
-              'Must contain at least one character and no special characters or numbers',
+            value: customerRegExps.city,
+            message: validationErrors.city,
           },
         })}
         error={formState.errors?.shippingCity?.message}
@@ -66,7 +67,7 @@ export const SecondStepForm = (props: SecondStepProps) => {
         register={register('shippingStreet', {
           required: {
             value: true,
-            message: 'Field is require',
+            message: validationErrors.required,
           },
         })}
         error={formState.errors?.shippingStreet?.message}
@@ -77,11 +78,11 @@ export const SecondStepForm = (props: SecondStepProps) => {
         register={register('shippingCode', {
           required: {
             value: true,
-            message: 'Field is require',
+            message: validationErrors.required,
           },
           pattern: {
-            value: /(^\d{5}$)/,
-            message: 'Code format should be like 54321',
+            value: customerRegExps.postal,
+            message: validationErrors.postalCode,
           },
         })}
         error={formState.errors?.shippingCode?.message}
@@ -119,12 +120,11 @@ export const SecondStepForm = (props: SecondStepProps) => {
             register={register('billingCity', {
               required: {
                 value: true,
-                message: 'Field is require',
+                message: validationErrors.required,
               },
               pattern: {
-                value: /^[a-zA-Z]*$/,
-                message:
-                  'Must contain at least one character and no special characters or numbers',
+                value: customerRegExps.city,
+                message: validationErrors.city,
               },
             })}
             error={formState.errors?.billingCity?.message}
@@ -135,7 +135,7 @@ export const SecondStepForm = (props: SecondStepProps) => {
             register={register('billingStreet', {
               required: {
                 value: true,
-                message: 'Field is require',
+                message: validationErrors.required,
               },
             })}
             error={formState.errors?.billingStreet?.message}
@@ -146,11 +146,11 @@ export const SecondStepForm = (props: SecondStepProps) => {
             register={register('billingCode', {
               required: {
                 value: true,
-                message: 'Field is require',
+                message: validationErrors.required,
               },
               pattern: {
-                value: /(^\d{5}$)/,
-                message: 'Code format should be like 54321',
+                value: customerRegExps.postal,
+                message: validationErrors.postalCode,
               },
             })}
             error={formState.errors?.billingCode?.message}

@@ -10,42 +10,54 @@ import { Basket } from '../../pages/Basket';
 import { Profile } from '../../pages/Profile';
 import { Catalog } from '../../pages/Catalog';
 
+const routePairs = [
+  {
+    path: '/',
+    component: <Main />,
+  },
+  {
+    path: '/login',
+    component: <Login />,
+  },
+  {
+    path: '/registration',
+    component: <Registration />,
+  },
+  {
+    path: '/about-us',
+    component: <AboutUs />,
+  },
+  {
+    path: '/profile',
+    component: <Profile />,
+  },
+  {
+    path: '/catalog',
+    component: <Catalog />,
+  },
+  {
+    path: '/basket',
+    component: <Basket />,
+  },
+  {
+    path: '/*',
+    component: <NotFound />,
+  },
+];
+
 export const withRouter = (component: JSX.Element) => (
   <BrowserRouter /* basename="/ecommerce-deploy" */>
     <>{component}</>
     <Routes>
-      <Route
-        path="/"
-        element={<Main />}
-      />
-      <Route
-        path="/login"
-        element={<Login />}
-      />
-      <Route
-        path="/registration"
-        element={<Registration />}
-      />
-      <Route
-        path="/about-us"
-        element={<AboutUs />}
-      />
-      <Route
-        path="/profile"
-        element={<Profile />}
-      />
-      <Route
-        path="/catalog"
-        element={<Catalog />}
-      />
-      <Route
-        path="/basket"
-        element={<Basket />}
-      />
-      <Route
-        path="/*"
-        element={<NotFound />}
-      />
+      {routePairs.map(({ path, component }) => {
+        return (
+          <Route
+            path={path}
+            element={component}
+            key={path}
+          />
+        );
+      })}
     </Routes>
   </BrowserRouter>
 );

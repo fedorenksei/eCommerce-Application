@@ -80,6 +80,7 @@ type InputStyleParams = {
 
 export function getInputStyles({ disabled }: InputStyleParams) {
   return clsx(
+    'appearance-none',
     'px-4 py-3 max-w-[400px] w-full',
     'bg-bg-color dark:bg-[#394267]',
     [

@@ -10,11 +10,15 @@ export default {
         'text-color': '#252B42',
         'second-text-color': '#737373',
 
+        'input-bg': '#FFFFFF',
+
         //DARK THEME
         'dt-bg-color': '#252B42',
 
         'dt-text-color': '#FFFFFF',
         'dt-second-text-color': '#FFFFFF',
+
+        'dt-input-bg': '#394267',
 
         //COMMON
         'primary-color': '#23A6F0',

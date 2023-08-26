@@ -41,11 +41,11 @@ test('component just rendering', async () => {
 
   expect(screen.getByText('Main page')).toBeInTheDocument();
 
-  await userEvent.click(screen.getByText('Login'));
-  expect(screen.getByText('Log in')).toBeInTheDocument();
+  await userEvent.click(screen.getAllByText('Log in')[0]);
+  expect(screen.getByText('Welcome back!')).toBeInTheDocument();
 
-  await userEvent.click(screen.getByText('Registration'));
-  expect(screen.getAllByText('Registration').length).toBeGreaterThan(1);
+  await userEvent.click(screen.getByText('Sign up'));
+  expect(screen.getByText('Registration')).toBeInTheDocument();
 });
 
 test('landing bad page', async () => {

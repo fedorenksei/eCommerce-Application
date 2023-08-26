@@ -99,7 +99,7 @@ export const LoginForm = () => {
           disabled={!formState.isDirty || !formState.isValid}
           type="submit"
         >
-          Login
+          Log in
         </FormButton>
       </div>
     </Form>
@@ -132,7 +132,7 @@ export const LoginForm = () => {
 
   return (
     <div className="form-bp:p-10 p-5 flex flex-col gap-10 items-center">
-      <Header2>Log in</Header2>
+      <Header2>Welcome back!</Header2>
 
       {elem}
 

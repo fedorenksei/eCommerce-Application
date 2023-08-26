@@ -28,7 +28,7 @@ const RouteLink = ({ routeName, linkText }: Props) => {
 const links = [
   {
     routeName: 'login',
-    linkText: 'Login',
+    linkText: 'Log in',
   },
   {
     routeName: 'registration',

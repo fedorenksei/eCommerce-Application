@@ -48,7 +48,7 @@ export const Header = () => {
                   onClick={() => setBurgerShown((state) => !state)}
                   to="/login"
                 >
-                  Login
+                  Log in
                 </Link>
               </li>
             )}
@@ -58,7 +58,7 @@ export const Header = () => {
                   onClick={() => setBurgerShown((state) => !state)}
                   to="/registration"
                 >
-                  Registration
+                  Sign up
                 </Link>
               </li>
             )}

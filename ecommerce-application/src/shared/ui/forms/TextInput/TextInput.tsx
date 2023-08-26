@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import { getInputStyles } from '../../styles';
+import { TextInputType } from '../../../types/types';
+import { Eye } from './Eye';
 
 type TextInputProps = {
-  type?: 'text' | 'password' | 'date';
+  type?: TextInputType;
   placeholder?: string;
   defaultValue?: string;
   disabled?: boolean;
@@ -21,16 +23,29 @@ export const TextInput = ({
   inputId,
 }: TextInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [focusStyle, setFocusStyle] = useState(false);
 
   return (
-    <div className="relative mr-5">
+    <div
+      className={clsx(
+        getInputStyles({ disabled, focus: focusStyle }),
+        type === 'password' && 'mr-5',
+        'flex gap-2',
+      )}
+      onFocus={() => {
+        setFocusStyle(true);
+      }}
+      onBlur={() => {
+        setFocusStyle(false);
+      }}
+    >
       <input
         id={inputId}
         type={showPassword ? 'text' : type}
         disabled={disabled}
         placeholder={placeholder}
         defaultValue={defaultValue}
-        className={getInputStyles({ disabled })}
+        className="appearance-none !outline-none flex-grow bg-input-bg dark:bg-dt-input-bg"
         {...register}
       />
       {type === 'password' && (
@@ -38,11 +53,7 @@ export const TextInput = ({
           type="button"
           onClick={() => setShowPassword((c) => !c)}
         >
-          <img
-            className="w-6 absolute left-full -right-10 top-0 bottom-0 m-auto cursor-pointer"
-            src="./images/eye-password-hide.svg"
-            alt="show or hide"
-          />
+          <Eye opened={!showPassword} />
         </button>
       )}
     </div>

@@ -76,25 +76,27 @@ export function getButtonStyles({
 
 type InputStyleParams = {
   disabled?: boolean;
+  focus?: boolean;
 };
 
-export function getInputStyles({ disabled }: InputStyleParams) {
+export function getInputStyles({ disabled, focus }: InputStyleParams) {
   return clsx(
+    'appearance-none',
     'px-4 py-3 max-w-[400px] w-full',
-    'bg-bg-color dark:bg-[#394267]',
+    'bg-input-bg dark:bg-dt-input-bg',
     [
       'rounded-md',
       'border-0 !outline-none',
-      ['ring-1 ring-inset', 'ring-neutral-200 dark:ring-slate-600'],
-      [
-        'focus:ring-2',
-        'focus:ring-primary-color dark:focus:ring-primary-color',
-      ],
+      'ring-1 ring-inset',
+      focus
+        ? 'ring-2 ring-primary-color dark:ring-primary-color'
+        : 'ring-neutral-200 dark:ring-slate-600',
     ],
     !disabled && [
-      'focus:shadow-lg hover:shadow-md transition-shadow',
+      focus && 'focus:shadow-lg',
+      'hover:shadow-md transition-shadow',
       'dark:shadow-slate-700',
-      'hover:ring-hover-color dark:hover:ring-hover-color',
+      !focus && 'hover:ring-hover-color dark:hover:ring-hover-color',
     ],
     'text-sm font-sans font-normal leading-7 tracking-wider',
     'text-neutral-600 dark:text-dt-text-color',

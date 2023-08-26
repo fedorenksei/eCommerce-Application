@@ -21,7 +21,8 @@ export const CheckboxGroup = ({
       <label
         className={clsx(
           'form-bp:col-span-2 flex justify-between gap-3',
-          'border rounded-xl border-neutral-200 hover:border-hover-color px-4',
+          'px-4 py-4 form-bp:py-0',
+          'border rounded-xl border-neutral-200 hover:border-hover-color',
           'hover:shadow-md transition-shadow',
           'dark:shadow-slate-700',
         )}

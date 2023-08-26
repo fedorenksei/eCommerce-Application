@@ -3,12 +3,13 @@ import { useId } from 'react';
 import { Header5 } from '../../text/Header5';
 import { TextInput } from '../TextInput';
 import { UseFormRegisterReturn } from 'react-hook-form';
+import { TextInputType } from '../../../types/types';
 
 type TextInputGroupProps = {
   label: string;
   error?: string;
   register: UseFormRegisterReturn;
-  type?: 'password' | 'date';
+  type?: TextInputType;
 };
 
 export const TextInputGroup = ({

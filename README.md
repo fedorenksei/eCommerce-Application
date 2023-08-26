@@ -27,12 +27,12 @@ All materials that you can find here are used for non-commercial purposes. If yo
 
 ## Technologies stack
 
-- React,
+- React, react-hook-form
 - Redux,
 - Storybook,
 - Jest,
 - React testing library,
-- TailwindCSS,
+- TailwindCSS, clsx,
 - Eslint,
 - Prettier,
 - Husky with lint-staged.

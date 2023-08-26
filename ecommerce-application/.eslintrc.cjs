@@ -25,6 +25,7 @@ module.exports = {
         printWidth: 80,
         singleAttributePerLine: true,
         bracketSpacing: true,
+        trailingComma: 'all',
       },
     ],
     'max-len': 'off',

@@ -1,5 +1,10 @@
 import React from 'react';
+import { LoginForm } from '../../widgets/LoginForm';
 
 export const Login = () => {
-  return <div className="text-center text-4xl">Login page</div>;
+  return (
+    <>
+      <LoginForm />
+    </>
+  );
 };

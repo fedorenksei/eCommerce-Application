@@ -7,6 +7,8 @@ import {
 import { TextInputGroup } from '../../../shared/ui/forms/TextInputGroup';
 import { Form } from '../../../shared/ui/forms/Form';
 import { FormButton } from '../../../shared/ui/forms/FormButton';
+import { customerRegExps } from '../../../shared/data/regExps';
+import { validationErrors } from '../../../shared/data/validationErrors';
 
 export const FirstStepForm = (props: FirstStepFormProps) => {
   const { register, handleSubmit, watch, trigger, formState } =
@@ -34,16 +36,8 @@ export const FirstStepForm = (props: FirstStepFormProps) => {
             message: 'Field is require',
           },
           pattern: {
-            value:
-              /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
-            message:
-              "Email must be properly formatted, contain a domain name, contain an '@' symbol separating local part and domain name (e.g., user@example.com)",
-          },
-          validate: (val: string) => {
-            const trimmed = val.trim();
-            if (trimmed.length !== val.length) {
-              return 'Email address must not contain leading or trailing whitespace';
-            }
+            value: customerRegExps.mail,
+            message: validationErrors.mail,
           },
         })}
         error={formState.errors?.email?.message}
@@ -55,17 +49,16 @@ export const FirstStepForm = (props: FirstStepFormProps) => {
           onChange: async () => await trigger('passwordConfirm'),
           required: {
             value: true,
-            message: 'Field is require',
+            message: validationErrors.required,
           },
           pattern: {
-            value: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/,
-            message:
-              'Password should contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (such as !@#$%^&*)',
+            value: customerRegExps.password,
+            message: validationErrors.password,
           },
           validate: (val: string) => {
             const trimmed = val.trim();
             if (trimmed.length !== val.length) {
-              return 'Password address must not contain leading or trailing whitespace';
+              return validationErrors.passwordSpaces;
             }
           },
         })}
@@ -78,11 +71,11 @@ export const FirstStepForm = (props: FirstStepFormProps) => {
         register={register('passwordConfirm', {
           required: {
             value: true,
-            message: 'Field is require',
+            message: validationErrors.required,
           },
           validate: (val: string) => {
             if (watch('password') != val) {
-              return 'Passwords is not the same';
+              return validationErrors.passwordSame;
             }
           },
         })}
@@ -95,12 +88,11 @@ export const FirstStepForm = (props: FirstStepFormProps) => {
         register={register('firstName', {
           required: {
             value: true,
-            message: 'Field is require',
+            message: validationErrors.required,
           },
           pattern: {
-            value: /^[a-zA-Z]*$/,
-            message:
-              'Must contain at least one character and no special characters or numbers',
+            value: customerRegExps.name,
+            message: validationErrors.name,
           },
         })}
         error={formState.errors?.firstName?.message}
@@ -111,12 +103,11 @@ export const FirstStepForm = (props: FirstStepFormProps) => {
         register={register('lastName', {
           required: {
             value: true,
-            message: 'Field is require',
+            message: validationErrors.required,
           },
           pattern: {
-            value: /^[a-zA-Z]*$/,
-            message:
-              'Must contain at least one character and no special characters or numbers',
+            value: customerRegExps.name,
+            message: validationErrors.name,
           },
         })}
         error={formState.errors?.lastName?.message}
@@ -127,7 +118,7 @@ export const FirstStepForm = (props: FirstStepFormProps) => {
         register={register('dateOfBirth', {
           required: {
             value: true,
-            message: 'Field is require',
+            message: validationErrors.required,
           },
           validate: validateDate,
         })}

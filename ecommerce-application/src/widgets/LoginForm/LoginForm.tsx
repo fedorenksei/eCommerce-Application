@@ -13,6 +13,8 @@ import { Paragraph } from '../../shared/ui/text/Paragraph';
 import { Header2 } from '../../shared/ui/text/Header2';
 import { useDispatch } from 'react-redux';
 import { setIsShown, setText } from '../../shared/store/modalSlice';
+import { customerRegExps } from '../../shared/data/regExps';
+import { validationErrors } from '../../shared/data/validationErrors';
 
 export const LoginForm = () => {
   const auth = useSelector((state: RootState) => state.auth);
@@ -60,19 +62,11 @@ export const LoginForm = () => {
         register={register('email', {
           required: {
             value: true,
-            message: 'Field is require',
+            message: validationErrors.required,
           },
           pattern: {
-            value:
-              /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
-            message:
-              "Email must be properly formatted, contain a domain name, contain an '@' symbol separating local part and domain name (e.g., user@example.com)",
-          },
-          validate: (val: string) => {
-            const trimmed = val.trim();
-            if (trimmed.length !== val.length) {
-              return 'Email address must not contain leading or trailing whitespace';
-            }
+            value: customerRegExps.mail,
+            message: validationErrors.mail,
           },
         })}
         error={formState.errors?.email?.message}
@@ -83,17 +77,16 @@ export const LoginForm = () => {
         register={register('password', {
           required: {
             value: true,
-            message: 'Field is require',
+            message: validationErrors.required,
           },
           pattern: {
-            value: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/,
-            message:
-              'Password should contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (such as !@#$%^&*)',
+            value: customerRegExps.password,
+            message: validationErrors.password,
           },
           validate: (val: string) => {
             const trimmed = val.trim();
             if (trimmed.length !== val.length) {
-              return 'Password address must not contain leading or trailing whitespace';
+              return validationErrors.passwordSpaces;
             }
           },
         })}

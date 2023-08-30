@@ -267,12 +267,16 @@ export class ServerAPI {
     }
   }
 
-  getProducts = async (/* categoryId?: string */) => {
+  getProducts = async (categoryId: string | null = null) => {
     /*     const filterParams = `filter=categories.id:"${categoryId}"&`;
     const sortParams = 'sort=name.en desc&';
     const findParams = 'text.en="cora"&'; */
+    console.log(categoryId);
+    const categoryParams = categoryId
+      ? `filter=categories.id:"${categoryId}"&`
+      : '';
     const limitParams = 'limit=9&';
-    const searchParams = `${limitParams}`;
+    const searchParams = `${limitParams}${categoryParams}`;
     const link = `${this.API_URL}/${this.KEY}/product-projections/search?${searchParams}`;
 
     let res = null;
@@ -291,6 +295,7 @@ export class ServerAPI {
       console.log(e);
     }
 
+    console.log(res);
     return res;
   };
 

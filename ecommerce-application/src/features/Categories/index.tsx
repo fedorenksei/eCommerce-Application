@@ -29,13 +29,13 @@ export const Categories = () => {
   const categoriesId: Record<string, string> = {};
   console.log(category);
 
-  const severApi = ServerAPI.getInstance();
+  const serverApi = ServerAPI.getInstance();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const categories: CategoryData[] = await severApi.getCategories(true);
+      const categories: CategoryData[] = await serverApi.getCategories(true);
       categories.forEach(({ name: { en: categoryName }, id }) => {
         categoriesId[categoryName] = id;
       });

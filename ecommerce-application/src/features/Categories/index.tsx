@@ -44,6 +44,7 @@ export const Categories = () => {
     };
     fetchCategories();
     return () => {};
+    // !Эта хренотень запускает бесконечный цикл, если сделать как хочет линтер.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

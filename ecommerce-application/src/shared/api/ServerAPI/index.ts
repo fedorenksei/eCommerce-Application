@@ -267,6 +267,33 @@ export class ServerAPI {
     }
   }
 
+  getProducts = async (/* categoryId?: string */) => {
+    /*     const filterParams = `filter=categories.id:"${categoryId}"&`;
+    const sortParams = 'sort=name.en desc&';
+    const findParams = 'text.en="cora"&'; */
+    const limitParams = 'limit=9&';
+    const searchParams = `${limitParams}`;
+    const link = `${this.API_URL}/${this.KEY}/product-projections/search?${searchParams}`;
+
+    let res = null;
+
+    try {
+      const response = await fetch(link, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+      console.log(response);
+      const result = await response.json();
+      res = result;
+    } catch (e) {
+      console.log(e);
+    }
+
+    return res;
+  };
+
   public async logout() {
     localStorage.removeItem(`${this.prefix}-access-token`);
     localStorage.removeItem(`${this.prefix}-refresh-token`);

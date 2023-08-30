@@ -39,8 +39,10 @@ export const Categories = () => {
       categories.forEach(({ name: { en: categoryName }, id }) => {
         categoriesId[categoryName] = id;
       });
-      console.log(categoriesId);
       setCategories(() => categories);
+      if (category && !Object.keys(categoriesId).includes(category)) {
+        navigate('/catalog');
+      }
     };
     fetchCategories();
     return () => {};

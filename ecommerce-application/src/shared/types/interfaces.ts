@@ -63,3 +63,11 @@ export interface CustomerAddress {
 export interface CustomerData {
   email: string;
 }
+
+export interface CategoryData {
+  ancestors: Array<string>;
+  id: string;
+  name: {
+    en: string;
+  };
+}

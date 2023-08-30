@@ -1,5 +1,6 @@
 import store from '../../../app/store';
 import {
+  CategoryData,
   CustomerData,
   LoginData,
   NewCustomerInfo,
@@ -27,14 +28,22 @@ export class ServerAPI {
     this.refreshToken = null;
     this.customerID = null;
     this.customerInfo = null;
-    this.prefix = 'nkj1k238sadQ';
-    this.KEY = 'ecommerce-application-creative-team';
-    this.CLIENT_ID = '2S2FwbXYw3IAoCFUFaIeHqAi';
-    this.CLIENT_SECRET = 'D_NhGA6rYxPkWwCXKQWe7u3nIu-u3viM';
-    this.SCOPE = 'manage_project:ecommerce-application-creative-team';
-    this.REGION = 'us-central1';
-    this.AUTH_URL = 'https://auth.us-central1.gcp.commercetools.com';
-    this.API_URL = 'https://api.us-central1.gcp.commercetools.com';
+    // this.prefix = 'nkj1k238sadQ';
+    // this.KEY = 'ecommerce-application-creative-team';
+    // this.CLIENT_ID = '2S2FwbXYw3IAoCFUFaIeHqAi';
+    // this.CLIENT_SECRET = 'D_NhGA6rYxPkWwCXKQWe7u3nIu-u3viM';
+    // this.SCOPE = 'manage_project:ecommerce-application-creative-team';
+    // this.REGION = 'us-central1';
+    // this.AUTH_URL = 'https://auth.us-central1.gcp.commercetools.com';
+    // this.API_URL = 'https://api.us-central1.gcp.commercetools.com';
+    this.prefix = 'testprefix';
+    this.KEY = '1213123';
+    this.CLIENT_ID = '8qsbF1nw1R9NjCihwGWVHvJs';
+    this.CLIENT_SECRET = 'hysbumzI1UcK-LRED6LRZwgtOi2roufT';
+    this.SCOPE = 'manage_project:1213123';
+    this.REGION = 'ueurope-west1';
+    this.AUTH_URL = 'https://auth.europe-west1.gcp.commercetools.com';
+    this.API_URL = 'https://api.europe-west1.gcp.commercetools.com';
   }
 
   public static getInstance() {
@@ -229,6 +238,32 @@ export class ServerAPI {
           customerInfo: { ...this.customerInfo },
         }),
       );
+    }
+  }
+
+  public async getCategories(onlyMain = false) {
+    const link = `${this.API_URL}/${this.KEY}/categories`;
+    let res = null;
+
+    try {
+      const response = await fetch(link, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+      const result = await response.json();
+      res = result.results;
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (res) {
+      res = onlyMain
+        ? res.filter((cat: CategoryData) => cat.ancestors.length === 0)
+        : res;
+
+      return res;
     }
   }
 

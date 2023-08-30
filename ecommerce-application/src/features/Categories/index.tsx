@@ -1,34 +1,14 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ServerAPI } from '../../shared/api/ServerAPI';
+import { CategoryData } from '../../shared/types/interfaces';
 
 interface Props {
   name: string;
   onClick: () => void;
   isActive?: boolean;
 }
-
-interface testCat {
-  name: string;
-}
-
-const testCategories: testCat[] = [
-  {
-    name: 'test1',
-  },
-  {
-    name: 'test2',
-  },
-  {
-    name: 'test3',
-  },
-  {
-    name: 'test4',
-  },
-  {
-    name: 'test5',
-  },
-];
 
 const Category = ({ name, onClick, isActive }: Props) => {
   return (
@@ -44,13 +24,27 @@ const Category = ({ name, onClick, isActive }: Props) => {
 };
 
 export const Categories = () => {
-  const [categories, setCategories] = useState<testCat[]>([]);
+  const [categories, setCategories] = useState<CategoryData[]>([]);
   const { category } = useParams();
+  const categoriesId: Record<string, string> = {};
+  console.log(category);
+
+  const severApi = ServerAPI.getInstance();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    setCategories(() => testCategories);
+    const fetchCategories = async () => {
+      const categories: CategoryData[] = await severApi.getCategories(true);
+      categories.forEach(({ name: { en: categoryName }, id }) => {
+        categoriesId[categoryName] = id;
+      });
+      console.log(categoriesId);
+      setCategories(() => categories);
+    };
+    fetchCategories();
+    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onCategoryClick = (categoryName: string) => {
@@ -58,13 +52,13 @@ export const Categories = () => {
   };
   return (
     <div className="flex w-full justify-around">
-      {categories.map(({ name }) => {
+      {categories.map(({ name: { en: categoryName } }) => {
         return (
           <Category
-            name={name}
-            onClick={() => onCategoryClick(name)}
-            key={name}
-            isActive={category === name}
+            name={categoryName}
+            onClick={() => onCategoryClick(categoryName)}
+            key={categoryName}
+            isActive={category === categoryName}
           />
         );
       })}

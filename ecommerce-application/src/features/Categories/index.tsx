@@ -5,18 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 interface Props {
   name: string;
   onClick: () => void;
+  isActive?: boolean;
 }
-
-const Category = ({ name, onClick }: Props) => {
-  return (
-    <button
-      className="border-slate-800 border-2 cursor-pointer select-none"
-      onClick={() => onClick()}
-    >
-      {name}
-    </button>
-  );
-};
 
 interface testCat {
   name: string;
@@ -40,10 +30,22 @@ const testCategories: testCat[] = [
   },
 ];
 
+const Category = ({ name, onClick, isActive }: Props) => {
+  return (
+    <button
+      className={`border-slate-800 border-2 cursor-pointer select-none ${
+        isActive && 'bg-slate-800 text-white'
+      }`}
+      onClick={() => onClick()}
+    >
+      {name}
+    </button>
+  );
+};
+
 export const Categories = () => {
   const [categories, setCategories] = useState<testCat[]>([]);
   const { category } = useParams();
-  console.log(category);
 
   const navigate = useNavigate();
 
@@ -56,12 +58,13 @@ export const Categories = () => {
   };
   return (
     <div className="flex w-full justify-around">
-      {categories.map((category) => {
+      {categories.map(({ name }) => {
         return (
           <Category
-            name={category.name}
-            onClick={() => onCategoryClick(category.name)}
-            key={category.name}
+            name={name}
+            onClick={() => onCategoryClick(name)}
+            key={name}
+            isActive={category === name}
           />
         );
       })}

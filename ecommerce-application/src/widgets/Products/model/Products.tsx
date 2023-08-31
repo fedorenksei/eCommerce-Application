@@ -1,27 +1,24 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ServerAPI } from '../../../shared/api/ServerAPI';
 import { useParams } from 'react-router-dom';
-import { CategoryData } from '../../../shared/types/interfaces';
-
-interface ProductData {
-  name: {
-    en: string;
-  };
-}
-
-interface ProductsData {
-  results: ProductData[];
-}
+import {
+  CategoryData,
+  ProductData,
+  ProductsData,
+} from '../../../shared/types/interfaces';
 
 export const Products = () => {
   const [products, setProducts] = useState<ProductData[]>();
   const { category } = useParams();
-  console.log(category);
-  const categoriesId: Record<string, string> = {};
 
   const serverApi = ServerAPI.getInstance();
+  const cbSetProducts = useCallback(
+    (newProducts: ProductData[]) => setProducts(newProducts),
+    [],
+  );
   useEffect(() => {
+    const categoriesId: Record<string, string> = {};
     const fetchCategories = async () => {
       const categories: CategoryData[] = await serverApi.getCategories(true);
       categories.forEach(({ name: { en: categoryName }, id }) => {
@@ -30,18 +27,16 @@ export const Products = () => {
     };
     const fetchProducts = async () => {
       await fetchCategories();
-      console.log('category is', category);
-      category && console.log(categoriesId[category]);
       const products: ProductsData = await serverApi.getProducts(
         category ? categoriesId[category] : null,
       );
       if (products) {
-        setProducts(() => products.results);
+        cbSetProducts(products.results);
       }
     };
     fetchProducts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category]);
+  }, [category, cbSetProducts, serverApi]);
+
   return (
     <div className="flex flex-col">
       {products &&

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ServerAPI } from '../../shared/api/ServerAPI';
 import { CategoryData } from '../../shared/types/interfaces';
@@ -26,29 +26,30 @@ const Category = ({ name, onClick, isActive }: Props) => {
 export const Categories = () => {
   const [categories, setCategories] = useState<CategoryData[]>([]);
   const { category } = useParams();
-  const categoriesId: Record<string, string> = {};
-  console.log(category);
+  const cbSetCategories = useCallback(
+    (newCategories: CategoryData[]) => setCategories(newCategories),
+    [],
+  );
 
   const serverApi = ServerAPI.getInstance();
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    const categoriesId: Record<string, string> = {};
     const fetchCategories = async () => {
       const categories: CategoryData[] = await serverApi.getCategories(true);
       categories.forEach(({ name: { en: categoryName }, id }) => {
         categoriesId[categoryName] = id;
       });
-      setCategories(() => categories);
+      cbSetCategories(categories);
       if (category && !Object.keys(categoriesId).includes(category)) {
         navigate('/catalog');
       }
     };
     fetchCategories();
     return () => {};
-    // !Эта хренотень запускает бесконечный цикл, если сделать как хочет линтер.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [category, cbSetCategories, navigate, serverApi]);
 
   const onCategoryClick = (categoryName: string) => {
     navigate(`/catalog/${categoryName}`);

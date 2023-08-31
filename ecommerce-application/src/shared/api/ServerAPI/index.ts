@@ -271,7 +271,6 @@ export class ServerAPI {
     /*     const filterParams = `filter=categories.id:"${categoryId}"&`;
     const sortParams = 'sort=name.en desc&';
     const findParams = 'text.en="cora"&'; */
-    console.log(categoryId);
     const categoryParams = categoryId
       ? `filter=categories.id:"${categoryId}"&`
       : '';
@@ -288,14 +287,12 @@ export class ServerAPI {
           Authorization: `Bearer ${this.accessToken}`,
         },
       });
-      console.log(response);
       const result = await response.json();
       res = result;
     } catch (e) {
       console.log(e);
     }
 
-    console.log(res);
     return res;
   };
 

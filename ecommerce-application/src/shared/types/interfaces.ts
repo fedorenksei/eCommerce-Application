@@ -71,3 +71,13 @@ export interface CategoryData {
     en: string;
   };
 }
+
+export interface ProductData {
+  name: {
+    en: string;
+  };
+}
+
+export interface ProductsData {
+  results: ProductData[];
+}

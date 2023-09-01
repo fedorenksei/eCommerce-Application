@@ -7,6 +7,7 @@ import {
 } from '../../types/interfaces';
 import { setAuth } from '../../store/isAuthSlice';
 import { setCustomerData } from '../../store/customerDataSlice';
+import { setFiltersState } from '../../store/filtersSlice';
 import { getFiltersParams } from '../../utils/getFiltersParams';
 
 export class ServerAPI {
@@ -302,6 +303,8 @@ export class ServerAPI {
     console.log(res);
     const results = res.results;
     const params = getFiltersParams(res.facets);
+
+    store.dispatch(setFiltersState(params));
     return { results, filterParams: params };
   };
 

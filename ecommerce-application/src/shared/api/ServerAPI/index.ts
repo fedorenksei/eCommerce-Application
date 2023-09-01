@@ -7,6 +7,7 @@ import {
 } from '../../types/interfaces';
 import { setAuth } from '../../store/isAuthSlice';
 import { setCustomerData } from '../../store/customerDataSlice';
+import { getFiltersParams } from '../../utils/getFiltersParams';
 
 export class ServerAPI {
   private static instance: ServerAPI;
@@ -299,7 +300,9 @@ export class ServerAPI {
     }
 
     console.log(res);
-    return res;
+    const results = res.results;
+    const params = getFiltersParams(res.facets);
+    return { results, filterParams: params };
   };
 
   public async logout() {

@@ -22,12 +22,14 @@ export class ServerAPI {
   private readonly REGION: string;
   private readonly AUTH_URL: string;
   private readonly API_URL: string;
+  private readonly limit: number;
 
   constructor() {
     this.accessToken = null;
     this.refreshToken = null;
     this.customerID = null;
     this.customerInfo = null;
+    this.limit = 20;
     // this.prefix = 'nkj1k238sadQ';
     // this.KEY = 'ecommerce-application-creative-team';
     // this.CLIENT_ID = '2S2FwbXYw3IAoCFUFaIeHqAi';
@@ -268,14 +270,17 @@ export class ServerAPI {
   }
 
   getProducts = async (categoryId: string | null = null) => {
-    /*     const filterParams = `filter=categories.id:"${categoryId}"&`;
-    const sortParams = 'sort=name.en desc&';
-    const findParams = 'text.en="cora"&'; */
+    const filterParams = `filter.query=variants.attributes.color.label.en:"green"&`;
+    // const filterParams = ``; &filter.query=variants.attributes.size:"38"
+    // const sortParams = 'sort=name.en desc&';
+    // const findParams = 'text.en="cora"&';
     const categoryParams = categoryId
-      ? `filter=categories.id:"${categoryId}"&`
+      ? `filter.query=categories.id:subtree("${categoryId}")&`
       : '';
-    const limitParams = 'limit=9&';
-    const searchParams = `${limitParams}${categoryParams}`;
+    // const facetParams = `facet=variants.attributes.gender.label+counting+products&facet=variants.attributes.color.label.en+counting+products&facet=variants.attributes.size+counting+products&facet=variants.attributes.style.label+counting+products`;
+    const facetParams = `facet=variants.attributes.gender.label&facet=variants.attributes.color.label.en&facet=variants.attributes.size&facet=variants.attributes.style.label&facet=variants.price.centAmount`;
+    const limitParams = `limit=${this.limit}&`;
+    const searchParams = `${limitParams}${categoryParams}${filterParams}${facetParams}`;
     const link = `${this.API_URL}/${this.KEY}/product-projections/search?${searchParams}`;
 
     let res = null;
@@ -293,6 +298,7 @@ export class ServerAPI {
       console.log(e);
     }
 
+    console.log(res);
     return res;
   };
 

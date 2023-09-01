@@ -40,10 +40,8 @@ export const Products = () => {
   return (
     <div className="flex flex-col">
       {products &&
-        products.map(({ name: { en: productName } }) => (
-          <span key={JSON.stringify(productName)}>
-            {JSON.stringify(productName)}
-          </span>
+        products.map(({ name: { en: productName }, id }) => (
+          <span key={id}>{JSON.stringify(productName)}</span>
         ))}
     </div>
   );

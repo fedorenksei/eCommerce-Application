@@ -76,6 +76,7 @@ export interface ProductData {
   name: {
     en: string;
   };
+  id: string;
 }
 
 export interface ProductsData {

@@ -60,9 +60,9 @@ export function getButtonStyles({
       ],
       transparent: [
         'bg-transparent',
-        'border border-primary-color',
-        !disabled && 'hover:border-hover-color hover:text-hover-color',
-        'focus:border-2 focus:border-dt-bg-color dark:focus:border-bg-color',
+        'ring-1 ring-primary-color',
+        !disabled && 'hover:ring-hover-color hover:text-hover-color',
+        'focus:ring-2 focus:ring-dt-bg-color dark:focus:ring-bg-color',
       ],
     }[color],
     !disabled && ['focus:shadow-lg hover:shadow-md', 'dark:shadow-slate-700'],

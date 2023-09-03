@@ -60,15 +60,21 @@ export interface CustomerAddress {
   postalCode: string;
 }
 
+export interface CustomerAddressWithId extends CustomerAddress {
+  id: string;
+}
+
 export interface CustomerData {
   email: string;
   password: string;
   firstName: string;
   lastName: string;
   dateOfBirth: string;
-  addresses: CustomerAddress[];
-  defaultShippingAddress: number;
-  defaultBillingAddress: number;
+  addresses: CustomerAddressWithId[];
+  defaultShippingAddressId: string;
+  defaultBillingAddressId: string;
+  shippingAddressIds: string[];
+  billingAddressIds: string[];
 }
 
 export interface PersonalData {

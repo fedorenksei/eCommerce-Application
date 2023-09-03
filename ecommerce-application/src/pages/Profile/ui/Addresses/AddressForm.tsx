@@ -13,12 +13,12 @@ import { setIsShown, setText } from '../../../../shared/store/modalSlice';
 import Spinner from '../../../../shared/ui/Spinner';
 import { AddressFormFields } from './AddressFormFields';
 
-interface AddressEditProps {
-  data: CustomerAddressWithId;
+interface AddressFormProps {
+  data?: CustomerAddressWithId;
   closeForm: () => void;
 }
 
-export const AddressEdit = ({ data, closeForm }: AddressEditProps) => {
+export const AddressForm = ({ data, closeForm }: AddressFormProps) => {
   const serverAPI = ServerAPI.getInstance();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +31,7 @@ export const AddressEdit = ({ data, closeForm }: AddressEditProps) => {
     console.log(newData);
 
     setIsLoading(true);
-    const actions = getUpdateActions({ ...newData, id: data.id });
+    const actions = getUpdateActions({ data: newData, id: data?.id });
     const res = await serverAPI.updateCustomer(actions);
     console.log(res);
     setIsLoading(false);
@@ -56,7 +56,14 @@ export const AddressEdit = ({ data, closeForm }: AddressEditProps) => {
         formState={formState}
       />
 
-      <div className="form-bp:col-span-2 justify-self-end">
+      <div className="form-bp:col-span-2 flex justify-between">
+        <FormButton
+          type="button"
+          onClick={closeForm}
+          secondary={true}
+        >
+          Cancel
+        </FormButton>
         <FormButton
           disabled={!formState.isDirty || !formState.isValid}
           type="submit"
@@ -68,18 +75,26 @@ export const AddressEdit = ({ data, closeForm }: AddressEditProps) => {
   );
 };
 
-function getUpdateActions(data: CustomerAddressWithId) {
-  const actions: CustomerUpdateAction[] = [
-    {
-      action: 'changeAddress',
-      addressId: data.id,
-      address: {
-        streetName: data.streetName,
-        postalCode: data.postalCode,
-        city: data.city,
-        country: data.country,
-      },
-    },
-  ];
-  return actions;
+function getUpdateActions({
+  data,
+  id,
+}: {
+  data: CustomerAddress;
+  id?: string;
+}): CustomerUpdateAction[] {
+  const actionType = id ? 'changeAddress' : 'addAddress';
+  const address: { [index: string]: string } = {
+    streetName: data.streetName,
+    postalCode: data.postalCode,
+    city: data.city,
+    country: data.country,
+  };
+  if (id) {
+    address.addressId = id;
+  }
+  const action = {
+    action: actionType,
+    address,
+  };
+  return [action];
 }

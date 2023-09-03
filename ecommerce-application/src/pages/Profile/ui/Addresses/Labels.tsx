@@ -26,7 +26,7 @@ export const AddressLabels = ({
       {isShipping && <Label text="shipping" />}
       {isBilling && <Label text="billing" />}
       {isDefaultShipping && <Label text="default shipping" />}
-      {isDefaultBilling && <Label text="default shipping" />}
+      {isDefaultBilling && <Label text="default billing" />}
     </div>
   );
 };

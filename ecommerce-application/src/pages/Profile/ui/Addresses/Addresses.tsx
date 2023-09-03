@@ -3,7 +3,7 @@ import { FormButton } from '../../../../shared/ui/forms/FormButton';
 import { Header3 } from '../../../../shared/ui/text/Header3';
 import { useToggle } from '../../../../shared/utils/hooks';
 import { ProfileSection } from '../shared/ProfileSection';
-import { AddressCreate } from './AddressCreate';
+import { AddressForm } from './AddressForm';
 import { AddressItem } from './AddressItem';
 
 export const Addresses = ({
@@ -36,15 +36,17 @@ export const Addresses = ({
 
         {isAdding ? (
           <ProfileSection>
-            <AddressCreate closeForm={toggleAdding} />
+            <AddressForm closeForm={toggleAdding} />
           </ProfileSection>
         ) : (
-          <FormButton
-            type="button"
-            onClick={toggleAdding}
-          >
-            Add address
-          </FormButton>
+          <div className="flex justify-center">
+            <FormButton
+              type="button"
+              onClick={toggleAdding}
+            >
+              Add address
+            </FormButton>
+          </div>
         )}
       </ProfileSection>
     </>

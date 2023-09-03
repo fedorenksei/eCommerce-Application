@@ -45,7 +45,7 @@ export function getButtonStyles({
   });
 
   return clsx(
-    'w-max inline-flex justify-center items-center',
+    'inline-flex justify-center items-center',
     'transition-all',
     [
       size !== 'small' && 'md:px-[40px] md:py-[15px] md:gap-[15px]',
@@ -62,6 +62,7 @@ export function getButtonStyles({
         'bg-transparent',
         'ring-1 ring-primary-color',
         !disabled && 'hover:ring-hover-color hover:text-hover-color',
+        disabled && 'ring-disabled-color text-disabled-color',
         'focus:ring-2 focus:ring-dt-bg-color dark:focus:ring-bg-color',
       ],
     }[color],

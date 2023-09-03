@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { CustomerAddressWithId } from '../../../../shared/types/interfaces';
 import { EditButton } from '../shared/EditButton';
 import { ProfileSection } from '../shared/ProfileSection';
-import { AddressEdit } from './AddressEdit';
-import { Paragraph } from '../../../../shared/ui/text/Paragraph';
+import { AddressForm } from './AddressForm';
 import { AddressLabels } from './Labels';
+import { AddressUsage } from './AddressUsage';
+import { AddressView } from './AddressView';
 
 interface AddressItemProps {
   data: CustomerAddressWithId;
@@ -28,32 +29,42 @@ export const AddressItem = ({
 
   return (
     <ProfileSection>
-      <div className="flex justify-between items-start gap-3">
-        {editMode ? (
-          <AddressEdit
-            data={data}
-            closeForm={toggleEditMode}
-          />
-        ) : (
-          <div className="flex flex-col items-start gap-2">
-            <AddressLabels
-              {...{
-                isShipping,
-                isBilling,
-                isDefaultShipping,
-                isDefaultBilling,
-              }}
-            />
-            <Paragraph>
-              {data.country}, {data.city}, {data.streetName}, {data.postalCode}
-            </Paragraph>
-          </div>
-        )}
-        <EditButton
-          editMode={editMode}
-          onClick={toggleEditMode}
+      {editMode ? (
+        <AddressForm
+          data={data}
+          closeForm={toggleEditMode}
         />
-      </div>
+      ) : (
+        <div className="flex flex-col items gap-5">
+          <AddressLabels
+            {...{
+              isShipping,
+              isBilling,
+              isDefaultShipping,
+              isDefaultBilling,
+            }}
+          />
+          <div className="flex items-start justify-between flex-wrap-reverse gap-2">
+            <AddressView data={data} />
+            <EditButton
+              editMode={editMode}
+              onClick={toggleEditMode}
+            />
+          </div>
+          <AddressUsage
+            type="shipping"
+            addressId={data.id}
+            isAllowed={isShipping}
+            isDefault={isDefaultShipping}
+          />
+          <AddressUsage
+            type="billing"
+            addressId={data.id}
+            isAllowed={isBilling}
+            isDefault={isDefaultBilling}
+          />
+        </div>
+      )}
     </ProfileSection>
   );
 };

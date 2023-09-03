@@ -82,3 +82,11 @@ export interface ProductData {
 export interface ProductsData {
   results: ProductData[];
 }
+
+export interface ProductRequestParams {
+  categoryId?: null | string | undefined;
+  size?: null | string | undefined;
+  color?: null | string | undefined;
+  gender?: null | string | undefined;
+  style?: null | string | undefined;
+}

@@ -4,11 +4,13 @@ import {
   CustomerData,
   LoginData,
   NewCustomerInfo,
+  ProductRequestParams,
 } from '../../types/interfaces';
 import { setAuth } from '../../store/isAuthSlice';
 import { setCustomerData } from '../../store/customerDataSlice';
 import { setFiltersState } from '../../store/filtersSlice';
 import { getFiltersParams } from '../../utils/getFiltersParams';
+import { setCategories } from '../../store/categoriesSlice';
 
 export class ServerAPI {
   private static instance: ServerAPI;
@@ -68,6 +70,13 @@ export class ServerAPI {
     } else {
       this.getCommonToken();
     }
+
+    const categoriesId: Record<string, string> = {};
+    const categories: CategoryData[] = await this.getCategories(true);
+    categories.forEach(({ name: { en: categoryName }, id }) => {
+      categoriesId[categoryName] = id;
+    });
+    store.dispatch(setCategories(categoriesId));
   }
 
   private loadTokens() {
@@ -271,7 +280,7 @@ export class ServerAPI {
     }
   }
 
-  getProducts = async (categoryId: string | null = null) => {
+  getProducts = async ({ categoryId = null }: ProductRequestParams) => {
     const filterParams = `filter.query=variants.attributes.color.label.en:"green"&`;
     // const filterParams = ``; &filter.query=variants.attributes.size:"38"
     // const sortParams = 'sort=name.en desc&';
@@ -305,6 +314,7 @@ export class ServerAPI {
     const params = getFiltersParams(res.facets);
 
     store.dispatch(setFiltersState(params));
+    console.log(params);
     return { results, filterParams: params };
   };
 

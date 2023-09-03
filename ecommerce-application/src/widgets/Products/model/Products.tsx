@@ -1,48 +1,55 @@
 import React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import { ServerAPI } from '../../../shared/api/ServerAPI';
-import { useParams } from 'react-router-dom';
-import {
-  CategoryData,
-  ProductData,
-  ProductsData,
-} from '../../../shared/types/interfaces';
+import { useParams /* useSearchParams */ } from 'react-router-dom';
+import { ProductData, ProductsData } from '../../../shared/types/interfaces';
+import { ProductList } from '../../../features/ProductList';
+import { Categories } from '../../../features/Categories';
+import { ProductFilter } from '../../../features/ProductFilters';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../app/store';
 
 export const Products = () => {
-  const [products, setProducts] = useState<ProductData[]>();
-  const { category } = useParams();
-
+  const [products, setProducts] = useState<ProductData[]>([]);
+  const categoriesList = useSelector(
+    (state: RootState) => state.categories.categoriesData,
+  );
+  const [categories] = useState<string[]>(Object.keys(categoriesList));
   const serverApi = ServerAPI.getInstance();
   const cbSetProducts = useCallback(
     (newProducts: ProductData[]) => setProducts(newProducts),
     [],
   );
+
+  const { category } = useParams();
+  // const [searchParams, setSearchParams] = useSearchParams();
+  // setSearchParams({
+  //   post: 'test',
+  // });
+  // console.log(searchParams.get('post'));
+
+  // console.log(searchParams);
+
   useEffect(() => {
-    const categoriesId: Record<string, string> = {};
-    const fetchCategories = async () => {
-      const categories: CategoryData[] = await serverApi.getCategories(true);
-      categories.forEach(({ name: { en: categoryName }, id }) => {
-        categoriesId[categoryName] = id;
-      });
-    };
     const fetchProducts = async () => {
-      await fetchCategories();
-      const products: ProductsData = await serverApi.getProducts(
-        category ? categoriesId[category] : null,
-      );
+      const products: ProductsData = await serverApi.getProducts({
+        categoryId:
+          category && categoriesList[category]
+            ? categoriesList[category]
+            : undefined,
+      });
       if (products) {
         cbSetProducts(products.results);
       }
     };
     fetchProducts();
-  }, [category, cbSetProducts, serverApi]);
+  }, [categoriesList, category, cbSetProducts, serverApi]);
 
   return (
-    <div className="flex flex-col">
-      {products &&
-        products.map(({ name: { en: productName }, id }) => (
-          <span key={id}>{JSON.stringify(productName)}</span>
-        ))}
-    </div>
+    <>
+      <Categories categories={categories} />
+      <ProductFilter />
+      <ProductList products={products} />
+    </>
   );
 };

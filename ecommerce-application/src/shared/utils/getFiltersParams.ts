@@ -28,18 +28,18 @@ interface FiltersParams {
 }
 
 export const getFiltersParams = (facets: FacetsData) => {
-  const colors = facets['variants.attributes.color.label.en'].terms.map(
-    (item: Term) => item.term,
-  );
-  const sizes = facets['variants.attributes.size'].terms.map(
-    (item: Term) => item.term,
-  );
-  const genders = facets['variants.attributes.gender.label'].terms.map(
-    (item: Term) => item.term,
-  );
-  const styles = facets['variants.attributes.style.label'].terms.map(
-    (item: Term) => item.term,
-  );
+  const colors = facets['variants.attributes.color.label.en'].terms
+    .map((item: Term) => item.term)
+    .sort();
+  const sizes = facets['variants.attributes.size'].terms
+    .map((item: Term) => item.term)
+    .sort();
+  const genders = facets['variants.attributes.gender.label'].terms
+    .map((item: Term) => item.term)
+    .sort();
+  const styles = facets['variants.attributes.style.label'].terms
+    .map((item: Term) => item.term)
+    .sort();
   const prices = {
     min: Math.min.apply(
       null,
@@ -59,6 +59,5 @@ export const getFiltersParams = (facets: FacetsData) => {
     prices,
   };
 
-  console.log(filtersParams);
   return filtersParams;
 };

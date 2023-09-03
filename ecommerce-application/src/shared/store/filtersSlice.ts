@@ -3,18 +3,20 @@ import { createSlice } from '@reduxjs/toolkit';
 const filtersSlice = createSlice({
   name: 'filtersParams',
   initialState: {
-    colors: [],
-    genders: [],
-    prices: {
-      min: 0,
-      max: 0,
+    params: {
+      colors: [],
+      genders: [],
+      prices: {
+        min: 0,
+        max: 0,
+      },
+      sizes: [],
+      styles: [],
     },
-    sizes: [],
-    styles: [],
   },
   reducers: {
     setFiltersState(state, action) {
-      state = action.payload;
+      state.params = action.payload;
     },
   },
 });

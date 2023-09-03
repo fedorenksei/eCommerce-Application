@@ -24,7 +24,7 @@ export const AddressUsage = ({
     return getButtonStyles({
       size: 'small',
       shape: 'square',
-      color: 'transparent',
+      filling: 'transparent',
       disabled,
     });
   };

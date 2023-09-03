@@ -19,7 +19,7 @@ export const FormButton = ({
   const styles = getButtonStyles({
     size: 'medium',
     shape: 'round',
-    color: secondary ? 'transparent' : 'filled',
+    filling: secondary ? 'transparent' : 'filled',
     disabled: disabled,
   });
 

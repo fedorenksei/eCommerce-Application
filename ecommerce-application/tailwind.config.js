@@ -28,6 +28,8 @@ export default {
         'success-color': '#2DC071',
         'alert-color': '#E77C40',
         'danger-color': '#E74040',
+        'danger-hover-color': '#A83B3B',
+        'danger-disabled-color': '#DE7979',
       },
       fontFamily: {
         primary: ['Montserrat'],

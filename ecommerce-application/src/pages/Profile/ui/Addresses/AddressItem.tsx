@@ -6,6 +6,7 @@ import { AddressForm } from './AddressForm';
 import { AddressLabels } from './Labels';
 import { AddressUsage } from './AddressUsage';
 import { AddressView } from './AddressView';
+import { DeleteButton } from './DeleteButton';
 
 interface AddressItemProps {
   data: CustomerAddressWithId;
@@ -44,12 +45,15 @@ export const AddressItem = ({
               isDefaultBilling,
             }}
           />
-          <div className="flex items-start justify-between flex-wrap-reverse gap-2">
+          <div className="flex items-end justify-between flex-wrap-reverse gap-2">
             <AddressView data={data} />
-            <EditButton
-              editMode={editMode}
-              onClick={toggleEditMode}
-            />
+            <div className="flex gap-3 flex-wrap flex-1 justify-end">
+              <EditButton
+                editMode={editMode}
+                onClick={toggleEditMode}
+              />
+              <DeleteButton id={data.id} />
+            </div>
           </div>
           <AddressUsage
             type="shipping"

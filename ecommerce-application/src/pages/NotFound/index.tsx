@@ -19,7 +19,7 @@ export const NotFound = () => {
         <button
           className={getButtonStyles({
             size: 'large',
-            color: 'filled',
+            filling: 'filled',
             shape: 'round',
           })}
         >

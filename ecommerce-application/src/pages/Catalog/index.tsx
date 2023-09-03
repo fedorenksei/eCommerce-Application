@@ -13,7 +13,7 @@ export const Catalog = () => {
         <button
           className={getButtonStyles({
             size: 'large',
-            color: 'filled',
+            filling: 'filled',
             shape: 'round',
           })}
         >

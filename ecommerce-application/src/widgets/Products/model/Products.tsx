@@ -37,6 +37,7 @@ export const Products = () => {
       const style = searchParams.get('styles');
       const minPrice = searchParams.get('minPrice');
       const maxPrice = searchParams.get('maxPrice');
+      const searchText = searchParams.get('searchText');
       let price: PriceParams | null = null;
       if (minPrice !== null && maxPrice !== null) {
         price = {
@@ -54,6 +55,7 @@ export const Products = () => {
         gender,
         style,
         priceRange: price || undefined,
+        searchText,
       });
       if (products) {
         cbSetProducts(products.results);

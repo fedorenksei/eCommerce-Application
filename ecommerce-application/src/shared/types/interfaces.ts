@@ -89,6 +89,7 @@ export interface ProductRequestParams {
   color?: null | string | undefined;
   gender?: null | string | undefined;
   style?: null | string | undefined;
+  searchText?: null | string | undefined;
   priceRange?: null | PriceParams;
 }
 

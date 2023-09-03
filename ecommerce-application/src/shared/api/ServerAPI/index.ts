@@ -287,6 +287,7 @@ export class ServerAPI {
     gender = null,
     style = null,
     priceRange = null,
+    searchText = null,
   }: ProductRequestParams) => {
     // const filterParams = `filter.query=variants.attributes.color.label.en:"green"&`;
     let filterParams = '';
@@ -305,12 +306,13 @@ export class ServerAPI {
     if (priceRange) {
       filterParams += `filter.query=variants.price.centAmount:range (${priceRange.min} to ${priceRange.max})&`;
     }
+    if (searchText) {
+      filterParams += `text.en="${searchText}"&`;
+    }
     // const sortParams = 'sort=name.en desc&';
-    // const findParams = 'text.en="cora"&';
     const categoryParams = categoryId
       ? `filter.query=categories.id:subtree("${categoryId}")&`
       : '';
-    // const facetParams = `facet=variants.attributes.gender.label+counting+products&facet=variants.attributes.color.label.en+counting+products&facet=variants.attributes.size+counting+products&facet=variants.attributes.style.label+counting+products`;
     const facetParams = `facet=variants.attributes.gender.label&facet=variants.attributes.color.label.en&facet=variants.attributes.size&facet=variants.attributes.style.label&facet=variants.price.centAmount`;
     const limitParams = `limit=${this.limit}&`;
     const searchParams = `${limitParams}${categoryParams}${filterParams}${facetParams}`;

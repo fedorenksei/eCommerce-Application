@@ -4,6 +4,7 @@ import { RootState } from '../../../app/store';
 import { Filter } from '../../../entities/Filter';
 import { VariantsParams } from '../../../shared/types/interfaces';
 import { RangeFilter } from '../../../entities/RangeFilter';
+import { CatalogSearch } from '../../../entities/CatalogSearch';
 
 export const ProductFilter = () => {
   const filters = useSelector(
@@ -17,13 +18,13 @@ export const ProductFilter = () => {
 
   return (
     <div className="border-2 border-slate-800 w-full text-center">
-      {filterNames.map((item) => {
-        if (filters[item as keyof VariantsParams])
+      {filterNames.map((filterNameKey) => {
+        if (filters[filterNameKey as keyof VariantsParams])
           return (
             <Filter
-              filterState={filters[item as keyof VariantsParams]}
-              filterName={item}
-              key={item}
+              filterState={filters[filterNameKey as keyof VariantsParams]}
+              filterName={filterNameKey}
+              key={filterNameKey}
             />
           );
       })}
@@ -31,6 +32,7 @@ export const ProductFilter = () => {
         filterParams={priceFilter}
         filterName="prices"
       />
+      <CatalogSearch />
     </div>
   );
 };

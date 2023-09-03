@@ -22,11 +22,11 @@ export const AddressLabels = ({
   isDefaultBilling,
 }: AddressLabelsProps) => {
   return (
-    <>
+    <div className="flex flex-wrap gap-2">
       {isShipping && <Label text="shipping" />}
       {isBilling && <Label text="billing" />}
       {isDefaultShipping && <Label text="default shipping" />}
       {isDefaultBilling && <Label text="default shipping" />}
-    </>
+    </div>
   );
 };

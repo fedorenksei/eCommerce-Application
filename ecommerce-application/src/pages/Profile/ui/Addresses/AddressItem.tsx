@@ -32,7 +32,7 @@ export const AddressItem = ({
         {editMode ? (
           <AddressEdit
             data={data}
-            toggleEditMode={toggleEditMode}
+            closeForm={toggleEditMode}
           />
         ) : (
           <div className="flex flex-col items-start gap-2">

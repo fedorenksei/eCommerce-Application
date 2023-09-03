@@ -3,27 +3,22 @@ import { FormButton } from '../../../../shared/ui/forms/FormButton';
 import { Form } from '../../../../shared/ui/forms/Form';
 import { useState } from 'react';
 import { ServerAPI } from '../../../../shared/api/ServerAPI';
-import {
-  CustomerAddress,
-  CustomerAddressWithId,
-} from '../../../../shared/types/interfaces';
+import { CustomerAddress } from '../../../../shared/types/interfaces';
 import { CustomerUpdateAction } from '../../../../shared/types/types';
 import { useDispatch } from 'react-redux';
 import { setIsShown, setText } from '../../../../shared/store/modalSlice';
 import Spinner from '../../../../shared/ui/Spinner';
 import { AddressFormFields } from './AddressFormFields';
 
-interface AddressEditProps {
-  data: CustomerAddressWithId;
+interface AddressCreateProps {
   closeForm: () => void;
 }
 
-export const AddressEdit = ({ data, closeForm }: AddressEditProps) => {
+export const AddressCreate = ({ closeForm }: AddressCreateProps) => {
   const serverAPI = ServerAPI.getInstance();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const { register, handleSubmit, formState } = useForm<CustomerAddress>({
-    defaultValues: data,
     mode: 'onChange',
   });
 
@@ -31,7 +26,7 @@ export const AddressEdit = ({ data, closeForm }: AddressEditProps) => {
     console.log(newData);
 
     setIsLoading(true);
-    const actions = getUpdateActions({ ...newData, id: data.id });
+    const actions = getUpdateActions({ ...newData });
     const res = await serverAPI.updateCustomer(actions);
     console.log(res);
     setIsLoading(false);
@@ -41,7 +36,7 @@ export const AddressEdit = ({ data, closeForm }: AddressEditProps) => {
       dispatch(setIsShown({ isShown: true }));
       dispatch(
         setText({
-          text: 'You have successfully updated an address',
+          text: 'You have successfully added a new address',
         }),
       );
     }
@@ -56,7 +51,14 @@ export const AddressEdit = ({ data, closeForm }: AddressEditProps) => {
         formState={formState}
       />
 
-      <div className="form-bp:col-span-2 justify-self-end">
+      <div className="form-bp:col-span-2 flex justify-between">
+        <FormButton
+          type="button"
+          onClick={closeForm}
+          secondary={true}
+        >
+          Cancel
+        </FormButton>
         <FormButton
           disabled={!formState.isDirty || !formState.isValid}
           type="submit"
@@ -68,11 +70,10 @@ export const AddressEdit = ({ data, closeForm }: AddressEditProps) => {
   );
 };
 
-function getUpdateActions(data: CustomerAddressWithId) {
+function getUpdateActions(data: CustomerAddress) {
   const actions: CustomerUpdateAction[] = [
     {
-      action: 'changeAddress',
-      addressId: data.id,
+      action: 'addAddress',
       address: {
         streetName: data.streetName,
         postalCode: data.postalCode,

@@ -1,6 +1,9 @@
 import { CustomerData } from '../../../../shared/types/interfaces';
+import { FormButton } from '../../../../shared/ui/forms/FormButton';
 import { Header3 } from '../../../../shared/ui/text/Header3';
+import { useToggle } from '../../../../shared/utils/hooks';
 import { ProfileSection } from '../shared/ProfileSection';
+import { AddressCreate } from './AddressCreate';
 import { AddressItem } from './AddressItem';
 
 export const Addresses = ({
@@ -10,6 +13,7 @@ export const Addresses = ({
   shippingAddressIds,
   billingAddressIds,
 }: CustomerData) => {
+  const [isAdding, toggleAdding] = useToggle();
   const addressesData = transformAddresses({
     addresses,
     defaultShippingAddressId,
@@ -22,12 +26,26 @@ export const Addresses = ({
     <>
       <ProfileSection>
         <Header3>Your addresses</Header3>
+
         {addressesData.map((address, i) => (
           <AddressItem
             {...address}
             key={`profile-shipping-${i}`}
           />
         ))}
+
+        {isAdding ? (
+          <ProfileSection>
+            <AddressCreate closeForm={toggleAdding} />
+          </ProfileSection>
+        ) : (
+          <FormButton
+            type="button"
+            onClick={toggleAdding}
+          >
+            Add address
+          </FormButton>
+        )}
       </ProfileSection>
     </>
   );

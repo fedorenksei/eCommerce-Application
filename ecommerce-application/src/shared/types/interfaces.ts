@@ -72,11 +72,29 @@ export interface CategoryData {
   };
 }
 
+export interface Price {
+  id: string;
+  value: {
+    centAmount: string;
+  };
+}
+
+export interface ProductImage {
+  url: string;
+}
+
 export interface ProductData {
   name: {
     en: string;
   };
   id: string;
+  masterVariant: {
+    prices: Price[];
+    images: ProductImage[];
+  };
+  metaDescription: {
+    en: string;
+  };
 }
 
 export interface ProductsData {

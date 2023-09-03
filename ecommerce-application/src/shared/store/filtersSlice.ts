@@ -1,22 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { FiltersState } from '../types/interfaces';
 
+const initialState: FiltersState = {
+  variantParams: {
+    colors: [],
+    genders: [],
+    sizes: [],
+    styles: [],
+  },
+  priceParams: {
+    min: 0,
+    max: 0,
+  },
+};
 const filtersSlice = createSlice({
   name: 'filtersParams',
-  initialState: {
-    params: {
-      colors: [],
-      genders: [],
-      prices: {
-        min: 0,
-        max: 0,
-      },
-      sizes: [],
-      styles: [],
-    },
-  },
+  initialState,
   reducers: {
     setFiltersState(state, action) {
-      state.params = action.payload;
+      state.variantParams = action.payload.variantParams;
+      state.priceParams = action.payload.priceParams;
     },
   },
 });

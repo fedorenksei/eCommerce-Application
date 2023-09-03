@@ -14,7 +14,6 @@ const categoriesSlice = createSlice({
   reducers: {
     setCategories(state, action) {
       state.categoriesData = action.payload;
-      console.log(state.categoriesData);
     },
   },
 });

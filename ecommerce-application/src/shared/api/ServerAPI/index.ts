@@ -280,9 +280,31 @@ export class ServerAPI {
     }
   }
 
-  getProducts = async ({ categoryId = null }: ProductRequestParams) => {
-    const filterParams = `filter.query=variants.attributes.color.label.en:"green"&`;
-    // const filterParams = ``; &filter.query=variants.attributes.size:"38"
+  getProducts = async ({
+    categoryId = null,
+    size = null,
+    color = null,
+    gender = null,
+    style = null,
+    priceRange = null,
+  }: ProductRequestParams) => {
+    // const filterParams = `filter.query=variants.attributes.color.label.en:"green"&`;
+    let filterParams = '';
+    if (size) {
+      filterParams += `filter.query=variants.attributes.size:${size}&`;
+    }
+    if (color) {
+      filterParams += `filter.query=variants.attributes.color.label.en:${color}&`;
+    }
+    if (gender) {
+      filterParams += `filter.query=variants.attributes.gender.label:${gender}&`;
+    }
+    if (style) {
+      filterParams += `filter.query=variants.attributes.style.label:${style}&`;
+    }
+    if (priceRange) {
+      filterParams += `filter.query=variants.price.centAmount:range (${priceRange.min} to ${priceRange.max})&`;
+    }
     // const sortParams = 'sort=name.en desc&';
     // const findParams = 'text.en="cora"&';
     const categoryParams = categoryId
@@ -309,12 +331,11 @@ export class ServerAPI {
       console.log(e);
     }
 
-    console.log(res);
     const results = res.results;
     const params = getFiltersParams(res.facets);
+    console.log(params);
 
     store.dispatch(setFiltersState(params));
-    console.log(params);
     return { results, filterParams: params };
   };
 

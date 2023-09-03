@@ -89,4 +89,22 @@ export interface ProductRequestParams {
   color?: null | string | undefined;
   gender?: null | string | undefined;
   style?: null | string | undefined;
+  priceRange?: null | PriceParams;
 }
+
+export type PriceParams = {
+  min: number;
+  max: number;
+};
+
+export type VariantsParams = {
+  colors: string[];
+  genders: string[];
+  sizes: string[];
+  styles: string[];
+};
+
+export type FiltersState = {
+  variantParams: VariantsParams;
+  priceParams: PriceParams;
+};

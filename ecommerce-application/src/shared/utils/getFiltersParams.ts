@@ -1,3 +1,5 @@
+import { FiltersState } from '../types/interfaces';
+
 interface FacetsData {
   'variants.attributes.color.label.en': Facet;
   'variants.attributes.gender.label': Facet;
@@ -14,17 +16,6 @@ interface Facet {
 interface Term {
   term: string;
   count: number;
-}
-
-interface FiltersParams {
-  colors: string[];
-  sizes: string[];
-  genders: string[];
-  styles: string[];
-  prices: {
-    min: number;
-    max: number;
-  };
 }
 
 export const getFiltersParams = (facets: FacetsData) => {
@@ -51,12 +42,17 @@ export const getFiltersParams = (facets: FacetsData) => {
     ),
   };
 
-  const filtersParams: FiltersParams = {
-    colors,
-    sizes,
-    genders,
-    styles,
-    prices,
+  const filtersParams: FiltersState = {
+    variantParams: {
+      colors,
+      sizes,
+      genders,
+      styles,
+    },
+    priceParams: {
+      max: prices.max,
+      min: prices.min,
+    },
   };
 
   return filtersParams;

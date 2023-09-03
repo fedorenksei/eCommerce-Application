@@ -288,8 +288,8 @@ export class ServerAPI {
     style = null,
     priceRange = null,
     searchText = null,
+    sort = null,
   }: ProductRequestParams) => {
-    // const filterParams = `filter.query=variants.attributes.color.label.en:"green"&`;
     let filterParams = '';
     if (size) {
       filterParams += `filter.query=variants.attributes.size:${size}&`;
@@ -309,7 +309,22 @@ export class ServerAPI {
     if (searchText) {
       filterParams += `text.en="${searchText}"&`;
     }
-    // const sortParams = 'sort=name.en desc&';
+    if (sort) {
+      switch (sort) {
+        case 'nameAsc':
+          filterParams += 'sort=name.en asc&';
+          break;
+        case 'nameDesc':
+          filterParams += 'sort=name.en desc&';
+          break;
+        case 'priceAsc':
+          filterParams += 'sort=price asc&';
+          break;
+        case 'priceDesc':
+          filterParams += 'sort=price desc&';
+          break;
+      }
+    }
     const categoryParams = categoryId
       ? `filter.query=categories.id:subtree("${categoryId}")&`
       : '';

@@ -90,6 +90,7 @@ export interface ProductRequestParams {
   gender?: null | string | undefined;
   style?: null | string | undefined;
   searchText?: null | string | undefined;
+  sort?: null | string | undefined;
   priceRange?: null | PriceParams;
 }
 

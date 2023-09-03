@@ -44,7 +44,7 @@ export interface NewCustomerInfo {
   email: string;
   password: string;
   firstName: string;
-  lastname: string;
+  lastName: string;
   dateOfBirth: string;
   addresses: CustomerAddress[];
   shippingAddresses: number[];
@@ -62,4 +62,18 @@ export interface CustomerAddress {
 
 export interface CustomerData {
   email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  addresses: CustomerAddress[];
+  defaultShippingAddress: number;
+  defaultBillingAddress: number;
+}
+
+export interface PersonalData {
+  email: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
 }

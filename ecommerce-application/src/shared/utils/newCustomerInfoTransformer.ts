@@ -38,7 +38,7 @@ export const newCustomerTransformInfo = (
     email: firstFormDate.email,
     password: firstFormDate.password,
     firstName: firstFormDate.firstName,
-    lastname: firstFormDate.lastName,
+    lastName: firstFormDate.lastName,
     dateOfBirth: firstFormDate.dateOfBirth,
     addresses: addresses,
     shippingAddresses: [0],

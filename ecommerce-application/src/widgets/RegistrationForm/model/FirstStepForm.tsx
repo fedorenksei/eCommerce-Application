@@ -9,6 +9,7 @@ import { Form } from '../../../shared/ui/forms/Form';
 import { FormButton } from '../../../shared/ui/forms/FormButton';
 import { customerRegExps } from '../../../shared/data/regExps';
 import { validationErrors } from '../../../shared/data/validationErrors';
+import { validateDate } from '../../../shared/utils/validateDate';
 
 export const FirstStepForm = (props: FirstStepFormProps) => {
   const { register, handleSubmit, watch, trigger, formState } =
@@ -16,15 +17,6 @@ export const FirstStepForm = (props: FirstStepFormProps) => {
       defaultValues: props.customerInfo,
       mode: 'onChange',
     });
-
-  const validateDate = (value: string) => {
-    const age =
-      (new Date().getTime() - +new Date(value)) /
-      (24 * 60 * 60 * 365.25 * 1000);
-    if (age < 13) {
-      return 'User should be above a 13 years';
-    }
-  };
 
   return (
     <Form onSubmit={handleSubmit(props.onSubmit)}>

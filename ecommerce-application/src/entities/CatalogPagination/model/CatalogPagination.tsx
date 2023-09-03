@@ -15,9 +15,9 @@ export const CatalogPagination = ({ totalProducts }: Props) => {
   const page = searchParams.get('page');
   useEffect(() => {
     if (page) {
-      setCurrPage(page);
+      setCurrPage(maxPage < Number(page) ? String(maxPage) : page);
     }
-  }, [page]);
+  }, [page, maxPage]);
 
   useEffect(() => {
     if (currPage === '1') {

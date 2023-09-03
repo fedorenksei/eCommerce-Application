@@ -33,7 +33,7 @@ export class ServerAPI {
     this.refreshToken = null;
     this.customerID = null;
     this.customerInfo = null;
-    this.limit = 20;
+    this.limit = 9;
     // this.prefix = 'nkj1k238sadQ';
     // this.KEY = 'ecommerce-application-creative-team';
     // this.CLIENT_ID = '2S2FwbXYw3IAoCFUFaIeHqAi';
@@ -289,6 +289,7 @@ export class ServerAPI {
     priceRange = null,
     searchText = null,
     sort = null,
+    page = null,
   }: ProductRequestParams) => {
     let filterParams = '';
     if (size) {
@@ -308,6 +309,9 @@ export class ServerAPI {
     }
     if (searchText) {
       filterParams += `text.en="${searchText}"&`;
+    }
+    if (page) {
+      filterParams += `offset=${this.limit * Number(page) - 1}&`;
     }
     if (sort) {
       switch (sort) {
@@ -349,11 +353,12 @@ export class ServerAPI {
     }
 
     const results = res.results;
+    console.log(res);
     const params = getFiltersParams(res.facets);
     console.log(params);
 
     store.dispatch(setFiltersState(params));
-    return { results, filterParams: params };
+    return { results, filterParams: params, total: res.total };
   };
 
   public async logout() {

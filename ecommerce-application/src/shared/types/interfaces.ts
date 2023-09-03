@@ -81,6 +81,7 @@ export interface ProductData {
 
 export interface ProductsData {
   results: ProductData[];
+  total: number;
 }
 
 export interface ProductRequestParams {
@@ -91,6 +92,7 @@ export interface ProductRequestParams {
   style?: null | string | undefined;
   searchText?: null | string | undefined;
   sort?: null | string | undefined;
+  page?: null | string | undefined;
   priceRange?: null | PriceParams;
 }
 

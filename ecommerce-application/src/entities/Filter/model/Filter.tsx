@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { getButtonStyles } from '../../../shared/ui/styles';
+import { getButtonStyles, getTextStyles } from '../../../shared/ui/styles';
 import clsx from 'clsx';
 import { Header3 } from '../../../shared/ui/text/Header3';
 import { capitalize } from '../../../shared/utils/helpers';
@@ -47,12 +47,11 @@ export const Filter = ({ filterState, filterName }: Props) => {
             key={item + index}
             onClick={() => onParamClick(item)}
             className={clsx(
-              getButtonStyles({
-                size: 'small',
-                filling: 'transparent',
-                shape: 'square',
-              }),
-              `${choosenParams.includes(item) ? 'bg-blue-400' : ''}`,
+              getTextStyles({ font: 'h5' }),
+              'p-1 border rounded-md',
+              'border-primary-color select-none',
+              'cursor-pointer transition hover:border-hover-color hover:-translate-y-0.5 hover:shadow-md',
+              choosenParams.includes(item) && 'bg-primary-color text-white',
             )}
           >
             {item}

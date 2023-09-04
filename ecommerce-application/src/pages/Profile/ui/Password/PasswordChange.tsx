@@ -10,28 +10,31 @@ import { useState } from 'react';
 import Spinner from '../../../../shared/ui/Spinner';
 import { setIsShown, setText } from '../../../../shared/store/modalSlice';
 
-interface PasswordFormFields {
+interface PasswordChangeFields {
   password: '';
   passwordConfirm: '';
 }
 
-interface PasswordFormProps {
+interface PasswordChangeProps {
   closeForm: () => void;
 }
 
-export const PasswordForm = ({ closeForm }: PasswordFormProps) => {
+export const PasswordChange = ({ closeForm }: PasswordChangeProps) => {
   const dispatch = useDispatch();
   const serverAPI = ServerAPI.getInstance();
   const [isLoading, setIsLoading] = useState(false);
 
   const { register, handleSubmit, watch, trigger, formState } =
-    useForm<PasswordFormFields>({
+    useForm<PasswordChangeFields>({
       mode: 'onChange',
     });
 
-  const onSubmit = async ({ password }: PasswordFormFields) => {
+  const onSubmit = async ({ password }: PasswordChangeFields) => {
     setIsLoading(true);
     const isOk = await serverAPI.resetPassword(password);
+
+    setIsLoading(false);
+
     dispatch(setIsShown({ isShown: true }));
     if (isOk) {
       dispatch(
@@ -39,6 +42,7 @@ export const PasswordForm = ({ closeForm }: PasswordFormProps) => {
           text: 'You have successfully changed the password',
         }),
       );
+      closeForm();
     } else {
       dispatch(
         setText({
@@ -46,7 +50,6 @@ export const PasswordForm = ({ closeForm }: PasswordFormProps) => {
         }),
       );
     }
-    setIsLoading(false);
   };
 
   return isLoading ? (

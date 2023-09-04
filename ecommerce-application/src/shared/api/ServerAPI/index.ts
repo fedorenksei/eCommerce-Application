@@ -261,6 +261,13 @@ export class ServerAPI {
     return isOk;
   }
 
+  public async checkPassword(password: string) {
+    return await this.loginCustomer({
+      password,
+      email: this.customerInfo?.email || '',
+    });
+  }
+
   private async getCustomerInfo() {
     const link = `${this.API_URL}/${this.KEY}/me`;
     let isOk = false;

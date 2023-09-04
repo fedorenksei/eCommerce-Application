@@ -401,6 +401,26 @@ export class ServerAPI {
     return { results, filterParams: params, total: res.total };
   };
 
+  public async getProduct(id: string) {
+    const link = `${this.API_URL}/${this.KEY}/products/${id}`;
+    let res = null;
+
+    try {
+      const response = await fetch(link, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+      res = await response.json();
+    } catch (e) {
+      console.log(e);
+    }
+
+    console.log(res);
+    return res ? res : false;
+  }
+
   public async logout() {
     localStorage.removeItem(`${this.prefix}-access-token`);
     localStorage.removeItem(`${this.prefix}-refresh-token`);

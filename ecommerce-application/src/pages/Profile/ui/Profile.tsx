@@ -6,6 +6,7 @@ import { Paragraph } from '../../../shared/ui/text/Paragraph';
 import { CustomerData } from '../../../shared/types/interfaces';
 import { Personal } from './Personal';
 import { Addresses } from './Addresses';
+import { Password } from './Password';
 
 export const Profile = () => {
   const customerData: null | CustomerData = useSelector(
@@ -18,6 +19,7 @@ export const Profile = () => {
       {customerData ? (
         <>
           <Personal {...(customerData as CustomerData)} />
+          <Password />
           <Addresses {...(customerData as CustomerData)} />
         </>
       ) : (

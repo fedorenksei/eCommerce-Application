@@ -35,22 +35,22 @@ export class ServerAPI {
     this.customerID = null;
     this.customerInfo = null;
     this.limit = 9;
-    // this.prefix = 'nkj1k238sadQ';
-    // this.KEY = 'ecommerce-application-creative-team';
-    // this.CLIENT_ID = '2S2FwbXYw3IAoCFUFaIeHqAi';
-    // this.CLIENT_SECRET = 'D_NhGA6rYxPkWwCXKQWe7u3nIu-u3viM';
-    // this.SCOPE = 'manage_project:ecommerce-application-creative-team';
-    // this.REGION = 'us-central1';
-    // this.AUTH_URL = 'https://auth.us-central1.gcp.commercetools.com';
-    // this.API_URL = 'https://api.us-central1.gcp.commercetools.com';
-    this.prefix = 'testprefix';
-    this.KEY = '1213123';
-    this.CLIENT_ID = '8qsbF1nw1R9NjCihwGWVHvJs';
-    this.CLIENT_SECRET = 'hysbumzI1UcK-LRED6LRZwgtOi2roufT';
-    this.SCOPE = 'manage_project:1213123';
-    this.REGION = 'ueurope-west1';
-    this.AUTH_URL = 'https://auth.europe-west1.gcp.commercetools.com';
-    this.API_URL = 'https://api.europe-west1.gcp.commercetools.com';
+    this.prefix = 'nkj1k238sadQ';
+    this.KEY = 'ecommerce-application-creative-team';
+    this.CLIENT_ID = '2S2FwbXYw3IAoCFUFaIeHqAi';
+    this.CLIENT_SECRET = 'D_NhGA6rYxPkWwCXKQWe7u3nIu-u3viM';
+    this.SCOPE = 'manage_project:ecommerce-application-creative-team';
+    this.REGION = 'us-central1';
+    this.AUTH_URL = 'https://auth.us-central1.gcp.commercetools.com';
+    this.API_URL = 'https://api.us-central1.gcp.commercetools.com';
+    // this.prefix = 'testprefix';
+    // this.KEY = '1213123';
+    // this.CLIENT_ID = '8qsbF1nw1R9NjCihwGWVHvJs';
+    // this.CLIENT_SECRET = 'hysbumzI1UcK-LRED6LRZwgtOi2roufT';
+    // this.SCOPE = 'manage_project:1213123';
+    // this.REGION = 'ueurope-west1';
+    // this.AUTH_URL = 'https://auth.europe-west1.gcp.commercetools.com';
+    // this.API_URL = 'https://api.europe-west1.gcp.commercetools.com';
   }
 
   public static getInstance() {
@@ -294,6 +294,48 @@ export class ServerAPI {
         }),
       );
     }
+  }
+
+  public async resetPassword(password: string) {
+    let token = '';
+    try {
+      const link = `${this.API_URL}/${this.KEY}/customers/password-token`;
+      const response = await fetch(link, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+        body: JSON.stringify({
+          email: this.customerInfo?.email,
+        }),
+      });
+      token = (await response.json()).value;
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (!token) return false;
+
+    let isOk = null;
+    try {
+      const link = `${this.API_URL}/${this.KEY}/customers/password/reset`;
+      const response = await fetch(link, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+        body: JSON.stringify({
+          tokenValue: token,
+          newPassword: password,
+        }),
+      });
+      isOk = response.ok;
+      console.log(isOk);
+    } catch (e) {
+      console.log(e);
+    }
+
+    return isOk;
   }
 
   public async getCategories(onlyMain = false) {

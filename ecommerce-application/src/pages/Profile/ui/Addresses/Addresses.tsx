@@ -30,7 +30,7 @@ export const Addresses = ({
         {addressesData.map((address, i) => (
           <AddressItem
             {...address}
-            key={`profile-shipping-${i}`}
+            key={`profile-address-${i}`}
           />
         ))}
 

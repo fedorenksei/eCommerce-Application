@@ -261,6 +261,13 @@ export class ServerAPI {
     return isOk;
   }
 
+  public async checkPassword(password: string) {
+    return await this.loginCustomer({
+      password,
+      email: this.customerInfo?.email || '',
+    });
+  }
+
   private async getCustomerInfo() {
     const link = `${this.API_URL}/${this.KEY}/me`;
     let isOk = false;
@@ -294,6 +301,48 @@ export class ServerAPI {
         }),
       );
     }
+  }
+
+  public async resetPassword(password: string) {
+    let token = '';
+    try {
+      const link = `${this.API_URL}/${this.KEY}/customers/password-token`;
+      const response = await fetch(link, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+        body: JSON.stringify({
+          email: this.customerInfo?.email,
+        }),
+      });
+      token = (await response.json()).value;
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (!token) return false;
+
+    let isOk = null;
+    try {
+      const link = `${this.API_URL}/${this.KEY}/customers/password/reset`;
+      const response = await fetch(link, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+        body: JSON.stringify({
+          tokenValue: token,
+          newPassword: password,
+        }),
+      });
+      isOk = response.ok;
+      console.log(isOk);
+    } catch (e) {
+      console.log(e);
+    }
+
+    return isOk;
   }
 
   public async getCategories(onlyMain = false) {

@@ -36,11 +36,17 @@ export const PersonalEdit = ({ data, toggleEditMode }: PersonalEditProps) => {
     setIsLoading(false);
     toggleEditMode();
 
+    dispatch(setIsShown({ isShown: true }));
     if (res) {
-      dispatch(setIsShown({ isShown: true }));
       dispatch(
         setText({
           text: 'You have successfully updated your personal data',
+        }),
+      );
+    } else {
+      dispatch(
+        setText({
+          text: 'Something went wrong, your personal data has not changed',
         }),
       );
     }

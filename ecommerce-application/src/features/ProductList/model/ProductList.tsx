@@ -10,9 +10,9 @@ export const ProductList = ({ products }: Props) => {
     <div className="flex flex-col">
       {products.map(
         ({
-          name: { en: productName },
+          name: { 'en-US': productName },
           masterVariant: { images, prices },
-          metaDescription,
+          description,
           id,
         }) => (
           <div
@@ -26,7 +26,7 @@ export const ProductList = ({ products }: Props) => {
             <span>
               Price is {Number(prices[0].value.centAmount) / 100} euro
             </span>
-            <span>{metaDescription?.en}</span>
+            <span>{description?.['en-US']}</span>
           </div>
         ),
       )}

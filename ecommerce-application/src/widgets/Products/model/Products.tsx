@@ -37,10 +37,10 @@ export const Products = () => {
   useEffect(() => {
     setCategories(Object.keys(categoriesList));
     const fetchProducts = async () => {
-      const size = searchParams.get('sizes');
+      const material = searchParams.get('materials');
       const color = searchParams.get('colors');
       const gender = searchParams.get('genders');
-      const style = searchParams.get('styles');
+      const brand = searchParams.get('brands');
       const minPrice = searchParams.get('minPrice');
       const maxPrice = searchParams.get('maxPrice');
       const searchText = searchParams.get('searchText');
@@ -58,10 +58,10 @@ export const Products = () => {
           category && categoriesList[category]
             ? categoriesList[category]
             : undefined,
-        size,
+        material,
         color,
         gender,
-        style,
+        brand,
         priceRange: price || undefined,
         searchText,
         sort,
@@ -70,7 +70,6 @@ export const Products = () => {
       if (products) {
         cbSetProducts(products.results);
         cbSetTotalProducts(products.total);
-        console.log(products);
       }
     };
     fetchProducts();

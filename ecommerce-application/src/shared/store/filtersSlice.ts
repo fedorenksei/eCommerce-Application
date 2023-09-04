@@ -5,8 +5,8 @@ const initialState: FiltersState = {
   variantParams: {
     colors: [],
     genders: [],
-    sizes: [],
-    styles: [],
+    materials: [],
+    brands: [],
   },
   priceParams: {
     min: 0,

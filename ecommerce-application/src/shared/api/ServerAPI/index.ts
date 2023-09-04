@@ -43,14 +43,14 @@ export class ServerAPI {
     this.REGION = 'us-central1';
     this.AUTH_URL = 'https://auth.us-central1.gcp.commercetools.com';
     this.API_URL = 'https://api.us-central1.gcp.commercetools.com';
-    // this.prefix = 'testprefix';
-    // this.KEY = '1213123';
-    // this.CLIENT_ID = '8qsbF1nw1R9NjCihwGWVHvJs';
-    // this.CLIENT_SECRET = 'hysbumzI1UcK-LRED6LRZwgtOi2roufT';
-    // this.SCOPE = 'manage_project:1213123';
-    // this.REGION = 'ueurope-west1';
-    // this.AUTH_URL = 'https://auth.europe-west1.gcp.commercetools.com';
-    // this.API_URL = 'https://api.europe-west1.gcp.commercetools.com';
+    /* this.prefix = 'testprefix';
+    this.KEY = '1213123';
+    this.CLIENT_ID = '8qsbF1nw1R9NjCihwGWVHvJs';
+    this.CLIENT_SECRET = 'hysbumzI1UcK-LRED6LRZwgtOi2roufT';
+    this.SCOPE = 'manage_project:1213123';
+    this.REGION = 'ueurope-west1';
+    this.AUTH_URL = 'https://auth.europe-west1.gcp.commercetools.com';
+    this.API_URL = 'https://api.europe-west1.gcp.commercetools.com'; */
   }
 
   public static getInstance() {
@@ -74,7 +74,7 @@ export class ServerAPI {
 
     const categoriesId: Record<string, string> = {};
     const categories: CategoryData[] = await this.getCategories(true);
-    categories.forEach(({ name: { en: categoryName }, id }) => {
+    categories.forEach(({ name: { 'en-US': categoryName }, id }) => {
       categoriesId[categoryName] = id;
     });
     store.dispatch(setCategories(categoriesId));
@@ -373,27 +373,27 @@ export class ServerAPI {
 
   getProducts = async ({
     categoryId = null,
-    size = null,
+    material = null,
     color = null,
     gender = null,
-    style = null,
+    brand = null,
     priceRange = null,
     searchText = null,
     sort = null,
     page = null,
   }: ProductRequestParams) => {
     let filterParams = '';
-    if (size) {
-      filterParams += `filter.query=variants.attributes.size:${size}&`;
+    if (material) {
+      filterParams += `filter.query=variants.attributes.material.label:${material}&`;
     }
     if (color) {
-      filterParams += `filter.query=variants.attributes.color.label.en:${color}&`;
+      filterParams += `filter.query=variants.attributes.color01.label:${color}&`;
     }
     if (gender) {
-      filterParams += `filter.query=variants.attributes.gender.label:${gender}&`;
+      filterParams += `filter.query=variants.attributes.gender-01.label.en-US:${gender}&`;
     }
-    if (style) {
-      filterParams += `filter.query=variants.attributes.style.label:${style}&`;
+    if (brand) {
+      filterParams += `filter.query=facet=variants.attributes.brand.label:${brand}&`;
     }
     if (priceRange) {
       filterParams += `filter.query=variants.price.centAmount:range (${priceRange.min} to ${priceRange.max})&`;
@@ -407,10 +407,10 @@ export class ServerAPI {
     if (sort) {
       switch (sort) {
         case 'nameAsc':
-          filterParams += 'sort=name.en asc&';
+          filterParams += 'sort=name.en-US asc&';
           break;
         case 'nameDesc':
-          filterParams += 'sort=name.en desc&';
+          filterParams += 'sort=name.en-US desc&';
           break;
         case 'priceAsc':
           filterParams += 'sort=price asc&';
@@ -423,7 +423,7 @@ export class ServerAPI {
     const categoryParams = categoryId
       ? `filter.query=categories.id:subtree("${categoryId}")&`
       : '';
-    const facetParams = `facet=variants.attributes.gender.label&facet=variants.attributes.color.label.en&facet=variants.attributes.size&facet=variants.attributes.style.label&facet=variants.price.centAmount`;
+    const facetParams = `facet=variants.attributes.gender-01.label.en-US&facet=variants.attributes.brand.label&facet=variants.attributes.material.label&facet=variants.attributes.color01.label&facet=variants.price.centAmount&`;
     const limitParams = `limit=${this.limit}&`;
     const searchParams = `${limitParams}${categoryParams}${filterParams}${facetParams}`;
     const link = `${this.API_URL}/${this.KEY}/product-projections/search?${searchParams}`;
@@ -444,9 +444,7 @@ export class ServerAPI {
     }
 
     const results = res.results;
-    console.log(res);
     const params = getFiltersParams(res.facets);
-    console.log(params);
 
     store.dispatch(setFiltersState(params));
     return { results, filterParams: params, total: res.total };

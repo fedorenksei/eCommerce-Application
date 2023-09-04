@@ -14,7 +14,6 @@ export const ProductFilter = () => {
   const priceFilter = useSelector(
     (state: RootState) => state.filtersParams.priceParams,
   );
-  console.log(priceFilter);
   const filterNames = Object.keys(filters).filter((item) => item !== 'prices');
 
   return (

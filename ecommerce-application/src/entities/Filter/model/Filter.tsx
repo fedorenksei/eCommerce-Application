@@ -10,12 +10,12 @@ export const Filter = ({ filterState, filterName }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [choosenParams, setChoosenParams] = useState<string[]>([]);
 
-  const onParamClick = (size: string) => {
+  const onParamClick = (param: string) => {
     setChoosenParams((curr) => {
-      if (curr.includes(size)) {
-        return curr.filter((item) => item !== size);
+      if (curr.includes(param)) {
+        return curr.filter((item) => item !== param);
       } else {
-        return [...curr, size];
+        return [...curr, param];
       }
     });
   };

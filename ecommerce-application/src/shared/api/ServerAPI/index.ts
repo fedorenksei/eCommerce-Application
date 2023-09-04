@@ -311,7 +311,7 @@ export class ServerAPI {
       filterParams += `text.en="${searchText}"&`;
     }
     if (page) {
-      filterParams += `offset=${this.limit * Number(page) - 1}&`;
+      filterParams += `offset=${this.limit * (Number(page) - 1)}&`;
     }
     if (sort) {
       switch (sort) {

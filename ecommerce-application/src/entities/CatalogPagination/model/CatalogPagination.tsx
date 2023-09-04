@@ -10,35 +10,35 @@ const productsOnPage = 9;
 export const CatalogPagination = ({ totalProducts }: Props) => {
   console.log(totalProducts);
   const maxPage = Math.ceil(totalProducts / productsOnPage);
-  const [currPage, setCurrPage] = useState('1');
+  const [currPage, setCurrPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const page = searchParams.get('page');
   useEffect(() => {
     if (page) {
-      setCurrPage(maxPage < Number(page) ? String(maxPage) : page);
+      setCurrPage(maxPage < Number(page) ? maxPage : Number(page));
     }
   }, [page, maxPage]);
 
   useEffect(() => {
-    if (currPage === '1') {
+    if (currPage === 1) {
       searchParams.delete('page');
     } else {
-      searchParams.set('page', currPage);
+      searchParams.set('page', String(currPage));
     }
     setSearchParams(searchParams);
   }, [currPage, searchParams, setSearchParams]);
 
   const onNextPageClick = () => {
-    setCurrPage((curr) => String(Number(curr) + 1));
+    setCurrPage((curr) => curr + 1);
   };
 
   const onPrevPageClick = () => {
-    setCurrPage((curr) => String(Number(curr) - 1));
+    setCurrPage((curr) => curr - 1);
   };
   return (
     <div>
       <button
-        disabled={currPage === '1' ? true : false}
+        disabled={currPage === 1 ? true : false}
         onClick={onPrevPageClick}
       >
         &lt;&lt;

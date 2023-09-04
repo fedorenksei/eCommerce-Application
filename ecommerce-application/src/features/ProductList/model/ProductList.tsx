@@ -1,11 +1,13 @@
 import React from 'react';
 import { ProductData } from '../../../shared/types/interfaces';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   products: ProductData[];
 };
 
 export const ProductList = ({ products }: Props) => {
+  const navigate = useNavigate();
   return (
     <div className="grid grid-cols-[repeat(auto-fill,_minmax(200px,_300px))] justify-even">
       {products.map(
@@ -18,6 +20,8 @@ export const ProductList = ({ products }: Props) => {
           <div
             className="flex flex-col border-2 p-2"
             key={id}
+            role="presentation"
+            onClick={() => navigate(`/product/${id}`)}
           >
             <span>{JSON.stringify(productName)}</span>
             {images.map((img) => (

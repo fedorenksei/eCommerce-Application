@@ -9,6 +9,7 @@ import { AboutUs } from '../../pages/AboutUs';
 import { Basket } from '../../pages/Basket';
 import { Profile } from '../../pages/Profile';
 import { Catalog } from '../../pages/Catalog';
+import { Product } from '../../pages/Product';
 
 const routePairs = [
   {
@@ -38,6 +39,10 @@ const routePairs = [
   {
     path: '/catalog/:category',
     component: <Catalog />,
+  },
+  {
+    path: '/product/:id',
+    component: <Product />,
   },
   {
     path: '/basket',

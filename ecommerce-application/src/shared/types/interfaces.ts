@@ -117,6 +117,27 @@ export interface ProductData {
   };
 }
 
+export interface DetailedProductData {
+  name: {
+    'en-US': string;
+  };
+  id: string;
+  masterData: {
+    current: {
+      description: {
+        'en-US': string;
+      };
+      name: {
+        'en-US': string;
+      };
+      masterVariant: {
+        prices: Price[];
+        images: ProductImage[];
+      };
+    };
+  };
+}
+
 export interface ProductsData {
   results: ProductData[];
   total: number;

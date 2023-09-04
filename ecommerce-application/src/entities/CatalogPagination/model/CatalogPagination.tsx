@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { getButtonStyles, getTextStyles } from '../../../shared/ui/styles';
 
 type Props = {
   totalProducts: number;
@@ -34,18 +35,31 @@ export const CatalogPagination = ({ totalProducts }: Props) => {
   const onPrevPageClick = () => {
     setCurrPage((curr) => curr - 1);
   };
+
   return (
-    <div>
+    <div className="flex justify-center gap-5 p-4 items-center">
       <button
         disabled={currPage === 1 ? true : false}
         onClick={onPrevPageClick}
+        className={getButtonStyles({
+          size: 'small',
+          filling: 'transparent',
+          shape: 'round',
+          disabled: currPage === 1 ? true : false,
+        })}
       >
         &lt;&lt;
       </button>
-      <span>{currPage}</span>
+      <span className={getTextStyles({ font: 'h2' })}>{currPage}</span>
       <button
         disabled={Number(currPage) >= Number(maxPage) ? true : false}
         onClick={onNextPageClick}
+        className={getButtonStyles({
+          size: 'small',
+          filling: 'transparent',
+          shape: 'round',
+          disabled: Number(currPage) >= Number(maxPage) ? true : false,
+        })}
       >
         &gt;&gt;
       </button>

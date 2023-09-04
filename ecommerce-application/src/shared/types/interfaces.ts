@@ -88,7 +88,7 @@ export interface CategoryData {
   ancestors: Array<string>;
   id: string;
   name: {
-    en: string;
+    'en-US': string;
   };
 }
 
@@ -105,15 +105,15 @@ export interface ProductImage {
 
 export interface ProductData {
   name: {
-    en: string;
+    'en-US': string;
   };
   id: string;
   masterVariant: {
     prices: Price[];
     images: ProductImage[];
   };
-  metaDescription: {
-    en: string;
+  description: {
+    'en-US': string;
   };
 }
 
@@ -124,10 +124,10 @@ export interface ProductsData {
 
 export interface ProductRequestParams {
   categoryId?: null | string | undefined;
-  size?: null | string | undefined;
+  material?: null | string | undefined;
   color?: null | string | undefined;
   gender?: null | string | undefined;
-  style?: null | string | undefined;
+  brand?: null | string | undefined;
   searchText?: null | string | undefined;
   sort?: null | string | undefined;
   page?: null | string | undefined;
@@ -142,8 +142,8 @@ export type PriceParams = {
 export type VariantsParams = {
   colors: string[];
   genders: string[];
-  sizes: string[];
-  styles: string[];
+  materials: string[];
+  brands: string[];
 };
 
 export type FiltersState = {

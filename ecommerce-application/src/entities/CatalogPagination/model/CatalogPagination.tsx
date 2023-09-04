@@ -8,7 +8,6 @@ type Props = {
 const productsOnPage = 9;
 
 export const CatalogPagination = ({ totalProducts }: Props) => {
-  console.log(totalProducts);
   const maxPage = Math.ceil(totalProducts / productsOnPage);
   const [currPage, setCurrPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();

@@ -1,10 +1,10 @@
 import { FiltersState } from '../types/interfaces';
 
 interface FacetsData {
-  'variants.attributes.color.label.en': Facet;
-  'variants.attributes.gender.label': Facet;
-  'variants.attributes.size': Facet;
-  'variants.attributes.style.label': Facet;
+  'variants.attributes.color01.label': Facet;
+  'variants.attributes.gender-01.label.en-US': Facet;
+  'variants.attributes.material.label': Facet;
+  'variants.attributes.brand.label': Facet;
   'variants.price.centAmount': Facet;
 }
 
@@ -19,16 +19,16 @@ interface Term {
 }
 
 export const getFiltersParams = (facets: FacetsData) => {
-  const colors = facets['variants.attributes.color.label.en'].terms
+  const colors = facets['variants.attributes.color01.label'].terms
     .map((item: Term) => item.term)
     .sort();
-  const sizes = facets['variants.attributes.size'].terms
+  const materials = facets['variants.attributes.material.label'].terms
     .map((item: Term) => item.term)
     .sort();
-  const genders = facets['variants.attributes.gender.label'].terms
+  const genders = facets['variants.attributes.gender-01.label.en-US'].terms
     .map((item: Term) => item.term)
     .sort();
-  const styles = facets['variants.attributes.style.label'].terms
+  const brands = facets['variants.attributes.brand.label'].terms
     .map((item: Term) => item.term)
     .sort();
   const prices = {
@@ -45,9 +45,9 @@ export const getFiltersParams = (facets: FacetsData) => {
   const filtersParams: FiltersState = {
     variantParams: {
       colors,
-      sizes,
+      materials,
       genders,
-      styles,
+      brands,
     },
     priceParams: {
       max: prices.max,

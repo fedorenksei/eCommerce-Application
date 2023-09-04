@@ -19,11 +19,17 @@ export const DeleteButton = ({ id }: DeleteButtonProps) => {
     ]);
     console.log(res);
 
+    dispatch(setIsShown({ isShown: true }));
     if (res) {
-      dispatch(setIsShown({ isShown: true }));
       dispatch(
         setText({
           text: 'You have successfully deleted an address',
+        }),
+      );
+    } else {
+      dispatch(
+        setText({
+          text: 'Something went wrong, your address has not been deleted',
         }),
       );
     }

@@ -30,7 +30,6 @@ export const AddressUsage = ({
   };
 
   const sendAction = async (action: AddressAction) => {
-    // setIsLoading(true);
     const actions = getAction({
       addressId,
       type,
@@ -38,14 +37,18 @@ export const AddressUsage = ({
     });
     const res = await serverAPI.updateCustomer(actions);
     console.log(res);
-    // setIsLoading(false);
-    // closeForm();
 
+    dispatch(setIsShown({ isShown: true }));
     if (res) {
-      dispatch(setIsShown({ isShown: true }));
       dispatch(
         setText({
           text: 'You have successfully updated an address',
+        }),
+      );
+    } else {
+      dispatch(
+        setText({
+          text: 'Something went wrong, your address has not changed',
         }),
       );
     }

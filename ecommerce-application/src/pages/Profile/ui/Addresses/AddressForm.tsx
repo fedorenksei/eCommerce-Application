@@ -37,11 +37,17 @@ export const AddressForm = ({ data, closeForm }: AddressFormProps) => {
     setIsLoading(false);
     closeForm();
 
+    dispatch(setIsShown({ isShown: true }));
     if (res) {
-      dispatch(setIsShown({ isShown: true }));
       dispatch(
         setText({
           text: 'You have successfully updated an address',
+        }),
+      );
+    } else {
+      dispatch(
+        setText({
+          text: 'Something went wrong, your address has not changed',
         }),
       );
     }

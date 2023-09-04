@@ -66,10 +66,10 @@ export class ServerAPI {
     if (this.refreshToken) {
       const isUpdated = await this.updateTokens();
       if (isUpdated === false) {
-        this.getCommonToken();
+        await this.getCommonToken();
       }
     } else {
-      this.getCommonToken();
+      await this.getCommonToken();
     }
 
     const categoriesId: Record<string, string> = {};

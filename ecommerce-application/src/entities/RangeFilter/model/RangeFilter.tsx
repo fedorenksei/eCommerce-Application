@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { PriceParams } from '../../../shared/types/interfaces';
 import { useSearchParams } from 'react-router-dom';
+import { Header3 } from '../../../shared/ui/text/Header3';
+import { capitalize } from '../../../shared/utils/helpers';
+import { Header5 } from '../../../shared/ui/text/Header5';
+import { getButtonStyles } from '../../../shared/ui/styles';
 
 type Props = {
   filterParams: PriceParams;
@@ -48,10 +52,10 @@ export const RangeFilter = ({
   };
 
   return (
-    <div className="flex flex-col">
-      <span>{filterName}</span>
+    <div className="space-y-2">
+      <Header3>{capitalize(filterName)}</Header3>
       <label>
-        <span>Min value</span>
+        <Header5>Min value</Header5>
         <input
           className="w-32 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
           type="range"
@@ -63,7 +67,7 @@ export const RangeFilter = ({
         <span>{minValue}</span>
       </label>
       <label>
-        <span>Max value</span>
+        <Header5>Max value</Header5>
         <input
           className="w-32 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
           type="range"
@@ -74,9 +78,27 @@ export const RangeFilter = ({
         />
         <span>{maxValue}</span>
       </label>
-      <div>
-        <button onClick={onApplyParamsClick}>Apply</button>
-        <button onClick={onResetClick}>Reset</button>
+      <div className="space-x-2">
+        <button
+          className={getButtonStyles({
+            size: 'small',
+            filling: 'filled',
+            shape: 'round',
+          })}
+          onClick={onApplyParamsClick}
+        >
+          Apply
+        </button>
+        <button
+          className={getButtonStyles({
+            size: 'small',
+            filling: 'transparent',
+            shape: 'round',
+          })}
+          onClick={onResetClick}
+        >
+          Reset
+        </button>
       </div>
     </div>
   );

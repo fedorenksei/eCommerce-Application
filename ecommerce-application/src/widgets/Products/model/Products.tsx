@@ -85,7 +85,7 @@ export const Products = () => {
   return (
     <>
       <Categories categories={categories} />
-      <div className="grid grid-cols-[minmax(200px,_300px),_1fr] md:flex-row md:items-start">
+      <div className="grid grid-cols-1 md:grid-cols-[minmax(200px,_300px),_1fr] gap-3">
         <ProductFilter />
         <div>
           <ProductList products={products} />

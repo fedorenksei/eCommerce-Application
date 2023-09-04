@@ -8,3 +8,7 @@ export const validateDate = (value: string) => {
     return 'This service is intended for users under 120 years old.';
   }
 };
+
+export function capitalize(str: string) {
+  return `${str[0].toUpperCase()}${str.slice(1)}`;
+}

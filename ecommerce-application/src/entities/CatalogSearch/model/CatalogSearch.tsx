@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { getButtonStyles, getInputStyles } from '../../../shared/ui/styles';
 
 export const CatalogSearch = () => {
   const [inputValue, setInputValue] = useState<string>('');
@@ -16,16 +17,22 @@ export const CatalogSearch = () => {
     setSearchParams(searchParams);
   };
   return (
-    <div>
+    <div className="space-y-2">
       <input
         type="text"
         placeholder="Type for search"
         value={inputValue}
         onChange={onInputChange}
+        className={getInputStyles({})}
       />
       <button
         type="button"
         onClick={onSearchClick}
+        className={getButtonStyles({
+          size: 'small',
+          filling: 'filled',
+          shape: 'round',
+        })}
       >
         Search
       </button>

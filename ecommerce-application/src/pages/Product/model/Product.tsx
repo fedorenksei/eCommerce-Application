@@ -44,7 +44,10 @@ export const Product = () => {
       </span>
       <span>
         <span className="font-bold">price:</span>{' '}
-        {product?.masterData.current.masterVariant.prices[0].value.centAmount}
+        {Number(
+          product?.masterData.current.masterVariant.prices[0].value.centAmount,
+        ) / 100}{' '}
+        <span className="font-bold">euro</span>
       </span>
     </div>
   );

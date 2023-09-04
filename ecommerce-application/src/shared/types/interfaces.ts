@@ -83,3 +83,70 @@ export interface PersonalData {
   lastName: string;
   dateOfBirth: string;
 }
+
+export interface CategoryData {
+  ancestors: Array<string>;
+  id: string;
+  name: {
+    en: string;
+  };
+}
+
+export interface Price {
+  id: string;
+  value: {
+    centAmount: string;
+  };
+}
+
+export interface ProductImage {
+  url: string;
+}
+
+export interface ProductData {
+  name: {
+    en: string;
+  };
+  id: string;
+  masterVariant: {
+    prices: Price[];
+    images: ProductImage[];
+  };
+  metaDescription: {
+    en: string;
+  };
+}
+
+export interface ProductsData {
+  results: ProductData[];
+  total: number;
+}
+
+export interface ProductRequestParams {
+  categoryId?: null | string | undefined;
+  size?: null | string | undefined;
+  color?: null | string | undefined;
+  gender?: null | string | undefined;
+  style?: null | string | undefined;
+  searchText?: null | string | undefined;
+  sort?: null | string | undefined;
+  page?: null | string | undefined;
+  priceRange?: null | PriceParams;
+}
+
+export type PriceParams = {
+  min: number;
+  max: number;
+};
+
+export type VariantsParams = {
+  colors: string[];
+  genders: string[];
+  sizes: string[];
+  styles: string[];
+};
+
+export type FiltersState = {
+  variantParams: VariantsParams;
+  priceParams: PriceParams;
+};

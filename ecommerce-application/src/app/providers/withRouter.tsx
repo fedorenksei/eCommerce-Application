@@ -36,6 +36,10 @@ const routePairs = [
     component: <Catalog />,
   },
   {
+    path: '/catalog/:category',
+    component: <Catalog />,
+  },
+  {
     path: '/basket',
     component: <Basket />,
   },

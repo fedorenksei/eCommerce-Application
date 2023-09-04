@@ -19,7 +19,7 @@ export const Personal = ({
 
   return (
     <ProfileSection>
-      <div className="flex justify-between">
+      <div className="flex flex-wrap justify-between gap-2">
         <Header3>Personal information</Header3>
         <EditButton
           editMode={editMode}

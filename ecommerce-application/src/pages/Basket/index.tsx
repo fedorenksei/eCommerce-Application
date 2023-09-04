@@ -13,7 +13,7 @@ export const Basket = () => {
         <button
           className={getButtonStyles({
             size: 'large',
-            color: 'filled',
+            filling: 'filled',
             shape: 'round',
           })}
         >

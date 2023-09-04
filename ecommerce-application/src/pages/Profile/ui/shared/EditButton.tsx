@@ -9,7 +9,7 @@ export const EditButton = ({ editMode, onClick }: EditButton) => {
   const styles = getButtonStyles({
     shape: 'square',
     size: 'small',
-    color: 'transparent',
+    filling: 'transparent',
   });
   return (
     <button

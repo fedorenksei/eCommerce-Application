@@ -11,13 +11,14 @@ import { setCustomerData } from '../../store/customerDataSlice';
 import { setFiltersState } from '../../store/filtersSlice';
 import { getFiltersParams } from '../../utils/getFiltersParams';
 import { setCategories } from '../../store/categoriesSlice';
+import { CustomerUpdateAction } from '../../types/types';
 
 export class ServerAPI {
   private static instance: ServerAPI;
   private accessToken: string | null;
   private refreshToken: string | null;
   private customerID: string | null;
-  private customerInfo: null | CustomerData;
+  private customerInfo: null | (CustomerData & { version: number });
   private readonly prefix: string;
   private readonly KEY: string;
   private readonly CLIENT_ID: string;
@@ -181,6 +182,47 @@ export class ServerAPI {
     return isOk;
   }
 
+  public async updateCustomer(actions: CustomerUpdateAction[]) {
+    const link = `${this.API_URL}/${this.KEY}/customers/${this.customerID}`;
+    let isOk = false;
+    let res = null;
+
+    try {
+      const response = await fetch(link, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+        body: JSON.stringify({
+          version: this.customerInfo!.version,
+          actions,
+        }),
+      });
+
+      isOk = response.ok;
+
+      if (isOk) {
+        res = await response.json();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (isOk) {
+      this.customerID = res.id;
+      this.customerInfo = {
+        ...res,
+      };
+      store.dispatch(
+        setCustomerData({
+          customerInfo: { ...res },
+        }),
+      );
+    }
+
+    return isOk;
+  }
+
   public async loginCustomer(loginData: LoginData) {
     const email = encodeURIComponent(loginData.email);
     const password = encodeURIComponent(loginData.password);
@@ -244,11 +286,11 @@ export class ServerAPI {
     if (isOk) {
       this.customerID = res.id;
       this.customerInfo = {
-        email: res.email,
+        ...res,
       };
       store.dispatch(
         setCustomerData({
-          customerInfo: { ...this.customerInfo },
+          customerInfo: { ...res },
         }),
       );
     }

@@ -2,7 +2,7 @@ import clsx from 'clsx';
 
 type TextStyleParams = {
   font?: 'simple' | 'h2' | 'h3' | 'h5';
-  color?: 'default' | 'second' | 'light' | 'primary';
+  color?: 'default' | 'second' | 'light' | 'primary' | 'danger';
 };
 
 export function getTextStyles({
@@ -22,6 +22,7 @@ export function getTextStyles({
       second: 'text-second-text-color dark:text-dt-second-text-color',
       light: 'text-dt-text-color',
       primary: 'text-primary-color',
+      danger: 'text-danger-color',
     }[color],
   );
 }
@@ -29,23 +30,25 @@ export function getTextStyles({
 type ButtonStyleParams = {
   size: 'small' | 'medium' | 'large';
   shape: 'square' | 'round';
-  color: 'filled' | 'transparent';
+  filling: 'filled' | 'transparent';
+  color?: 'primary' | 'danger';
   disabled?: boolean;
 };
 
 export function getButtonStyles({
   size,
   shape,
-  color,
+  filling,
+  color = 'primary',
   disabled,
 }: ButtonStyleParams) {
   const textStyles = getTextStyles({
     font: size === 'large' ? 'h3' : 'h5',
-    color: color === 'filled' ? 'light' : 'primary',
+    color: filling === 'filled' ? 'light' : color,
   });
 
   return clsx(
-    'w-max inline-flex justify-center items-center',
+    'inline-flex justify-center items-center',
     'transition-all',
     [
       size !== 'small' && 'md:px-[40px] md:py-[15px] md:gap-[15px]',
@@ -54,17 +57,38 @@ export function getButtonStyles({
     '!outline-none',
     {
       filled: [
-        !disabled && 'bg-primary-color hover:bg-hover-color',
-        disabled && 'bg-disabled-color',
+        !disabled &&
+          {
+            primary: 'bg-primary-color hover:bg-hover-color',
+            danger: 'bg-danger-color hover:bg-danger-hover-color',
+          }[color],
+        disabled &&
+          {
+            primary: 'bg-disabled-color',
+            danger: 'bg-danger-disabled-color',
+          }[color],
         'focus:ring-2 focus:ring-dt-bg-color dark:focus:ring-bg-color',
       ],
       transparent: [
-        'bg-transparent',
-        'border border-primary-color',
-        !disabled && 'hover:border-hover-color hover:text-hover-color',
-        'focus:border-2 focus:border-dt-bg-color dark:focus:border-bg-color',
+        'bg-transparent ring-1',
+        {
+          primary: 'ring-primary-color',
+          danger: 'ring-danger-color',
+        }[color],
+        !disabled &&
+          {
+            primary: 'hover:ring-hover-color hover:text-hover-color',
+            danger:
+              'hover:ring-danger-hover-color hover:text-danger-hover-color',
+          }[color],
+        disabled &&
+          {
+            primary: 'ring-disabled-color text-disabled-color',
+            danger: 'ring-danger-disabled-color text-danger-disabled-color',
+          }[color],
+        'focus:ring-2 focus:ring-dt-bg-color dark:focus:ring-bg-color',
       ],
-    }[color],
+    }[filling],
     !disabled && ['focus:shadow-lg hover:shadow-md', 'dark:shadow-slate-700'],
     {
       square: 'rounded-[5px]',

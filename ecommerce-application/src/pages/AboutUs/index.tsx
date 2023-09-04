@@ -13,7 +13,7 @@ export const AboutUs = () => {
         <button
           className={getButtonStyles({
             size: 'large',
-            color: 'filled',
+            filling: 'filled',
             shape: 'round',
           })}
         >

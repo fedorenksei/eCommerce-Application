@@ -2,11 +2,13 @@ import React from 'react';
 import { Header2 } from '../../../shared/ui/text/Header2';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
-import { Paragraph } from '../../../shared/ui/text/Paragraph';
 import { CustomerData } from '../../../shared/types/interfaces';
 import { Personal } from './Personal';
 import { Addresses } from './Addresses';
 import { Password } from './Password';
+import { Header5 } from '../../../shared/ui/text/Header5';
+import { Link } from 'react-router-dom';
+import { getButtonStyles } from '../../../shared/ui/styles';
 
 export const Profile = () => {
   const customerData: null | CustomerData = useSelector(
@@ -23,7 +25,21 @@ export const Profile = () => {
           <Addresses {...(customerData as CustomerData)} />
         </>
       ) : (
-        <Paragraph>Log in please</Paragraph>
+        <>
+          <Header5>Log in please</Header5>
+          <Link to={`/login`}>
+            <button
+              type="button"
+              className={getButtonStyles({
+                size: 'medium',
+                filling: 'filled',
+                shape: 'round',
+              })}
+            >
+              Log in
+            </button>
+          </Link>
+        </>
       )}
     </div>
   );

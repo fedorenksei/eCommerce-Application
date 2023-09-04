@@ -38,8 +38,9 @@ export const Product = () => {
       </span>
       <span>
         <span className="font-bold">image links:</span>{' '}
+        <div className="flex flex-col"></div>
         {product?.masterData.current.masterVariant.images.map(({ url }) => (
-          <span key={url}>{url}</span>
+          <div key={url}>{url}</div>
         ))}
       </span>
       <span>

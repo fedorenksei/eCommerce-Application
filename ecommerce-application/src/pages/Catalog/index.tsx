@@ -4,7 +4,7 @@ import { Products } from '../../widgets/Products';
 
 export const Catalog = () => {
   return (
-    <div className="flex flex-col gap-2 items-center">
+    <div className="p-3 flex flex-col gap-2 items-stretch">
       <Header2>Catalog</Header2>
       <Products />
     </div>

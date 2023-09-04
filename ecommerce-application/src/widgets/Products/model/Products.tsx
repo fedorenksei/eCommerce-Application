@@ -85,9 +85,13 @@ export const Products = () => {
   return (
     <>
       <Categories categories={categories} />
-      <ProductFilter />
-      <ProductList products={products} />
-      <CatalogPagination totalProducts={totalProducts} />
+      <div className="grid grid-cols-[minmax(200px,_300px),_1fr] md:flex-row md:items-start">
+        <ProductFilter />
+        <div>
+          <ProductList products={products} />
+          <CatalogPagination totalProducts={totalProducts} />
+        </div>
+      </div>
     </>
   );
 };

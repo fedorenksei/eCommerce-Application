@@ -7,7 +7,7 @@ type Props = {
 
 export const ProductList = ({ products }: Props) => {
   return (
-    <div className="flex flex-col">
+    <div className="grid grid-cols-[repeat(auto-fill,_minmax(200px,_300px))] justify-even">
       {products.map(
         ({
           name: { 'en-US': productName },
@@ -16,7 +16,7 @@ export const ProductList = ({ products }: Props) => {
           id,
         }) => (
           <div
-            className="flex flex-col border-2"
+            className="flex flex-col border-2 p-2"
             key={id}
           >
             <span>{JSON.stringify(productName)}</span>

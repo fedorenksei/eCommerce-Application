@@ -7,7 +7,7 @@ import { RangeFilter } from '../../../entities/RangeFilter';
 import { CatalogSearch } from '../../../entities/CatalogSearch';
 import { CatalogSortPanel } from '../../../entities/CatalogSortPanel';
 
-export const ProductFilter = () => {
+export const ProductFilters = () => {
   const filters = useSelector(
     (state: RootState) => state.filtersParams.variantParams,
   );

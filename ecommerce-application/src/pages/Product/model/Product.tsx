@@ -8,6 +8,9 @@ import { Paragraph } from '../../../shared/ui/text/Paragraph';
 import { getButtonStyles } from '../../../shared/ui/styles';
 import clsx from 'clsx';
 
+import './slider.css';
+import { useToggle } from '../../../shared/utils/hooks';
+
 export const Product = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<DetailedProductData | null>(null);
@@ -36,9 +39,12 @@ export const Product = () => {
     ) / 100;
   const discountedPrice = Math.floor(price * 0.95);
 
-  const imageUrls = product?.masterData.current.masterVariant.images || [];
+  const imageUrls =
+    product?.masterData.current.masterVariant.images.map(
+      (image) => image.url,
+    ) || [];
   const [currImg, setCurrImg] = useState(0);
-  const currImgUrl = imageUrls[currImg]?.url;
+  const [fullScreen, toggleFullScreen] = useToggle();
 
   return (
     <div className="w-full space-y-4 p-10">
@@ -52,53 +58,65 @@ export const Product = () => {
           <span className="text-danger-color">€{discountedPrice}</span>
         </div>
         <Paragraph>{description}</Paragraph>
-      </div>
 
-      <div
-        className={clsx(
-          'max-w-[100%] gap-5 p-4',
-          'flex justify-center items-center',
-        )}
-      >
-        <button
-          disabled={currImg === 0 ? true : false}
-          onClick={() => {
-            setCurrImg((c) => c - 1);
-          }}
+        <div
           className={clsx(
-            getButtonStyles({
+            'max-w-[100%] gap-5 p-4',
+            'flex justify-center items-center',
+          )}
+        >
+          <button
+            disabled={currImg === 0 ? true : false}
+            onClick={() => {
+              setCurrImg((c) => c - 1);
+            }}
+            className={clsx(
+              getButtonStyles({
+                size: 'small',
+                filling: 'transparent',
+                shape: 'round',
+                disabled: currImg === 0 ? true : false,
+              }),
+            )}
+          >
+            &lt;&lt;
+          </button>
+
+          <button
+            disabled={currImg >= imageUrls.length - 1 ? true : false}
+            onClick={() => {
+              setCurrImg((c) => c + 1);
+            }}
+            className={getButtonStyles({
               size: 'small',
               filling: 'transparent',
               shape: 'round',
-              disabled: currImg === 0 ? true : false,
-            }),
-          )}
-        >
-          &lt;&lt;
-        </button>
-
-        <button
-          disabled={currImg >= imageUrls.length - 1 ? true : false}
-          onClick={() => {
-            setCurrImg((c) => c + 1);
-          }}
-          className={getButtonStyles({
-            size: 'small',
-            filling: 'transparent',
-            shape: 'round',
-            disabled: currImg >= imageUrls.length - 1 ? true : false,
-          })}
-        >
-          &gt;&gt;
-        </button>
+              disabled: currImg >= imageUrls.length - 1 ? true : false,
+            })}
+          >
+            &gt;&gt;
+          </button>
+        </div>
+        <div className="overflow-hidden">
+          <div
+            className={clsx(
+              'w-[100%] flex transition-all my-slider-translate',
+              fullScreen && 'absolute top-0 left-0',
+            )}
+            onClick={toggleFullScreen}
+            style={{ '--slide-number': currImg } as React.CSSProperties}
+          >
+            {imageUrls.map((url, i) => (
+              <img
+                src={url}
+                alt={productName}
+                key={`${id}_image_${i}`}
+                className="w-[100%] mx-auto"
+              />
+            ))}
+          </div>
+        </div>
       </div>
-
-      <img
-        src={currImgUrl}
-        alt={productName}
-        key={`${id}_image_${currImg}`}
-        className="md:max-w-[80%] mx-auto"
-      />
     </div>
   );
 };

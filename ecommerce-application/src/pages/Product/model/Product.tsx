@@ -61,60 +61,71 @@ export const Product = () => {
 
         <div
           className={clsx(
-            'max-w-[100%] gap-5 p-4',
-            'flex justify-center items-center',
+            'space-y-3 text-center pb-3',
+            fullScreen &&
+              'absolute top-0 left-0 shadow-[0px_0px_0px_100000px_rgba(0,_0,_0,_0.5)] z-10 bg-bg-color dark:bg-dt-bg-color',
           )}
         >
-          <button
-            disabled={currImg === 0 ? true : false}
-            onClick={() => {
-              setCurrImg((c) => c - 1);
-            }}
+          <div
             className={clsx(
-              getButtonStyles({
+              'max-w-[100%] gap-5 p-4',
+              'flex justify-center items-center',
+            )}
+          >
+            <button
+              disabled={currImg === 0 ? true : false}
+              onClick={() => {
+                setCurrImg((c) => c - 1);
+              }}
+              className={clsx(
+                getButtonStyles({
+                  size: 'small',
+                  filling: 'transparent',
+                  shape: 'round',
+                  disabled: currImg === 0 ? true : false,
+                }),
+              )}
+            >
+              &lt;&lt;
+            </button>
+
+            <button
+              disabled={currImg >= imageUrls.length - 1 ? true : false}
+              onClick={() => {
+                setCurrImg((c) => c + 1);
+              }}
+              className={getButtonStyles({
                 size: 'small',
                 filling: 'transparent',
                 shape: 'round',
-                disabled: currImg === 0 ? true : false,
-              }),
-            )}
-          >
-            &lt;&lt;
-          </button>
-
-          <button
-            disabled={currImg >= imageUrls.length - 1 ? true : false}
-            onClick={() => {
-              setCurrImg((c) => c + 1);
-            }}
-            className={getButtonStyles({
-              size: 'small',
-              filling: 'transparent',
-              shape: 'round',
-              disabled: currImg >= imageUrls.length - 1 ? true : false,
-            })}
-          >
-            &gt;&gt;
-          </button>
-        </div>
-        <div className="overflow-hidden">
-          <div
-            className={clsx(
-              'w-[100%] flex transition-all my-slider-translate',
-              fullScreen && 'absolute top-0 left-0',
-            )}
-            onClick={toggleFullScreen}
-            style={{ '--slide-number': currImg } as React.CSSProperties}
-          >
-            {imageUrls.map((url, i) => (
-              <img
-                src={url}
-                alt={productName}
-                key={`${id}_image_${i}`}
-                className="w-[100%] mx-auto"
-              />
-            ))}
+                disabled: currImg >= imageUrls.length - 1 ? true : false,
+              })}
+            >
+              &gt;&gt;
+            </button>
           </div>
+          <div
+            className="overflow-hidden"
+            role="presentation"
+            onClick={toggleFullScreen}
+          >
+            <div
+              className="w-[100%] cursor-pointer flex transition-all my-slider-translate"
+              style={{ '--slide-number': currImg } as React.CSSProperties}
+            >
+              {imageUrls.map((url, i) => (
+                <img
+                  src={url}
+                  alt={productName}
+                  key={`${id}_image_${i}`}
+                  className="w-[100%] mx-auto"
+                />
+              ))}
+            </div>
+          </div>
+          <Paragraph>
+            Click on the image to {fullScreen ? 'go back' : 'see it full-scale'}
+          </Paragraph>
         </div>
       </div>
     </div>

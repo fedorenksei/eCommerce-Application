@@ -27,10 +27,10 @@ export const Addresses = ({
       <ProfileSection>
         <Header3>Your addresses</Header3>
 
-        {addressesData.map((address, i) => (
+        {addressesData.map((address) => (
           <AddressItem
             {...address}
-            key={`profile-address-${i}`}
+            key={`profile-address-${address.data.id}`}
           />
         ))}
 

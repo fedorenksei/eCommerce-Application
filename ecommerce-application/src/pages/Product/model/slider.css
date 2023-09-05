@@ -1,0 +1,3 @@
+.my-slider-translate {
+  translate: calc(var(--slide-number) * 100% * -1);
+}

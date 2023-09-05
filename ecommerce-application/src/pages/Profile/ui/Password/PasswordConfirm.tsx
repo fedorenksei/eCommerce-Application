@@ -9,6 +9,8 @@ import { FormButton } from '../../../../shared/ui/forms/FormButton';
 import { useState } from 'react';
 import Spinner from '../../../../shared/ui/Spinner';
 import { setIsShown, setText } from '../../../../shared/store/modalSlice';
+import { Header5 } from '../../../../shared/ui/text/Header5';
+import { Paragraph } from '../../../../shared/ui/text/Paragraph';
 
 interface PasswordConfirmFields {
   password: '';
@@ -36,10 +38,10 @@ export const PasswordConfirm = ({
     const isOk = await serverAPI.checkPassword(password);
 
     setIsLoading(false);
-    dispatch(setIsShown({ isShown: true }));
     if (isOk) {
       onSuccess();
     } else {
+      dispatch(setIsShown({ isShown: true }));
       dispatch(
         setText({
           text: 'You have entered a wrong password',
@@ -52,44 +54,49 @@ export const PasswordConfirm = ({
   return isLoading ? (
     <Spinner />
   ) : (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <TextInputGroup
-        label="Password"
-        register={register('password', {
-          required: {
-            value: true,
-            message: validationErrors.required,
-          },
-          pattern: {
-            value: customerRegExps.password,
-            message: validationErrors.password,
-          },
-          validate: (val: string) => {
-            const trimmed = val.trim();
-            if (trimmed.length !== val.length) {
-              return validationErrors.passwordSpaces;
-            }
-          },
-        })}
-        type="password"
-        error={formState.errors?.password?.message}
-      />
-
-      <div className="form-bp:col-span-2 flex justify-between">
-        <FormButton
-          type="button"
-          onClick={closeForm}
-          secondary={true}
-        >
-          Cancel
-        </FormButton>
-        <FormButton
-          disabled={!formState.isDirty || !formState.isValid}
-          type="submit"
-        >
-          Submit
-        </FormButton>
+    <>
+      <div className="mx-auto">
+        <Paragraph>Enter your current password</Paragraph>
       </div>
-    </Form>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <TextInputGroup
+          label="Password"
+          register={register('password', {
+            required: {
+              value: true,
+              message: validationErrors.required,
+            },
+            pattern: {
+              value: customerRegExps.password,
+              message: validationErrors.password,
+            },
+            validate: (val: string) => {
+              const trimmed = val.trim();
+              if (trimmed.length !== val.length) {
+                return validationErrors.passwordSpaces;
+              }
+            },
+          })}
+          type="password"
+          error={formState.errors?.password?.message}
+        />
+
+        <div className="form-bp:col-span-2 flex justify-between">
+          <FormButton
+            type="button"
+            onClick={closeForm}
+            secondary={true}
+          >
+            Cancel
+          </FormButton>
+          <FormButton
+            disabled={!formState.isDirty || !formState.isValid}
+            type="submit"
+          >
+            Submit
+          </FormButton>
+        </div>
+      </Form>
+    </>
   );
 };

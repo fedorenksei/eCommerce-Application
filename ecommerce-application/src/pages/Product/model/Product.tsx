@@ -100,9 +100,11 @@ export const Product = () => {
         <div className="overflow-hidden">
           <div
             className={clsx(
-              'w-[100%] flex transition-all my-slider-translate',
-              fullScreen && 'absolute top-0 left-0',
+              'w-[100%] cursor-pointer flex transition-all my-slider-translate',
+              fullScreen &&
+                'absolute top-0 left-0 shadow-[0px_0px_0px_100000px_red]',
             )}
+            role="presentation"
             onClick={toggleFullScreen}
             style={{ '--slide-number': currImg } as React.CSSProperties}
           >

@@ -17,7 +17,6 @@ export const DeleteButton = ({ id }: DeleteButtonProps) => {
         addressId: id,
       },
     ]);
-    console.log(res);
 
     dispatch(setIsShown({ isShown: true }));
     if (res) {

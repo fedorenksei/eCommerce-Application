@@ -28,11 +28,8 @@ export const PersonalEdit = ({ data, toggleEditMode }: PersonalEditProps) => {
   });
 
   const onSubmit = async (newData: PersonalData) => {
-    console.log(newData);
-
     setIsLoading(true);
     const res = await serverAPI.updateCustomer(getUpdateActions(newData));
-    console.log(res);
     setIsLoading(false);
     toggleEditMode();
 

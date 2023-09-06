@@ -118,7 +118,7 @@ export const Product = () => {
                   src={url}
                   alt={productName}
                   key={`${id}_image_${i}`}
-                  className="w-[100%] mx-auto"
+                  className="w-[100%] shrink-0 mx-auto"
                 />
               ))}
             </div>

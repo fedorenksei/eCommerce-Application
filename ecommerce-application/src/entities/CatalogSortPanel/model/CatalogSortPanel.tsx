@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { Header3 } from '../../../shared/ui/text/Header3';
 
 export const CatalogSortPanel = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -19,6 +20,7 @@ export const CatalogSortPanel = () => {
   };
   return (
     <div>
+      <Header3>Sort</Header3>
       <select
         value={sortState}
         onChange={onSortChanging}

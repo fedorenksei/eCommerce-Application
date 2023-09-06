@@ -9,7 +9,7 @@ import {
 } from '../../../shared/types/interfaces';
 import { ProductList } from '../../../features/ProductList';
 import { Categories } from '../../../features/Categories';
-import { ProductFilter } from '../../../features/ProductFilters';
+import { ProductFilters } from '../../../features/ProductFilters';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
 import { CatalogPagination } from '../../../entities/CatalogPagination';
@@ -85,9 +85,13 @@ export const Products = () => {
   return (
     <>
       <Categories categories={categories} />
-      <ProductFilter />
-      <ProductList products={products} />
-      <CatalogPagination totalProducts={totalProducts} />
+      <div className="grid grid-cols-1 md:grid-cols-[minmax(200px,_300px),_1fr] gap-3">
+        <ProductFilters />
+        <div>
+          <ProductList products={products} />
+          <CatalogPagination totalProducts={totalProducts} />
+        </div>
+      </div>
     </>
   );
 };

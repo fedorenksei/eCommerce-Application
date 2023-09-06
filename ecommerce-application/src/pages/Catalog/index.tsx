@@ -4,8 +4,10 @@ import { Products } from '../../widgets/Products';
 
 export const Catalog = () => {
   return (
-    <div className="flex flex-col gap-2 items-center">
-      <Header2>Catalog</Header2>
+    <div className="p-3 space-y-3">
+      <div className="text-center">
+        <Header2>Catalog</Header2>
+      </div>
       <Products />
     </div>
   );

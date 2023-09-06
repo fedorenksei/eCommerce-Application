@@ -28,12 +28,9 @@ export const AddressForm = ({ data, closeForm }: AddressFormProps) => {
   });
 
   const onSubmit = async (newData: CustomerAddress) => {
-    console.log(newData);
-
     setIsLoading(true);
     const actions = getUpdateActions({ data: newData, id: data?.id });
     const res = await serverAPI.updateCustomer(actions);
-    console.log(res);
     setIsLoading(false);
     closeForm();
 

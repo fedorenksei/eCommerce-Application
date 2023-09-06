@@ -7,7 +7,7 @@ import { RangeFilter } from '../../../entities/RangeFilter';
 import { CatalogSearch } from '../../../entities/CatalogSearch';
 import { CatalogSortPanel } from '../../../entities/CatalogSortPanel';
 
-export const ProductFilter = () => {
+export const ProductFilters = () => {
   const filters = useSelector(
     (state: RootState) => state.filtersParams.variantParams,
   );
@@ -17,7 +17,7 @@ export const ProductFilter = () => {
   const filterNames = Object.keys(filters).filter((item) => item !== 'prices');
 
   return (
-    <div className="border-2 border-slate-800 w-full text-center">
+    <div className="p-2 space-y-4 border rounded-md border-slate-300 md:max-w-sm">
       {filterNames.map((filterNameKey) => {
         if (filters[filterNameKey as keyof VariantsParams])
           return (

@@ -36,7 +36,6 @@ export const AddressUsage = ({
       action,
     });
     const res = await serverAPI.updateCustomer(actions);
-    console.log(res);
 
     dispatch(setIsShown({ isShown: true }));
     if (res) {

@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { getButtonStyles, getTextStyles } from '../../../shared/ui/styles';
+import clsx from 'clsx';
+import { Header3 } from '../../../shared/ui/text/Header3';
+import { capitalize } from '../../../shared/utils/helpers';
 
 type Props = {
   filterState: string[];
@@ -27,23 +31,55 @@ export const Filter = ({ filterState, filterName }: Props) => {
       : searchParams.delete(filterName);
     setSearchParams(searchParams);
   };
+
+  const onResetClick = () => {
+    searchParams.delete(filterName);
+    setChoosenParams(() => []);
+    setSearchParams(searchParams);
+  };
+
   return (
-    <div>
-      <h3>{filterName}</h3>
-      <div>
+    <div className="space-y-3">
+      <Header3>{capitalize(filterName)}</Header3>
+      <div className="flex flex-wrap gap-2">
         {filterState.map((item, index) => (
           <button
             key={item + index}
             onClick={() => onParamClick(item)}
-            className={`border-2 ${
-              choosenParams.includes(item) ? 'bg-blue-400' : ''
-            }`}
+            className={clsx(
+              getTextStyles({ font: 'h5' }),
+              'p-1 border rounded-md',
+              'border-primary-color select-none',
+              'cursor-pointer transition hover:border-hover-color hover:-translate-y-0.5 hover:shadow-md',
+              choosenParams.includes(item) && 'bg-primary-color text-white',
+            )}
           >
             {item}
           </button>
         ))}
       </div>
-      <button onClick={onApplyParamsClick}>Apply</button>
+      <div className="space-x-2">
+        <button
+          className={getButtonStyles({
+            size: 'small',
+            filling: 'filled',
+            shape: 'round',
+          })}
+          onClick={onApplyParamsClick}
+        >
+          Apply
+        </button>
+        <button
+          className={getButtonStyles({
+            size: 'small',
+            filling: 'transparent',
+            shape: 'round',
+          })}
+          onClick={onResetClick}
+        >
+          Reset
+        </button>
+      </div>
     </div>
   );
 };

@@ -9,7 +9,7 @@ import { Form } from '../../../shared/ui/forms/Form';
 import { FormButton } from '../../../shared/ui/forms/FormButton';
 import { customerRegExps } from '../../../shared/data/regExps';
 import { validationErrors } from '../../../shared/data/validationErrors';
-import { validateDate } from '../../../shared/utils/validateDate';
+import { validateDate } from '../../../shared/utils/helpers';
 
 export const FirstStepForm = (props: FirstStepFormProps) => {
   const { register, handleSubmit, watch, trigger, formState } =

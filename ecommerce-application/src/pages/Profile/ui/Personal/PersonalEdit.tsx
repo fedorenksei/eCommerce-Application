@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { TextInputGroup } from '../../../../shared/ui/forms/TextInputGroup';
 import { customerRegExps } from '../../../../shared/data/regExps';
 import { validationErrors } from '../../../../shared/data/validationErrors';
-import { validateDate } from '../../../../shared/utils/validateDate';
+import { validateDate } from '../../../../shared/utils/helpers';
 import { FormButton } from '../../../../shared/ui/forms/FormButton';
 import { Form } from '../../../../shared/ui/forms/Form';
 import { useState } from 'react';
@@ -28,11 +28,8 @@ export const PersonalEdit = ({ data, toggleEditMode }: PersonalEditProps) => {
   });
 
   const onSubmit = async (newData: PersonalData) => {
-    console.log(newData);
-
     setIsLoading(true);
     const res = await serverAPI.updateCustomer(getUpdateActions(newData));
-    console.log(res);
     setIsLoading(false);
     toggleEditMode();
 

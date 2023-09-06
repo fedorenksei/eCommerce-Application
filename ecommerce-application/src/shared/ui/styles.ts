@@ -83,8 +83,8 @@ export function getButtonStyles({
           }[color],
         disabled &&
           {
-            primary: 'ring-disabled-color text-disabled-color',
-            danger: 'ring-danger-disabled-color text-danger-disabled-color',
+            primary: '!ring-disabled-color !text-disabled-color',
+            danger: '!ring-danger-disabled-color !text-danger-disabled-color',
           }[color],
         'focus:ring-2 focus:ring-dt-bg-color dark:focus:ring-bg-color',
       ],

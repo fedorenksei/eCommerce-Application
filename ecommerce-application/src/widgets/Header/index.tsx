@@ -31,10 +31,10 @@ export const Header = () => {
         <div
           className={`${
             !burgerShown ? 'hidden' : 'absolute flex flex-col top-20 left-0'
-          } shadow-md md:shadow-none bg-bg-color w-full z-10 md:flex md:static md:flex-row justify-end gap-40 items-center flex-auto`}
+          } shadow-md md:shadow-none bg-bg-color w-full z-10 md:flex md:static md:flex-row justify-end gap-10 items-center flex-auto`}
         >
           <ul className="flex py-6 gap-4 flex-col md:flex-row">
-            <li className="text-center text-second-text-color text-sm font-bold hover:text-primary-color hover:underline">
+            <li className="text-center text-text-color dark:text-dt-text-color text-md font-bold hover:text-primary-color hover:underline">
               <Link
                 onClick={() => setBurgerShown((state) => !state)}
                 to="/"
@@ -42,39 +42,59 @@ export const Header = () => {
                 Main
               </Link>
             </li>
+            <li className="text-center text-text-color dark:text-dt-text-color text-md font-bold hover:text-primary-color hover:underline">
+              <Link
+                onClick={() => setBurgerShown((state) => !state)}
+                to="/catalog"
+              >
+                Catalog
+              </Link>
+            </li>
+          </ul>
+          <ul className="flex py-6 gap-4 flex-col md:flex-row">
             {!auth.isAuth && (
-              <li className="text-center text-second-text-color text-sm font-bold hover:text-primary-color hover:underline">
-                <Link
-                  onClick={() => setBurgerShown((state) => !state)}
-                  to="/login"
-                >
-                  Log in
-                </Link>
-              </li>
-            )}
-            {!auth.isAuth && (
-              <li className="text-center text-second-text-color text-sm font-bold hover:text-primary-color hover:underline">
-                <Link
-                  onClick={() => setBurgerShown((state) => !state)}
-                  to="/registration"
-                >
-                  Sign up
-                </Link>
-              </li>
+              <>
+                <li className="text-center text-text-color dark:text-dt-text-color text-md font-bold hover:text-primary-color hover:underline">
+                  <Link
+                    onClick={() => setBurgerShown((state) => !state)}
+                    to="/login"
+                  >
+                    Log in
+                  </Link>
+                </li>
+                <li className="text-center text-text-color dark:text-dt-text-color text-md font-bold hover:text-primary-color hover:underline">
+                  <Link
+                    onClick={() => setBurgerShown((state) => !state)}
+                    to="/registration"
+                  >
+                    Sign up
+                  </Link>
+                </li>
+              </>
             )}
             {auth.isAuth && (
-              <li className="text-center text-second-text-color text-sm font-bold hover:text-primary-color">
-                <button onClick={() => serverAPI.logout()}>
-                  <span className="hover:underline">Logout</span>
-                </button>
-              </li>
+              <>
+                <li className="text-center text-text-color dark:text-dt-text-color text-md font-bold hover:text-primary-color">
+                  <button onClick={() => serverAPI.logout()}>
+                    <span className="hover:underline">Logout</span>
+                  </button>
+                </li>
+                <li className="text-center text-text-color dark:text-dt-text-color text-md font-bold hover:text-primary-color hover:underline">
+                  <Link
+                    onClick={() => setBurgerShown((state) => !state)}
+                    to="/profile"
+                  >
+                    Profile
+                  </Link>
+                </li>
+              </>
+            )}
+            {customerData.customerData && (
+              <span className="text-center text-primary-color text-base font-bold">
+                {(customerData.customerData as CustomerData).email}
+              </span>
             )}
           </ul>
-          {customerData.customerData && (
-            <span className="text-center text-primary-color text-base font-bold">
-              {(customerData.customerData as CustomerData).email}
-            </span>
-          )}
         </div>
         <button
           onClick={() => setBurgerShown((state) => !state)}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Header2 } from '../../../shared/ui/text/Header2';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
@@ -7,10 +7,16 @@ import { Personal } from './Personal';
 import { Addresses } from './Addresses';
 import { Password } from './Password';
 import { Header5 } from '../../../shared/ui/text/Header5';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getButtonStyles } from '../../../shared/ui/styles';
 
 export const Profile = () => {
+  const auth = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!auth.isAuth) navigate('/login');
+  }, [navigate, auth]);
+
   const customerData: null | CustomerData = useSelector(
     (state: RootState) => state.customerData,
   ).customerData;

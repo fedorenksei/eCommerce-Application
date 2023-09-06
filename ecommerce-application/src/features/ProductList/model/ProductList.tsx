@@ -1,12 +1,14 @@
 import React from 'react';
 import { ProductData } from '../../../shared/types/interfaces';
 import { ProductCard } from './ProductCard';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   products: ProductData[];
 };
 
 export const ProductList = ({ products }: Props) => {
+  const navigate = useNavigate();
   return (
     <div className="grid grid-cols-[repeat(auto-fill,_minmax(100px,_200px))] justify-evenly gap-3">
       {products.map(

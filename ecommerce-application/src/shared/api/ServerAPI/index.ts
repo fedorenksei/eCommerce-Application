@@ -43,14 +43,6 @@ export class ServerAPI {
     this.REGION = 'us-central1';
     this.AUTH_URL = 'https://auth.us-central1.gcp.commercetools.com';
     this.API_URL = 'https://api.us-central1.gcp.commercetools.com';
-    /* this.prefix = 'testprefix';
-    this.KEY = '1213123';
-    this.CLIENT_ID = '8qsbF1nw1R9NjCihwGWVHvJs';
-    this.CLIENT_SECRET = 'hysbumzI1UcK-LRED6LRZwgtOi2roufT';
-    this.SCOPE = 'manage_project:1213123';
-    this.REGION = 'ueurope-west1';
-    this.AUTH_URL = 'https://auth.europe-west1.gcp.commercetools.com';
-    this.API_URL = 'https://api.europe-west1.gcp.commercetools.com'; */
   }
 
   public static getInstance() {

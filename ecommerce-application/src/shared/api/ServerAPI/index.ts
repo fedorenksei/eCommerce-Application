@@ -1,18 +1,24 @@
 import store from '../../../app/store';
 import {
+  CategoryData,
   CustomerData,
   LoginData,
   NewCustomerInfo,
+  ProductRequestParams,
 } from '../../types/interfaces';
 import { setAuth } from '../../store/isAuthSlice';
 import { setCustomerData } from '../../store/customerDataSlice';
+import { setFiltersState } from '../../store/filtersSlice';
+import { getFiltersParams } from '../../utils/getFiltersParams';
+import { setCategories } from '../../store/categoriesSlice';
+import { CustomerUpdateAction } from '../../types/types';
 
 export class ServerAPI {
   private static instance: ServerAPI;
   private accessToken: string | null;
   private refreshToken: string | null;
   private customerID: string | null;
-  private customerInfo: null | CustomerData;
+  private customerInfo: null | (CustomerData & { version: number });
   private readonly prefix: string;
   private readonly KEY: string;
   private readonly CLIENT_ID: string;
@@ -21,12 +27,14 @@ export class ServerAPI {
   private readonly REGION: string;
   private readonly AUTH_URL: string;
   private readonly API_URL: string;
+  private readonly limit: number;
 
   constructor() {
     this.accessToken = null;
     this.refreshToken = null;
     this.customerID = null;
     this.customerInfo = null;
+    this.limit = 9;
     this.prefix = 'nkj1k238sadQ';
     this.KEY = 'ecommerce-application-creative-team';
     this.CLIENT_ID = '2S2FwbXYw3IAoCFUFaIeHqAi';
@@ -50,11 +58,18 @@ export class ServerAPI {
     if (this.refreshToken) {
       const isUpdated = await this.updateTokens();
       if (isUpdated === false) {
-        this.getCommonToken();
+        await this.getCommonToken();
       }
     } else {
-      this.getCommonToken();
+      await this.getCommonToken();
     }
+
+    const categoriesId: Record<string, string> = {};
+    const categories: CategoryData[] = await this.getCategories(true);
+    categories.forEach(({ name: { 'en-US': categoryName }, id }) => {
+      categoriesId[categoryName] = id;
+    });
+    store.dispatch(setCategories(categoriesId));
   }
 
   private loadTokens() {
@@ -159,6 +174,47 @@ export class ServerAPI {
     return isOk;
   }
 
+  public async updateCustomer(actions: CustomerUpdateAction[]) {
+    const link = `${this.API_URL}/${this.KEY}/customers/${this.customerID}`;
+    let isOk = false;
+    let res = null;
+
+    try {
+      const response = await fetch(link, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+        body: JSON.stringify({
+          version: this.customerInfo!.version,
+          actions,
+        }),
+      });
+
+      isOk = response.ok;
+
+      if (isOk) {
+        res = await response.json();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (isOk) {
+      this.customerID = res.id;
+      this.customerInfo = {
+        ...res,
+      };
+      store.dispatch(
+        setCustomerData({
+          customerInfo: { ...res },
+        }),
+      );
+    }
+
+    return isOk;
+  }
+
   public async loginCustomer(loginData: LoginData) {
     const email = encodeURIComponent(loginData.email);
     const password = encodeURIComponent(loginData.password);
@@ -197,6 +253,13 @@ export class ServerAPI {
     return isOk;
   }
 
+  public async checkPassword(password: string) {
+    return await this.loginCustomer({
+      password,
+      email: this.customerInfo?.email || '',
+    });
+  }
+
   private async getCustomerInfo() {
     const link = `${this.API_URL}/${this.KEY}/me`;
     let isOk = false;
@@ -222,14 +285,181 @@ export class ServerAPI {
     if (isOk) {
       this.customerID = res.id;
       this.customerInfo = {
-        email: res.email,
+        ...res,
       };
       store.dispatch(
         setCustomerData({
-          customerInfo: { ...this.customerInfo },
+          customerInfo: { ...res },
         }),
       );
     }
+  }
+
+  public async resetPassword(password: string) {
+    let token = '';
+    try {
+      const link = `${this.API_URL}/${this.KEY}/customers/password-token`;
+      const response = await fetch(link, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+        body: JSON.stringify({
+          email: this.customerInfo?.email,
+        }),
+      });
+      token = (await response.json()).value;
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (!token) return false;
+
+    let isOk = null;
+    try {
+      const link = `${this.API_URL}/${this.KEY}/customers/password/reset`;
+      const response = await fetch(link, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+        body: JSON.stringify({
+          tokenValue: token,
+          newPassword: password,
+        }),
+      });
+      isOk = response.ok;
+      console.log(isOk);
+    } catch (e) {
+      console.log(e);
+    }
+
+    return isOk;
+  }
+
+  public async getCategories(onlyMain = false) {
+    const link = `${this.API_URL}/${this.KEY}/categories`;
+    let res = null;
+
+    try {
+      const response = await fetch(link, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+      const result = await response.json();
+      res = result.results;
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (res) {
+      res = onlyMain
+        ? res.filter((cat: CategoryData) => cat.ancestors.length === 0)
+        : res;
+
+      return res;
+    }
+  }
+
+  getProducts = async ({
+    categoryId = null,
+    material = null,
+    color = null,
+    gender = null,
+    brand = null,
+    priceRange = null,
+    searchText = null,
+    sort = null,
+    page = null,
+  }: ProductRequestParams) => {
+    let filterParams = '';
+    if (material) {
+      filterParams += `filter.query=variants.attributes.material.label:${material}&`;
+    }
+    if (color) {
+      filterParams += `filter.query=variants.attributes.color01.label:${color}&`;
+    }
+    if (gender) {
+      filterParams += `filter.query=variants.attributes.gender-01.label.en-US:${gender}&`;
+    }
+    if (brand) {
+      filterParams += `filter.query=facet=variants.attributes.brand.label:${brand}&`;
+    }
+    if (priceRange) {
+      filterParams += `filter.query=variants.price.centAmount:range (${priceRange.min} to ${priceRange.max})&`;
+    }
+    if (searchText) {
+      filterParams += `text.en="${searchText}"&`;
+    }
+    if (page) {
+      filterParams += `offset=${this.limit * (Number(page) - 1)}&`;
+    }
+    if (sort) {
+      switch (sort) {
+        case 'nameAsc':
+          filterParams += 'sort=name.en-US asc&';
+          break;
+        case 'nameDesc':
+          filterParams += 'sort=name.en-US desc&';
+          break;
+        case 'priceAsc':
+          filterParams += 'sort=price asc&';
+          break;
+        case 'priceDesc':
+          filterParams += 'sort=price desc&';
+          break;
+      }
+    }
+    const categoryParams = categoryId
+      ? `filter.query=categories.id:subtree("${categoryId}")&`
+      : '';
+    const facetParams = `facet=variants.attributes.gender-01.label.en-US&facet=variants.attributes.brand.label&facet=variants.attributes.material.label&facet=variants.attributes.color01.label&facet=variants.price.centAmount&`;
+    const limitParams = `limit=${this.limit}&`;
+    const searchParams = `${limitParams}${categoryParams}${filterParams}${facetParams}`;
+    const link = `${this.API_URL}/${this.KEY}/product-projections/search?${searchParams}`;
+
+    let res = null;
+
+    try {
+      const response = await fetch(link, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+      const result = await response.json();
+      res = result;
+    } catch (e) {
+      console.log(e);
+    }
+
+    const results = res.results;
+    const params = getFiltersParams(res.facets);
+
+    store.dispatch(setFiltersState(params));
+    return { results, filterParams: params, total: res.total };
+  };
+
+  public async getProduct(id: string) {
+    const link = `${this.API_URL}/${this.KEY}/products/${id}`;
+    let res = null;
+
+    try {
+      const response = await fetch(link, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+      res = await response.json();
+    } catch (e) {
+      console.log(e);
+    }
+
+    console.log(res);
+    return res ? res : false;
   }
 
   public async logout() {

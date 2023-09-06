@@ -9,8 +9,6 @@ export const newCustomerTransformInfo = (
   firstFormDate: CustomerInputData,
   secondFormData: CustomerInputAddress,
 ) => {
-  console.log(firstFormDate);
-  console.log(secondFormData);
   const shippingAddress: CustomerAddress = {
     country: secondFormData.country,
     city: secondFormData.shippingCity,
@@ -38,7 +36,7 @@ export const newCustomerTransformInfo = (
     email: firstFormDate.email,
     password: firstFormDate.password,
     firstName: firstFormDate.firstName,
-    lastname: firstFormDate.lastName,
+    lastName: firstFormDate.lastName,
     dateOfBirth: firstFormDate.dateOfBirth,
     addresses: addresses,
     shippingAddresses: [0],
@@ -56,8 +54,6 @@ export const newCustomerTransformInfo = (
   if (isBillingAddressNotTheSame && secondFormData.billingIsDefault) {
     customerInfo.defaultBillingAddress = 1;
   }
-
-  console.log(customerInfo);
 
   return customerInfo;
 };

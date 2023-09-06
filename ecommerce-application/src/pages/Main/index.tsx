@@ -15,7 +15,7 @@ const RouteLink = ({ routeName, linkText }: Props) => {
         type="button"
         className={getButtonStyles({
           size: 'medium',
-          color: 'filled',
+          filling: 'filled',
           shape: 'round',
         })}
       >

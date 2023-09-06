@@ -10,7 +10,7 @@ export const Modal = () => {
   const text = useSelector((state: RootState) => state.modal.text);
   return (
     <div
-      className={`absolute max-w-80 p-7 min-h-[4rem] bottom-0 right-0 text-center border-2 border-text-color dark:border-dt-text-color rounded-md bg-bg-color dark:bg-dt-bg-color text-text-color dark:text-dt-text-color justify-center items-center ${
+      className={`fixed max-w-80 p-7 min-h-[4rem] bottom-0 right-0 text-center border-2 border-text-color dark:border-dt-text-color rounded-md bg-bg-color dark:bg-dt-bg-color text-text-color dark:text-dt-text-color justify-center items-center ${
         isShown ? 'flex' : 'hidden'
       }`}
     >

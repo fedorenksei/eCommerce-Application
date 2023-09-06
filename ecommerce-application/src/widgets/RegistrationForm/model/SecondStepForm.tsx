@@ -34,8 +34,7 @@ export const SecondStepForm = (props: SecondStepProps) => {
     >
       <CheckboxGroup label="Choose the Country">
         <select
-          name="user_profile_color_1"
-          form="addressform"
+          {...register('country')}
           className="text-slate-900"
         >
           <option value="DE">Germany</option>

@@ -56,7 +56,6 @@ export const RegistrationForm = () => {
 
     setIsLoading(true);
     const res = await serverAPI.createNewCustomer(newCustomerData);
-    console.log(res);
     setIsLoading(false);
     setIsError(!res);
 

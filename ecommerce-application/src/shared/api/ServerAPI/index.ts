@@ -385,13 +385,13 @@ export class ServerAPI {
       filterParams += `filter.query=variants.attributes.gender-01.label.en-US:${gender}&`;
     }
     if (brand) {
-      filterParams += `filter.query=facet=variants.attributes.brand.label:${brand}&`;
+      filterParams += `filter.query=variants.attributes.brand.label:${brand}&`;
     }
     if (priceRange) {
       filterParams += `filter.query=variants.price.centAmount:range (${priceRange.min} to ${priceRange.max})&`;
     }
     if (searchText) {
-      filterParams += `text.en="${searchText}"&`;
+      filterParams += `text.en-US="${searchText}"&`;
     }
     if (page) {
       filterParams += `offset=${this.limit * (Number(page) - 1)}&`;

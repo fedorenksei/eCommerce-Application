@@ -65,14 +65,14 @@ export class ServerAPI {
       await this.loginAnonymously();
     }
 
+    this.storeCart();
+
     const categoriesId: Record<string, string> = {};
     const categories: CategoryData[] = await this.getCategories(true);
     categories.forEach(({ name: { 'en-US': categoryName }, id }) => {
       categoriesId[categoryName] = id;
     });
     store.dispatch(setCategories(categoriesId));
-
-    this.storeCart();
   }
 
   private loadTokens() {
@@ -485,10 +485,10 @@ export class ServerAPI {
   private async storeCart() {
     let cart = await this.getActiveCart();
     if (!cart) {
-      await this.createCart();
-      cart = await this.getActiveCart();
+      cart = await this.createCart();
     }
 
+    // TODO: catch error
     if (!cart) return;
 
     store.dispatch(
@@ -522,7 +522,7 @@ export class ServerAPI {
   private async createCart() {
     const link = `${this.API_URL}/${this.KEY}/me/carts`;
 
-    let isOk = null;
+    let result = null;
     try {
       const response = await fetch(link, {
         method: 'POST',
@@ -534,12 +534,12 @@ export class ServerAPI {
         }),
       });
 
-      isOk = response.ok;
+      if (response.ok) result = await response.json();
     } catch (e) {
       console.log(e);
     }
 
-    return isOk;
+    return result;
   }
 }
 

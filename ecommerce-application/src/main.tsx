@@ -7,12 +7,12 @@ import { ServerAPI } from './shared/api/ServerAPI';
 type Props = {
   component: JSX.Element;
 };
-export const Preflight = ({ component }: Props) => {
+export const Init = ({ component }: Props) => {
   const serverAPI = ServerAPI.getInstance();
   const [isReady, setIsReady] = useState<boolean>(false);
   useEffect(() => {
     const start = async () => {
-      await serverAPI.preflight();
+      await serverAPI.init();
       setIsReady(true);
     };
     start();
@@ -22,6 +22,6 @@ export const Preflight = ({ component }: Props) => {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Preflight component={App} />
+    <Init component={App} />
   </React.StrictMode>,
 );

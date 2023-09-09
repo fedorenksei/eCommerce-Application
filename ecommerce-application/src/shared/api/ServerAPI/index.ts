@@ -52,16 +52,16 @@ export class ServerAPI {
     return ServerAPI.instance;
   }
 
-  public async preflight() {
+  public async init() {
     this.loadTokens();
 
     if (this.refreshToken) {
-      const isUpdated = await this.updateTokens();
+      const isUpdated = await this.updateAccessToken();
       if (isUpdated === false) {
-        await this.getCommonToken();
+        await this.loginAnonymously();
       }
     } else {
-      await this.getCommonToken();
+      await this.loginAnonymously();
     }
 
     const categoriesId: Record<string, string> = {};
@@ -86,7 +86,7 @@ export class ServerAPI {
     }
   }
 
-  private async updateTokens() {
+  private async updateAccessToken() {
     const link = `${this.AUTH_URL}/oauth/token?grant_type=refresh_token&refresh_token=${this.refreshToken}`;
 
     let isOk = false;
@@ -113,21 +113,22 @@ export class ServerAPI {
 
     if (isOk) {
       this.saveTokens(res.access_token);
-      await this.getCustomerInfo();
-      store.dispatch(
-        setAuth({
-          isAuth: true,
-        }),
-      );
-      return isOk;
+      const isCustomerNotAnonymous = await this.getCustomerInfo();
+      if (isCustomerNotAnonymous) {
+        store.dispatch(
+          setAuth({
+            isAuth: true,
+          }),
+        );
+      }
     }
 
     return isOk;
   }
 
-  private async getCommonToken() {
-    const link = `${this.AUTH_URL}/oauth/token?grant_type=client_credentials`;
-    let token = '';
+  private async loginAnonymously() {
+    const link = `${this.AUTH_URL}/oauth/${this.KEY}/anonymous/token?grant_type=client_credentials`;
+    let result = null;
 
     try {
       const response = await fetch(link, {
@@ -138,14 +139,17 @@ export class ServerAPI {
           )}`,
         },
       });
-      const res = await response.json();
-      token = res.access_token;
+
+      if (response.ok) {
+        result = await response.json();
+      }
     } catch (e) {
       console.log(e);
     }
 
-    if (!token) return;
-    this.saveTokens(token);
+    if (result) {
+      this.saveTokens(result.access_token, result.refresh_token);
+    }
   }
 
   public async createNewCustomer(customerInfo: NewCustomerInfo) {
@@ -171,6 +175,99 @@ export class ServerAPI {
         password: customerInfo.password,
       });
     }
+    return isOk;
+  }
+
+  public async loginCustomer(loginData: LoginData) {
+    const email = encodeURIComponent(loginData.email);
+    const password = encodeURIComponent(loginData.password);
+    const link = `${this.AUTH_URL}/oauth/${this.KEY}/customers/token?grant_type=password&username=${email}&password=${password}`;
+    let isOk = false;
+    let res = null;
+
+    try {
+      const response = await fetch(link, {
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${btoa(
+            `${this.CLIENT_ID}:${this.CLIENT_SECRET}`,
+          )}`,
+        },
+      });
+      isOk = response.ok;
+
+      if (isOk) {
+        res = await response.json();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (isOk) {
+      this.saveTokens(res.access_token, res.refresh_token);
+      await this.getCustomerInfo();
+      store.dispatch(
+        setAuth({
+          isAuth: true,
+        }),
+      );
+    }
+
+    return isOk;
+  }
+
+  public async logout() {
+    localStorage.removeItem(`${this.prefix}-access-token`);
+    localStorage.removeItem(`${this.prefix}-refresh-token`);
+    this.accessToken = null;
+    this.refreshToken = null;
+    store.dispatch(
+      setAuth({
+        isAuth: false,
+      }),
+    );
+    store.dispatch(
+      setCustomerData({
+        customerInfo: null,
+      }),
+    );
+    await this.loginAnonymously();
+  }
+
+  private async getCustomerInfo() {
+    const link = `${this.API_URL}/${this.KEY}/me`;
+    let isOk = false;
+    let res = null;
+
+    try {
+      const response = await fetch(link, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+
+      isOk = response.ok;
+
+      if (isOk) {
+        res = await response.json();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (isOk) {
+      this.customerID = res.id;
+      this.customerInfo = {
+        ...res,
+      };
+      store.dispatch(
+        setCustomerData({
+          customerInfo: { ...res },
+        }),
+      );
+    }
+
     return isOk;
   }
 
@@ -215,84 +312,11 @@ export class ServerAPI {
     return isOk;
   }
 
-  public async loginCustomer(loginData: LoginData) {
-    const email = encodeURIComponent(loginData.email);
-    const password = encodeURIComponent(loginData.password);
-    const link = `${this.AUTH_URL}/oauth/${this.KEY}/customers/token?grant_type=password&username=${email}&password=${password}`;
-    let isOk = false;
-    let res = null;
-
-    try {
-      const response = await fetch(link, {
-        method: 'POST',
-        headers: {
-          Authorization: `Basic ${btoa(
-            `${this.CLIENT_ID}:${this.CLIENT_SECRET}`,
-          )}`,
-        },
-      });
-      isOk = response.ok;
-
-      if (isOk) {
-        res = await response.json();
-      }
-    } catch (e) {
-      console.log(e);
-    }
-
-    if (isOk) {
-      this.saveTokens(res.access_token, res.refresh_token);
-      await this.getCustomerInfo();
-      store.dispatch(
-        setAuth({
-          isAuth: true,
-        }),
-      );
-    }
-
-    return isOk;
-  }
-
   public async checkPassword(password: string) {
     return await this.loginCustomer({
       password,
       email: this.customerInfo?.email || '',
     });
-  }
-
-  private async getCustomerInfo() {
-    const link = `${this.API_URL}/${this.KEY}/me`;
-    let isOk = false;
-    let res = null;
-
-    try {
-      const response = await fetch(link, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${this.accessToken}`,
-        },
-      });
-
-      isOk = response.ok;
-
-      if (isOk) {
-        res = await response.json();
-      }
-    } catch (e) {
-      console.log(e);
-    }
-
-    if (isOk) {
-      this.customerID = res.id;
-      this.customerInfo = {
-        ...res,
-      };
-      store.dispatch(
-        setCustomerData({
-          customerInfo: { ...res },
-        }),
-      );
-    }
   }
 
   public async resetPassword(password: string) {
@@ -460,24 +484,6 @@ export class ServerAPI {
 
     console.log(res);
     return res ? res : false;
-  }
-
-  public async logout() {
-    localStorage.removeItem(`${this.prefix}-access-token`);
-    localStorage.removeItem(`${this.prefix}-refresh-token`);
-    this.accessToken = null;
-    this.refreshToken = null;
-    store.dispatch(
-      setAuth({
-        isAuth: false,
-      }),
-    );
-    store.dispatch(
-      setCustomerData({
-        customerInfo: null,
-      }),
-    );
-    await this.getCommonToken();
   }
 }
 

@@ -485,6 +485,58 @@ export class ServerAPI {
     console.log(res);
     return res ? res : false;
   }
+
+  public async getCart() {
+    let cart = await this.getActiveCart();
+    if (!cart) {
+      await this.createCart();
+      cart = await this.getActiveCart();
+    }
+    return cart;
+  }
+
+  private async getActiveCart() {
+    const link = `${this.API_URL}/${this.KEY}/me/active-cart`;
+
+    let result = null;
+    try {
+      const response = await fetch(link, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+
+      if (response.ok) result = await response.json();
+    } catch (e) {
+      console.log(e);
+    }
+
+    return result;
+  }
+
+  private async createCart() {
+    const link = `${this.API_URL}/${this.KEY}/me/carts`;
+
+    let isOk = null;
+    try {
+      const response = await fetch(link, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+        body: JSON.stringify({
+          currency: 'EUR',
+        }),
+      });
+
+      isOk = response.ok;
+    } catch (e) {
+      console.log(e);
+    }
+
+    return isOk;
+  }
 }
 
 //! TODO удалить лишние консоль логи

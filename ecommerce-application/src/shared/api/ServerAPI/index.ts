@@ -12,6 +12,7 @@ import { setFiltersState } from '../../store/filtersSlice';
 import { getFiltersParams } from '../../utils/getFiltersParams';
 import { setCategories } from '../../store/categoriesSlice';
 import { CustomerUpdateAction } from '../../types/types';
+import { setCart } from '../../store/cartSlice';
 
 export class ServerAPI {
   private static instance: ServerAPI;
@@ -70,6 +71,8 @@ export class ServerAPI {
       categoriesId[categoryName] = id;
     });
     store.dispatch(setCategories(categoriesId));
+
+    this.storeCart();
   }
 
   private loadTokens() {
@@ -113,14 +116,7 @@ export class ServerAPI {
 
     if (isOk) {
       this.saveTokens(res.access_token);
-      const isCustomerNotAnonymous = await this.getCustomerInfo();
-      if (isCustomerNotAnonymous) {
-        store.dispatch(
-          setAuth({
-            isAuth: true,
-          }),
-        );
-      }
+      this.storeCustomerInfo();
     }
 
     return isOk;
@@ -205,12 +201,7 @@ export class ServerAPI {
 
     if (isOk) {
       this.saveTokens(res.access_token, res.refresh_token);
-      await this.getCustomerInfo();
-      store.dispatch(
-        setAuth({
-          isAuth: true,
-        }),
-      );
+      this.storeCustomerInfo();
     }
 
     return isOk;
@@ -234,7 +225,7 @@ export class ServerAPI {
     await this.loginAnonymously();
   }
 
-  private async getCustomerInfo() {
+  private async storeCustomerInfo() {
     const link = `${this.API_URL}/${this.KEY}/me`;
     let isOk = false;
     let res = null;
@@ -264,6 +255,11 @@ export class ServerAPI {
       store.dispatch(
         setCustomerData({
           customerInfo: { ...res },
+        }),
+      );
+      store.dispatch(
+        setAuth({
+          isAuth: true,
         }),
       );
     }
@@ -387,7 +383,7 @@ export class ServerAPI {
     }
   }
 
-  getProducts = async ({
+  public async getProducts({
     categoryId = null,
     material = null,
     color = null,
@@ -397,7 +393,7 @@ export class ServerAPI {
     searchText = null,
     sort = null,
     page = null,
-  }: ProductRequestParams) => {
+  }: ProductRequestParams) {
     let filterParams = '';
     if (material) {
       filterParams += `filter.query=variants.attributes.material.label:${material}&`;
@@ -409,13 +405,13 @@ export class ServerAPI {
       filterParams += `filter.query=variants.attributes.gender-01.label.en-US:${gender}&`;
     }
     if (brand) {
-      filterParams += `filter.query=facet=variants.attributes.brand.label:${brand}&`;
+      filterParams += `filter.query=variants.attributes.brand.label:${brand}&`;
     }
     if (priceRange) {
       filterParams += `filter.query=variants.price.centAmount:range (${priceRange.min} to ${priceRange.max})&`;
     }
     if (searchText) {
-      filterParams += `text.en="${searchText}"&`;
+      filterParams += `text.en-US="${searchText}"&`;
     }
     if (page) {
       filterParams += `offset=${this.limit * (Number(page) - 1)}&`;
@@ -464,7 +460,7 @@ export class ServerAPI {
 
     store.dispatch(setFiltersState(params));
     return { results, filterParams: params, total: res.total };
-  };
+  }
 
   public async getProduct(id: string) {
     const link = `${this.API_URL}/${this.KEY}/products/${id}`;
@@ -486,13 +482,21 @@ export class ServerAPI {
     return res ? res : false;
   }
 
-  public async getCart() {
+  private async storeCart() {
     let cart = await this.getActiveCart();
     if (!cart) {
       await this.createCart();
       cart = await this.getActiveCart();
     }
-    return cart;
+
+    if (!cart) return;
+
+    store.dispatch(
+      setCart({
+        id: cart.id,
+        lineItems: cart.lineItems,
+      }),
+    );
   }
 
   private async getActiveCart() {

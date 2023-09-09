@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { PriceParams } from '../../../shared/types/interfaces';
 import { useSearchParams } from 'react-router-dom';
 import { Header3 } from '../../../shared/ui/text/Header3';
-import { capitalize } from '../../../shared/utils/helpers';
+import { capitalize, roundNumber } from '../../../shared/utils/helpers';
 import { Header5 } from '../../../shared/ui/text/Header5';
 import { getButtonStyles } from '../../../shared/ui/styles';
 
@@ -54,7 +54,7 @@ export const RangeFilter = ({
   return (
     <div className="space-y-2">
       <Header3>{capitalize(filterName)}</Header3>
-      <label>
+      <label className="space-x-2">
         <Header5>Min value</Header5>
         <input
           className="w-32 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
@@ -64,9 +64,9 @@ export const RangeFilter = ({
           value={minValue}
           onChange={onMinInputChange}
         />
-        <span>{minValue}</span>
+        <span>€ {roundNumber(minValue)}</span>
       </label>
-      <label>
+      <label className="space-x-2">
         <Header5>Max value</Header5>
         <input
           className="w-32 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
@@ -76,7 +76,7 @@ export const RangeFilter = ({
           value={maxValue}
           onInput={onMaxInputChange}
         />
-        <span>{maxValue}</span>
+        <span>€ {roundNumber(maxValue)}</span>
       </label>
       <div className="space-x-2">
         <button

@@ -5,6 +5,7 @@ import modalReducer from '../../shared/store/modalSlice';
 import filtersParamsReducer from '../../shared/store/filtersSlice';
 import categoriesReducer from '../../shared/store/categoriesSlice';
 import cartReducer from '../../shared/store/cartSlice';
+import discountCodesReducer from '../../shared/store/discountCodesSlice';
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
@@ -17,6 +18,7 @@ const store = configureStore({
     filtersParams: filtersParamsReducer,
     categories: categoriesReducer,
     cart: cartReducer,
+    discountCodes: discountCodesReducer,
   },
 });
 

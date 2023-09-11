@@ -2,6 +2,8 @@ import React from 'react';
 import { Header2 } from '../../shared/ui/text/Header2';
 import { Link } from 'react-router-dom';
 import { getButtonStyles } from '../../shared/ui/styles';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
 
 type Props = {
   routeName: string;
@@ -53,9 +55,12 @@ const links = [
 ];
 
 export const Main = () => {
+  const discountCodes = useSelector((state: RootState) => state.discountCodes);
+
   return (
     <div className="text-center text-4xl p-10">
       <Header2>Main page</Header2>
+      {JSON.stringify(discountCodes)}
       <div className="p-10 flex flex-col flex-wrap gap-5 justify-center">
         {links.map(({ routeName, linkText }) => (
           <RouteLink

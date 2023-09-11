@@ -13,6 +13,7 @@ import { getFiltersParams } from '../../utils/getFiltersParams';
 import { setCategories } from '../../store/categoriesSlice';
 import { CustomerUpdateAction } from '../../types/types';
 import { setCart } from '../../store/cartSlice';
+import { setDiscountCodes } from '../../store/discountCodesSlice';
 
 export class ServerAPI {
   private static instance: ServerAPI;
@@ -66,6 +67,7 @@ export class ServerAPI {
     }
 
     this.storeCart();
+    this.storeDiscountCodes();
 
     const categoriesId: Record<string, string> = {};
     const categories: CategoryData[] = await this.getCategories(true);
@@ -542,6 +544,35 @@ export class ServerAPI {
     }
 
     return result;
+  }
+
+  private async storeDiscountCodes() {
+    const link = `${this.API_URL}/${this.KEY}/discount-codes`;
+
+    let result = null;
+    try {
+      const response = await fetch(link, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+
+      if (response.ok) result = await response.json();
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (!result) return;
+
+    const discountCodes = result.results.map(
+      (item: { name: { 'en-US': string }; code: string }) => ({
+        name: item.name['en-US'],
+        code: item.code,
+      }),
+    );
+    console.log(discountCodes);
+    store.dispatch(setDiscountCodes({ discountCodes }));
   }
 }
 

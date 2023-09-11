@@ -576,7 +576,7 @@ export class ServerAPI {
     }
 
     if (isOk) {
-      //
+      this.storeCart();
     }
 
     return isOk;

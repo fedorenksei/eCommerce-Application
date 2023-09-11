@@ -495,6 +495,7 @@ export class ServerAPI {
 
     store.dispatch(
       setCart({
+        version: cart.version,
         id: cart.id,
         lineItems: cart.lineItems,
       }),
@@ -547,6 +548,7 @@ export class ServerAPI {
   public async addLineItemCart(
     actions: AddCartAction[],
     cartId: string | undefined,
+    cartVersion: number,
   ) {
     const link = `${this.API_URL}/${this.KEY}/me/carts/${cartId}`;
     let isOk = false;
@@ -559,8 +561,7 @@ export class ServerAPI {
           Authorization: `Bearer ${this.accessToken}`,
         },
         body: JSON.stringify({
-          // add cart version !!!!!!!!
-          version: 13, // this.cart!.version
+          version: cartVersion,
           actions,
         }),
       });

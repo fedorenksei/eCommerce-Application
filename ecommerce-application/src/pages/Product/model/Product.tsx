@@ -24,6 +24,7 @@ export const Product = () => {
   );
   const serverApi = ServerAPI.getInstance();
   const cartId = useSelector((state: RootState) => state.cart.id);
+  const cartVersion = useSelector((state: RootState) => state.cart.version);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -154,6 +155,7 @@ export const Product = () => {
     const res = await serverApi.addLineItemCart(
       getUpdateActions(idProduct),
       idCart,
+      cartVersion,
     );
     console.log(res);
   }

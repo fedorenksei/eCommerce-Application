@@ -6,6 +6,9 @@ import { Header2 } from '../../../shared/ui/text/Header2';
 import { Header3 } from '../../../shared/ui/text/Header3';
 import { Paragraph } from '../../../shared/ui/text/Paragraph';
 import { getButtonStyles } from '../../../shared/ui/styles';
+import { AddCartAction } from '../../../shared/types/types';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../app/store';
 import clsx from 'clsx';
 
 import './slider.css';
@@ -20,6 +23,7 @@ export const Product = () => {
     [],
   );
   const serverApi = ServerAPI.getInstance();
+  const cartId = useSelector((state: RootState) => state.cart.id);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -103,6 +107,19 @@ export const Product = () => {
             >
               &gt;&gt;
             </button>
+            <button
+              onClick={() => {
+                // todo add action to add in cart
+                addToCard(id, cartId);
+              }}
+              className={getButtonStyles({
+                size: 'small',
+                filling: 'transparent',
+                shape: 'round',
+              })}
+            >
+              Add to cart
+            </button>
           </div>
           <div
             className="overflow-hidden"
@@ -130,4 +147,28 @@ export const Product = () => {
       </div>
     </div>
   );
+
+  async function addToCard(idProduct: string | undefined, idCart: string) {
+    console.log(idProduct, idCart);
+
+    const res = await serverApi.addLineItemCart(
+      getUpdateActions(idProduct),
+      idCart,
+    );
+    console.log(res);
+  }
+
+  // add to cart
+  function getUpdateActions(id: string | undefined, amount: number = 1) {
+    const actions: AddCartAction[] = [
+      {
+        action: 'addLineItem',
+        productId: id,
+        variantId: 1,
+        quantity: amount,
+      },
+    ];
+    console.log(actions);
+    return actions;
+  }
 };

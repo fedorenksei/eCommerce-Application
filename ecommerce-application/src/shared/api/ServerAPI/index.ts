@@ -11,7 +11,7 @@ import { setCustomerData } from '../../store/customerDataSlice';
 import { setFiltersState } from '../../store/filtersSlice';
 import { getFiltersParams } from '../../utils/getFiltersParams';
 import { setCategories } from '../../store/categoriesSlice';
-import { CustomerUpdateAction } from '../../types/types';
+import { CustomerUpdateAction, AddCartAction } from '../../types/types';
 import { setCart } from '../../store/cartSlice';
 
 export class ServerAPI {
@@ -541,6 +541,42 @@ export class ServerAPI {
 
     return result;
   }
-}
 
+  public async addLineItemCart(
+    actions: AddCartAction[],
+    cartId: string | undefined,
+  ) {
+    const link = `${this.API_URL}/${this.KEY}/me/carts/${cartId}`;
+    let isOk = false;
+    //let res = null;
+
+    try {
+      const response = await fetch(link, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+        body: JSON.stringify({
+          // add cart version !!!!!!!!
+          version: 13, // this.cart!.version
+          actions,
+        }),
+      });
+
+      isOk = response.ok;
+
+      if (isOk) {
+        //res = await response.json();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (isOk) {
+      //
+    }
+
+    return isOk;
+  }
+}
 //! TODO удалить лишние консоль логи

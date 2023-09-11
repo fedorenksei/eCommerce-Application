@@ -202,6 +202,7 @@ export class ServerAPI {
     if (isOk) {
       this.saveTokens(res.access_token, res.refresh_token);
       this.storeCustomerInfo();
+      this.storeCart();
     }
 
     return isOk;
@@ -223,6 +224,7 @@ export class ServerAPI {
       }),
     );
     await this.loginAnonymously();
+    this.storeCart();
   }
 
   private async storeCustomerInfo() {

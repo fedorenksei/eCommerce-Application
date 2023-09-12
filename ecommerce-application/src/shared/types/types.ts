@@ -12,8 +12,16 @@ export type AddCartAction = {
   quantity: number;
 };
 
+export type DeleteItemAction =
+  | AddCartAction
+  | {
+      action: string;
+      lineItemId: string;
+    };
+
 export type CartUpdateAction =
   | AddCartAction
+  | DeleteItemAction
   | {
       action: string;
       code: string;

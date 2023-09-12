@@ -6,7 +6,10 @@ import { Header2 } from '../../../shared/ui/text/Header2';
 import { Header3 } from '../../../shared/ui/text/Header3';
 import { Paragraph } from '../../../shared/ui/text/Paragraph';
 import { getButtonStyles } from '../../../shared/ui/styles';
-import { AddCartAction } from '../../../shared/types/types';
+import { AddCartAction, DeleteItemAction } from '../../../shared/types/types';
+//import { getLineItem } from '../../../shared/utils/getLineItem';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../app/store';
 import clsx from 'clsx';
 
 import './slider.css';
@@ -21,6 +24,7 @@ export const Product = () => {
     [],
   );
   const serverApi = ServerAPI.getInstance();
+  const lineItems = useSelector((state: RootState) => state.cart.lineItems);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -106,7 +110,7 @@ export const Product = () => {
             </button>
             <button
               onClick={() => {
-                // todo add action to add in cart
+                // action to add in cart
                 addToCard(id);
               }}
               className={getButtonStyles({
@@ -116,6 +120,19 @@ export const Product = () => {
               })}
             >
               Add to cart
+            </button>
+            <button
+              onClick={() => {
+                // action to delete item
+                delInCard(id);
+              }}
+              className={getButtonStyles({
+                size: 'small',
+                filling: 'transparent',
+                shape: 'round',
+              })}
+            >
+              Del
             </button>
           </div>
           <div
@@ -160,6 +177,29 @@ export const Product = () => {
         productId: id,
         variantId: 1,
         quantity: amount,
+      },
+    ];
+    return actions;
+  }
+
+  async function delInCard(productId: string | undefined) {
+    console.log(productId);
+    const productSearch = lineItems.filter(
+      (lineItem) => lineItem.productId === productId,
+    );
+    const lineItemOfProduct = productSearch[0];
+    console.log(lineItemOfProduct?.id);
+    const res = await serverApi.updateCart(
+      deleteActions(lineItemOfProduct?.id),
+    );
+    console.log(res);
+  }
+
+  function deleteActions(ItemId: string) {
+    const actions: DeleteItemAction[] = [
+      {
+        action: 'removeLineItem',
+        lineItemId: ItemId,
       },
     ];
     console.log(actions);

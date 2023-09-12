@@ -2,6 +2,7 @@ import store from '../../../app/store';
 import {
   CategoryData,
   CustomerData,
+  LineItem,
   LoginData,
   NewCustomerInfo,
   ProductRequestParams,
@@ -11,9 +12,10 @@ import { setCustomerData } from '../../store/customerDataSlice';
 import { setFiltersState } from '../../store/filtersSlice';
 import { getFiltersParams } from '../../utils/getFiltersParams';
 import { setCategories } from '../../store/categoriesSlice';
-import { CustomerUpdateAction, AddCartAction } from '../../types/types';
+import { CustomerUpdateAction, CartUpdateAction } from '../../types/types';
 import { setCart } from '../../store/cartSlice';
 import { setDiscountCodes } from '../../store/discountCodesSlice';
+import { getLineItem } from '../../utils/getLineItem';
 
 export class ServerAPI {
   private static instance: ServerAPI;
@@ -495,11 +497,16 @@ export class ServerAPI {
     // TODO: catch error
     if (!cart) return;
 
+    const lineItems: LineItem[] = cart.lineItems.map(getLineItem);
+    const discountedPrice = 0;
     store.dispatch(
       setCart({
         version: cart.version,
         id: cart.id,
-        lineItems: cart.lineItems,
+        lineItems,
+        totalPrice: cart.totalPrice.centAmount,
+        discountedPrice,
+        discountCodes: cart.discountCodes,
       }),
     );
   }
@@ -580,12 +587,9 @@ export class ServerAPI {
     store.dispatch(setDiscountCodes({ discountCodes }));
   }
 
-  public async addLineItemCart(
-    actions: AddCartAction[],
-    cartId: string | undefined,
-    cartVersion: number,
-  ) {
-    const link = `${this.API_URL}/${this.KEY}/me/carts/${cartId}`;
+  public async updateCart(actions: CartUpdateAction[]) {
+    const { id, version } = store.getState().cart;
+    const link = `${this.API_URL}/${this.KEY}/me/carts/${id}`;
     let isOk = false;
     //let res = null;
 
@@ -596,7 +600,7 @@ export class ServerAPI {
           Authorization: `Bearer ${this.accessToken}`,
         },
         body: JSON.stringify({
-          version: cartVersion,
+          version,
           actions,
         }),
       });

@@ -1,25 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-type CartState = {
-  version: number;
-  id: string;
-  lineItems: { id: string; quantity: number }[];
-};
+import { CartState } from '../types/interfaces';
 
 const initialState: CartState = {
   version: 0,
   id: '',
   lineItems: [],
+  totalPrice: 0,
+  discountedPrice: 0,
+  discountCodes: [],
 };
 
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    setCart(state, action) {
+    setCart(state, action: { payload: CartState }) {
       state.version = action.payload.version;
       state.id = action.payload.id;
       state.lineItems = action.payload.lineItems;
+      state.totalPrice = action.payload.totalPrice;
+      state.discountedPrice = action.payload.discountedPrice;
+      state.discountCodes = action.payload.discountCodes;
     },
   },
 });

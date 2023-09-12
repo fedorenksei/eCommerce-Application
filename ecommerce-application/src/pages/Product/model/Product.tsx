@@ -7,8 +7,6 @@ import { Header3 } from '../../../shared/ui/text/Header3';
 import { Paragraph } from '../../../shared/ui/text/Paragraph';
 import { getButtonStyles } from '../../../shared/ui/styles';
 import { AddCartAction } from '../../../shared/types/types';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../app/store';
 import clsx from 'clsx';
 
 import './slider.css';
@@ -23,8 +21,6 @@ export const Product = () => {
     [],
   );
   const serverApi = ServerAPI.getInstance();
-  const cartId = useSelector((state: RootState) => state.cart.id);
-  const cartVersion = useSelector((state: RootState) => state.cart.version);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -111,7 +107,7 @@ export const Product = () => {
             <button
               onClick={() => {
                 // todo add action to add in cart
-                addToCard(id, cartId);
+                addToCard(id);
               }}
               className={getButtonStyles({
                 size: 'small',
@@ -149,14 +145,10 @@ export const Product = () => {
     </div>
   );
 
-  async function addToCard(idProduct: string | undefined, idCart: string) {
-    console.log(idProduct, idCart);
+  async function addToCard(idProduct: string | undefined) {
+    console.log(idProduct);
 
-    const res = await serverApi.addLineItemCart(
-      getUpdateActions(idProduct),
-      idCart,
-      cartVersion,
-    );
+    const res = await serverApi.updateCart(getUpdateActions(idProduct));
     console.log(res);
   }
 

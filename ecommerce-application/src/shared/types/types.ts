@@ -11,3 +11,10 @@ export type AddCartAction = {
   variantId: number;
   quantity: number;
 };
+
+export type CartUpdateAction =
+  | AddCartAction
+  | {
+      action: string;
+      code: string;
+    };

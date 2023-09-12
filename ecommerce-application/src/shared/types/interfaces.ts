@@ -171,3 +171,21 @@ export type FiltersState = {
   variantParams: VariantsParams;
   priceParams: PriceParams;
 };
+
+export interface LineItem {
+  id: string;
+  productId: string;
+  price: number;
+  totalPrice: number;
+  discountedPricePerQuantity: string;
+  quantity: number;
+}
+
+export interface CartState {
+  version: number;
+  id: string;
+  lineItems: LineItem[];
+  totalPrice: number;
+  discountedPrice: number;
+  discountCodes: string[];
+}

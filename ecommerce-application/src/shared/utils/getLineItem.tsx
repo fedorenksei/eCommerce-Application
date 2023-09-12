@@ -8,7 +8,7 @@ interface LineItemApiData {
   };
   quantity: number;
   totalPrice: { centAmount: number };
-  discountedPricePerQuantity: any;
+  discountedPricePerQuantity: string; // TODO check update type
 }
 
 export const getLineItem = (data: LineItemApiData): LineItem => {

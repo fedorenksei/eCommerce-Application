@@ -1,7 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 type DiscountCodesState = {
-  discountCodes: { name: string; code: string }[];
+  discountCodes: {
+    name: string;
+    description: string;
+    code: string;
+  }[];
 };
 
 const initialState: DiscountCodesState = {

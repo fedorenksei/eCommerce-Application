@@ -566,12 +566,16 @@ export class ServerAPI {
     if (!result) return;
 
     const discountCodes = result.results.map(
-      (item: { name: { 'en-US': string }; code: string }) => ({
+      (item: {
+        name: { 'en-US': string };
+        description: { 'en-US': string };
+        code: string;
+      }) => ({
         name: item.name['en-US'],
+        description: item.description['en-US'],
         code: item.code,
       }),
     );
-    console.log(discountCodes);
     store.dispatch(setDiscountCodes({ discountCodes }));
   }
 }

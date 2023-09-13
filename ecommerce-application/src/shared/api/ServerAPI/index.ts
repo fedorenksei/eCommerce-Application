@@ -498,6 +498,15 @@ export class ServerAPI {
     if (!cart) return;
 
     const lineItems: LineItem[] = cart.lineItems.map(getLineItem);
+    const discountCodeId = cart.discountCodes
+      .filter(
+        (item: { state: string; discountCode: { id: string } }) =>
+          item.state === 'MatchesCart',
+      )
+      .map(
+        (item: { discountCode: { id: string } }) => item.discountCode.id,
+      )?.[0];
+
     const discountedPrice = 0;
     store.dispatch(
       setCart({
@@ -506,7 +515,7 @@ export class ServerAPI {
         lineItems,
         totalPrice: cart.totalPrice.centAmount,
         discountedPrice,
-        discountCodes: cart.discountCodes,
+        discountCodeId,
       }),
     );
   }
@@ -575,10 +584,12 @@ export class ServerAPI {
 
     const discountCodes = result.results.map(
       (item: {
+        id: string;
         name: { 'en-US': string };
         description: { 'en-US': string };
         code: string;
       }) => ({
+        id: item.id,
         name: item.name['en-US'],
         description: item.description['en-US'],
         code: item.code,

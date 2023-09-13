@@ -15,6 +15,13 @@ export type AddCartAction = {
 export type CartUpdateAction =
   | AddCartAction
   | {
-      action: string;
+      action: 'addDiscountCode';
       code: string;
+    }
+  | {
+      action: 'removeDiscountCode';
+      discountCode: {
+        typeId: 'discount-code';
+        id: string;
+      };
     };

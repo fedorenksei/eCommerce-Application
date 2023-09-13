@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 type DiscountCodesState = {
   discountCodes: {
+    id: string;
     name: string;
     description: string;
     code: string;
@@ -13,7 +14,7 @@ const initialState: DiscountCodesState = {
 };
 
 const discountCodesSlice = createSlice({
-  name: 'cart',
+  name: 'discountCodes',
   initialState,
   reducers: {
     setDiscountCodes(state, action) {

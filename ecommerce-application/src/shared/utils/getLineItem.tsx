@@ -8,7 +8,6 @@ interface LineItemApiData {
   };
   quantity: number;
   totalPrice: { centAmount: number };
-  discountedPricePerQuantity: any;
 }
 
 export const getLineItem = (data: LineItemApiData): LineItem => {
@@ -18,6 +17,5 @@ export const getLineItem = (data: LineItemApiData): LineItem => {
     price: data.price.value.centAmount,
     totalPrice: data.totalPrice.centAmount,
     quantity: data.quantity,
-    discountedPricePerQuantity: JSON.stringify(data.discountedPricePerQuantity),
   };
 };

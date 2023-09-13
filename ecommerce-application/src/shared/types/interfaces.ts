@@ -177,7 +177,6 @@ export interface LineItem {
   productId: string;
   price: number;
   totalPrice: number;
-  discountedPricePerQuantity: string;
   quantity: number;
 }
 

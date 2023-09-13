@@ -66,13 +66,7 @@ export class ServerAPI {
     }
 
     this.storeCart();
-
-    const categoriesId: Record<string, string> = {};
-    const categories: CategoryData[] = await this.getCategories(true);
-    categories.forEach(({ name: { 'en-US': categoryName }, id }) => {
-      categoriesId[categoryName] = id;
-    });
-    store.dispatch(setCategories(categoriesId));
+    this.storeCategories();
   }
 
   private loadTokens() {
@@ -359,7 +353,7 @@ export class ServerAPI {
     return isOk;
   }
 
-  public async getCategories(onlyMain = false) {
+  public async storeCategories() {
     const link = `${this.API_URL}/${this.KEY}/categories`;
     let res = null;
 
@@ -376,13 +370,16 @@ export class ServerAPI {
       console.log(e);
     }
 
-    if (res) {
-      res = onlyMain
-        ? res.filter((cat: CategoryData) => cat.ancestors.length === 0)
-        : res;
+    if (!res) return;
 
-      return res;
-    }
+    const categories: CategoryData[] = res.filter(
+      (cat: CategoryData) => cat.ancestors.length === 0,
+    );
+    const categoriesId: Record<string, string> = {};
+    categories.forEach(({ name: { 'en-US': categoryName }, id }) => {
+      categoriesId[categoryName] = id;
+    });
+    store.dispatch(setCategories(categoriesId));
   }
 
   public async getProducts({

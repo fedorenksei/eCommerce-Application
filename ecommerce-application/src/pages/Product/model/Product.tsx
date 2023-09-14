@@ -10,6 +10,7 @@ import { AddCartAction, DeleteItemAction } from '../../../shared/types/types';
 //import { getLineItem } from '../../../shared/utils/getLineItem';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
+import { Counter } from './cartCounter';
 import clsx from 'clsx';
 
 import './slider.css';
@@ -25,6 +26,7 @@ export const Product = () => {
   );
   const serverApi = ServerAPI.getInstance();
   const lineItems = useSelector((state: RootState) => state.cart.lineItems);
+  //let counter: number = 1;
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -35,6 +37,17 @@ export const Product = () => {
 
     fetchProduct();
   }, [cbSetProduct, id, serverApi]);
+
+  const productSearch = lineItems.filter(
+    (lineItem) => lineItem.productId === id,
+  );
+  const lineItemOfProduct = productSearch[0];
+  let amount: number;
+  if (lineItemOfProduct?.id === undefined) {
+    amount = 1;
+  } else {
+    amount = lineItemOfProduct?.quantity;
+  }
 
   const productName = product?.masterData.current.name['en-US'];
   const description = product?.masterData.current.description['en-US'];
@@ -121,6 +134,41 @@ export const Product = () => {
             >
               Add to cart
             </button>
+            <Counter countStart={amount} />
+
+            {/* <button
+              onClick={() => {
+                // action to decrease item
+                if (counter > 1) {
+                  counter = counter - 1;
+                  console.log('-', counter);
+                }
+              }}
+              className={getButtonStyles({
+                size: 'small',
+                filling: 'transparent',
+                shape: 'round',
+              })}
+            >
+              -
+            </button>
+            <Paragraph>{counter}</Paragraph>
+            <button
+              onClick={() => {
+                // action to increase item
+                if (counter < 99) {
+                  counter = counter + 1;
+                  console.log('+', counter);
+                }
+              }}
+              className={getButtonStyles({
+                size: 'small',
+                filling: 'transparent',
+                shape: 'round',
+              })}
+            >
+              +
+            </button> */}
             <button
               onClick={() => {
                 // action to delete item
@@ -184,15 +232,18 @@ export const Product = () => {
 
   async function delInCard(productId: string | undefined) {
     console.log(productId);
-    const productSearch = lineItems.filter(
-      (lineItem) => lineItem.productId === productId,
-    );
-    const lineItemOfProduct = productSearch[0];
-    console.log(lineItemOfProduct?.id);
-    const res = await serverApi.updateCart(
-      deleteActions(lineItemOfProduct?.id),
-    );
-    console.log(res);
+
+    if (lineItemOfProduct?.id === undefined) {
+      return;
+    } else {
+      //const lineItemId = lineItemOfProduct?.id;
+
+      const res = await serverApi.updateCart(
+        deleteActions(lineItemOfProduct?.id),
+      );
+      console.log(res);
+      return;
+    }
   }
 
   function deleteActions(ItemId: string) {

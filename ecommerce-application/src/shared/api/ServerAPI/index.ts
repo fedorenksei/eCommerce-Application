@@ -128,6 +128,7 @@ export class ServerAPI {
     }
 
     if (isOk) {
+      this.accessToken = res.access_token;
       const isUserIdentified = await this.storeCustomerInfo();
       this.saveTokens({
         userType: isUserIdentified ? 'identified' : 'anonymous',

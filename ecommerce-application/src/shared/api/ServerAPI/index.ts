@@ -54,6 +54,12 @@ export class ServerAPI {
   }
 
   public async init() {
+    await this.restoreUser();
+    this.storeCart();
+    this.storeCategories();
+  }
+
+  private async restoreUser() {
     this.getRefreshToken();
 
     if (this.refreshToken) {
@@ -64,9 +70,6 @@ export class ServerAPI {
     } else {
       await this.loginAnonymously();
     }
-
-    this.storeCart();
-    this.storeCategories();
   }
 
   private getRefreshToken() {
@@ -247,17 +250,7 @@ export class ServerAPI {
     this.accessToken = null;
     this.refreshToken = null;
 
-    this.getRefreshToken();
-
-    if (this.refreshToken) {
-      const isUpdated = await this.updateAccessToken();
-      if (isUpdated === false) {
-        await this.loginAnonymously();
-      }
-    } else {
-      await this.loginAnonymously();
-    }
-
+    await this.restoreUser();
     this.storeCart();
   }
 

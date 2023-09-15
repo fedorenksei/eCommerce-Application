@@ -150,7 +150,6 @@ export const Product = () => {
                   size: 'small',
                   filling: 'transparent',
                   shape: 'round',
-                  disabled: isCart ? true : false,
                 }),
               )}
             >

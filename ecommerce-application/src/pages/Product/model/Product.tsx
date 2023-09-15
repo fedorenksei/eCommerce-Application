@@ -6,7 +6,11 @@ import { Header2 } from '../../../shared/ui/text/Header2';
 import { Header3 } from '../../../shared/ui/text/Header3';
 import { Paragraph } from '../../../shared/ui/text/Paragraph';
 import { getButtonStyles } from '../../../shared/ui/styles';
-import { AddCartAction, DeleteItemAction } from '../../../shared/types/types';
+import {
+  AddCartAction,
+  ChangeLineAction,
+  DeleteItemAction,
+} from '../../../shared/types/types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
 import clsx from 'clsx';
@@ -127,7 +131,9 @@ export const Product = () => {
             </button>
             <button
               disabled={isCart ? false : true}
-              onClick={() => {}} // TODO -1 action add
+              onClick={() => {
+                changeLineCart(id, amount - 1);
+              }} // TODO -1 action add
               className={clsx(
                 getButtonStyles({
                   size: 'small',
@@ -233,6 +239,20 @@ export const Product = () => {
     }
   }
 
+  async function changeLineCart(productId: string | undefined, amount: number) {
+    console.log(productId);
+
+    if (lineItemOfProduct?.id === undefined) {
+      return;
+    } else {
+      const res = await serverApi.updateCart(
+        changeLineActions(lineItemOfProduct?.id, amount),
+      );
+      console.log(res);
+      return;
+    }
+  }
+
   function deleteActions(ItemId: string) {
     const actions: DeleteItemAction[] = [
       {
@@ -240,7 +260,17 @@ export const Product = () => {
         lineItemId: ItemId,
       },
     ];
-    console.log(actions);
+    return actions;
+  }
+
+  function changeLineActions(ItemId: string, amount: number) {
+    const actions: ChangeLineAction[] = [
+      {
+        action: 'changeLineItemQuantity',
+        lineItemId: ItemId,
+        quantity: amount,
+      },
+    ];
     return actions;
   }
 

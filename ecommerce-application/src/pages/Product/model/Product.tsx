@@ -7,10 +7,8 @@ import { Header3 } from '../../../shared/ui/text/Header3';
 import { Paragraph } from '../../../shared/ui/text/Paragraph';
 import { getButtonStyles } from '../../../shared/ui/styles';
 import { AddCartAction, DeleteItemAction } from '../../../shared/types/types';
-//import { getLineItem } from '../../../shared/utils/getLineItem';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
-import { Counter } from './cartCounter';
 import clsx from 'clsx';
 
 import './slider.css';
@@ -26,7 +24,6 @@ export const Product = () => {
   );
   const serverApi = ServerAPI.getInstance();
   const lineItems = useSelector((state: RootState) => state.cart.lineItems);
-  //let counter: number = 1;
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -43,10 +40,17 @@ export const Product = () => {
   );
   const lineItemOfProduct = productSearch[0];
   let amount: number;
+  let isCart: boolean = false;
+  let nameButton: string = 'Add';
+
   if (lineItemOfProduct?.id === undefined) {
-    amount = 1;
+    isCart = false;
+    amount = 0;
+    nameButton = 'Add';
   } else {
+    isCart = true;
     amount = lineItemOfProduct?.quantity;
+    nameButton = 'Del';
   }
 
   const productName = product?.masterData.current.name['en-US'];
@@ -122,57 +126,41 @@ export const Product = () => {
               &gt;&gt;
             </button>
             <button
-              onClick={() => {
-                // action to add in cart
-                addToCard(id);
-              }}
-              className={getButtonStyles({
-                size: 'small',
-                filling: 'transparent',
-                shape: 'round',
-              })}
-            >
-              Add to cart
-            </button>
-            <Counter countStart={amount} />
-
-            {/* <button
-              onClick={() => {
-                // action to decrease item
-                if (counter > 1) {
-                  counter = counter - 1;
-                  console.log('-', counter);
-                }
-              }}
-              className={getButtonStyles({
-                size: 'small',
-                filling: 'transparent',
-                shape: 'round',
-              })}
+              disabled={isCart ? false : true}
+              onClick={() => {}} // TODO -1 action add
+              className={clsx(
+                getButtonStyles({
+                  size: 'small',
+                  filling: 'transparent',
+                  shape: 'round',
+                  disabled: isCart ? false : true,
+                }),
+              )}
             >
               -
             </button>
-            <Paragraph>{counter}</Paragraph>
+            <Paragraph>{amount}</Paragraph>
+
             <button
               onClick={() => {
-                // action to increase item
-                if (counter < 99) {
-                  counter = counter + 1;
-                  console.log('+', counter);
-                }
+                addToCart(id, 1);
               }}
-              className={getButtonStyles({
-                size: 'small',
-                filling: 'transparent',
-                shape: 'round',
-              })}
+              className={clsx(
+                getButtonStyles({
+                  size: 'small',
+                  filling: 'transparent',
+                  shape: 'round',
+                  disabled: isCart ? true : false,
+                }),
+              )}
             >
               +
-            </button> */}
+            </button>
+
             <button
               onClick={() => {
-                // action to delete item
-                delInCard(id);
+                // Univers Button
+                updateCard(id);
               }}
               className={getButtonStyles({
                 size: 'small',
@@ -180,7 +168,7 @@ export const Product = () => {
                 shape: 'round',
               })}
             >
-              Del
+              {nameButton}
             </button>
           </div>
           <div
@@ -210,10 +198,10 @@ export const Product = () => {
     </div>
   );
 
-  async function addToCard(idProduct: string | undefined) {
+  async function addToCart(idProduct: string | undefined, amount: number = 1) {
     console.log(idProduct);
 
-    const res = await serverApi.updateCart(getUpdateActions(idProduct));
+    const res = await serverApi.updateCart(getUpdateActions(idProduct, amount));
     console.log(res);
   }
 
@@ -230,7 +218,7 @@ export const Product = () => {
     return actions;
   }
 
-  async function delInCard(productId: string | undefined) {
+  async function delInCart(productId: string | undefined) {
     console.log(productId);
 
     if (lineItemOfProduct?.id === undefined) {
@@ -255,5 +243,14 @@ export const Product = () => {
     ];
     console.log(actions);
     return actions;
+  }
+
+  async function updateCard(id: string | undefined) {
+    if (isCart) {
+      delInCart(id);
+    } else {
+      addToCart(id);
+    }
+    return;
   }
 };

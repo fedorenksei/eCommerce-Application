@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
 import { getTextStyles } from '../../../shared/ui/styles';
 
 export const NavListItem = ({ children }: PropsWithChildren) => {

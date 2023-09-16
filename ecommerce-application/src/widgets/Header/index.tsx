@@ -98,7 +98,7 @@ export const Header = () => {
                   >
                     <BsPersonAdd
                       size="1.7em"
-                      title="Register"
+                      title="Sign up"
                     />
                   </Link>
                 </NavListItem>

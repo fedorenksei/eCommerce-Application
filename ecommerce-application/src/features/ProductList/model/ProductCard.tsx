@@ -1,6 +1,11 @@
 import { useNavigate } from 'react-router-dom';
+import { ServerAPI } from '../../../shared/api/ServerAPI';
 import { Header5 } from '../../../shared/ui/text/Header5';
 import { Paragraph } from '../../../shared/ui/text/Paragraph';
+import { getButtonStyles } from '../../../shared/ui/styles';
+import { AddCartAction, DeleteItemAction } from '../../../shared/types/types';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../app/store';
 import clsx from 'clsx';
 
 interface ProductCardProps {
@@ -23,6 +28,32 @@ export const ProductCard = ({
   const shortDescription =
     description.length > 100 ? `${description.slice(0, 97)}...` : description;
   const discountedPrice = Math.floor(price * 0.95);
+  const lineItems = useSelector((state: RootState) => state.cart.lineItems);
+  const productSearch = lineItems.filter(
+    (lineItem) => lineItem.productId === id,
+  );
+  const lineItemOfProduct = productSearch[0];
+  let amount: number;
+  let isCart = false;
+  let nameButton: string = '';
+  const serverApi = ServerAPI.getInstance();
+
+  if (lineItemOfProduct?.id === undefined) {
+    isCart = false;
+    amount = 0;
+    nameButton = 'Add to cart';
+  } else {
+    isCart = true;
+    amount = lineItemOfProduct?.quantity;
+    nameButton = 'Delete';
+  }
+
+  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    updateCard(id);
+    console.log('is card :', isCart, amount, nameButton);
+    //event.preventDefault();
+  };
 
   return (
     <div
@@ -45,6 +76,67 @@ export const ProductCard = ({
         <span className="text-danger-color">€{discountedPrice}</span>
       </div>
       <Paragraph>{shortDescription}</Paragraph>
+      <button
+        onClick={handleButtonClick}
+        className={getButtonStyles({
+          size: 'small',
+          filling: 'transparent',
+          shape: 'round',
+        })}
+      >
+        {nameButton}
+      </button>
     </div>
   );
+  async function updateCard(id: string | undefined) {
+    if (isCart) {
+      delInCart(id);
+    } else {
+      addToCart(id);
+    }
+    return;
+  }
+
+  async function addToCart(idProduct: string | undefined, amount: number = 1) {
+    console.log(idProduct);
+
+    const res = await serverApi.updateCart(getUpdateActions(idProduct, amount));
+    console.log(res);
+  }
+
+  // add to cart
+  function getUpdateActions(id: string | undefined, amount: number = 1) {
+    const actions: AddCartAction[] = [
+      {
+        action: 'addLineItem',
+        productId: id,
+        variantId: 1,
+        quantity: amount,
+      },
+    ];
+    return actions;
+  }
+
+  async function delInCart(productId: string | undefined) {
+    console.log(productId);
+
+    if (lineItemOfProduct?.id === undefined) {
+      return;
+    } else {
+      const res = await serverApi.updateCart(
+        deleteActions(lineItemOfProduct?.id),
+      );
+      console.log(res);
+      return;
+    }
+  }
+  function deleteActions(ItemId: string) {
+    const actions: DeleteItemAction[] = [
+      {
+        action: 'removeLineItem',
+        lineItemId: ItemId,
+      },
+    ];
+    return actions;
+  }
 };

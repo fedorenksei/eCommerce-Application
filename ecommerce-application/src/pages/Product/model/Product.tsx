@@ -266,11 +266,11 @@ export const Product = () => {
     return actions;
   }
 
-  async function updateCard() {
+  async function updateCard(id: string | undefined) {
     if (isCart) {
       delInCart();
     } else {
-      addToCart();
+      addToCart(id);
     }
     return;
   }

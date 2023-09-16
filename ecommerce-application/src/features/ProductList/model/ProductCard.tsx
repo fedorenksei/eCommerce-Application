@@ -36,8 +36,9 @@ export const ProductCard = ({
   let isCart = false;
   let nameButton: string = '';
   const serverApi = ServerAPI.getInstance();
+  const lineItemId: string | undefined = lineItemOfProduct?.id;
 
-  if (lineItemOfProduct?.id === undefined) {
+  if (lineItemId === undefined) {
     isCart = false;
     nameButton = 'Add to cart';
   } else {
@@ -86,7 +87,7 @@ export const ProductCard = ({
   );
   async function updateCard(id: string | undefined) {
     if (isCart) {
-      delInCart(id);
+      delInCart();
     } else {
       addToCart(id);
     }
@@ -111,12 +112,10 @@ export const ProductCard = ({
   }
 
   async function delInCart() {
-    if (lineItemOfProduct?.id === undefined) {
+    if (lineItemId === undefined) {
       return;
     } else {
-      const res = await serverApi.updateCart(
-        deleteActions(lineItemOfProduct?.id),
-      );
+      const res = await serverApi.updateCart(deleteActions(lineItemId));
       console.log(res);
       return;
     }

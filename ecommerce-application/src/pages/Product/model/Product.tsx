@@ -94,7 +94,7 @@ export const Product = () => {
         >
           <div
             className={clsx(
-              'max-w-[100%] gap-5 p-4',
+              'max-w-[100%] gap-2 p-4',
               'flex justify-center items-center',
             )}
           >
@@ -132,8 +132,8 @@ export const Product = () => {
             <button
               disabled={isCart ? false : true}
               onClick={() => {
-                changeLineCart(id, amount - 1);
-              }} // TODO -1 action add
+                changeLineCart(amount - 1);
+              }}
               className={clsx(
                 getButtonStyles({
                   size: 'small',
@@ -204,8 +204,6 @@ export const Product = () => {
   );
 
   async function addToCart(idProduct: string | undefined, amount: number = 1) {
-    console.log(idProduct);
-
     const res = await serverApi.updateCart(getUpdateActions(idProduct, amount));
     console.log(res);
   }
@@ -223,14 +221,10 @@ export const Product = () => {
     return actions;
   }
 
-  async function delInCart(productId: string | undefined) {
-    console.log(productId);
-
+  async function delInCart() {
     if (lineItemOfProduct?.id === undefined) {
       return;
     } else {
-      //const lineItemId = lineItemOfProduct?.id;
-
       const res = await serverApi.updateCart(
         deleteActions(lineItemOfProduct?.id),
       );
@@ -239,9 +233,7 @@ export const Product = () => {
     }
   }
 
-  async function changeLineCart(productId: string | undefined, amount: number) {
-    console.log(productId);
-
+  async function changeLineCart(amount: number) {
     if (lineItemOfProduct?.id === undefined) {
       return;
     } else {
@@ -274,11 +266,11 @@ export const Product = () => {
     return actions;
   }
 
-  async function updateCard(id: string | undefined) {
+  async function updateCard() {
     if (isCart) {
-      delInCart(id);
+      delInCart();
     } else {
-      addToCart(id);
+      addToCart();
     }
     return;
   }

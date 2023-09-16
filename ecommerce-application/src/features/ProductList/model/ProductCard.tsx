@@ -33,26 +33,21 @@ export const ProductCard = ({
     (lineItem) => lineItem.productId === id,
   );
   const lineItemOfProduct = productSearch[0];
-  let amount: number;
   let isCart = false;
   let nameButton: string = '';
   const serverApi = ServerAPI.getInstance();
 
   if (lineItemOfProduct?.id === undefined) {
     isCart = false;
-    amount = 0;
     nameButton = 'Add to cart';
   } else {
     isCart = true;
-    amount = lineItemOfProduct?.quantity;
     nameButton = 'Delete';
   }
 
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     updateCard(id);
-    console.log('is card :', isCart, amount, nameButton);
-    //event.preventDefault();
   };
 
   return (
@@ -99,8 +94,6 @@ export const ProductCard = ({
   }
 
   async function addToCart(idProduct: string | undefined, amount: number = 1) {
-    console.log(idProduct);
-
     const res = await serverApi.updateCart(getUpdateActions(idProduct, amount));
     console.log(res);
   }
@@ -117,9 +110,7 @@ export const ProductCard = ({
     return actions;
   }
 
-  async function delInCart(productId: string | undefined) {
-    console.log(productId);
-
+  async function delInCart() {
     if (lineItemOfProduct?.id === undefined) {
       return;
     } else {

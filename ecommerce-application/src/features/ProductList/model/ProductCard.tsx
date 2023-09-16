@@ -70,12 +70,6 @@ export const ProductCard = ({
         src={imageUrl}
         alt={productName}
       />
-      <Header5>{productName}</Header5>
-      <div className="space-x-2">
-        <span className="text-neutral-400 line-through">€{price}</span>
-        <span className="text-danger-color">€{discountedPrice}</span>
-      </div>
-      <Paragraph>{shortDescription}</Paragraph>
       <button
         onClick={handleButtonClick}
         className={getButtonStyles({
@@ -86,6 +80,13 @@ export const ProductCard = ({
       >
         {nameButton}
       </button>
+
+      <Header5>{productName}</Header5>
+      <div className="space-x-2">
+        <span className="text-neutral-400 line-through">€{price}</span>
+        <span className="text-danger-color">€{discountedPrice}</span>
+      </div>
+      <Paragraph>{shortDescription}</Paragraph>
     </div>
   );
   async function updateCard(id: string | undefined) {
@@ -104,7 +105,6 @@ export const ProductCard = ({
     console.log(res);
   }
 
-  // add to cart
   function getUpdateActions(id: string | undefined, amount: number = 1) {
     const actions: AddCartAction[] = [
       {

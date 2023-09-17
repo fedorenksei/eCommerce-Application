@@ -179,6 +179,8 @@ export interface LineItem {
   totalPrice: number;
   discountedPricePerQuantity: string;
   quantity: number;
+  name: string;
+  imageUrl: string;
 }
 
 export interface CartState {

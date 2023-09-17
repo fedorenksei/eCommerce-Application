@@ -1,6 +1,7 @@
 import { LineItem } from '../types/interfaces';
 
 interface LineItemApiData {
+  variant: { images: { url: string }[] };
   id: string;
   productId: string;
   price: {
@@ -8,7 +9,8 @@ interface LineItemApiData {
   };
   quantity: number;
   totalPrice: { centAmount: number };
-  discountedPricePerQuantity: string; // TODO check update type
+  name: { 'en-US': string };
+  discountedPricePerQuantity: []; // TODO check update type
 }
 
 export const getLineItem = (data: LineItemApiData): LineItem => {
@@ -18,6 +20,8 @@ export const getLineItem = (data: LineItemApiData): LineItem => {
     price: data.price.value.centAmount,
     totalPrice: data.totalPrice.centAmount,
     quantity: data.quantity,
+    name: data.name['en-US'],
+    imageUrl: data.variant.images[0].url,
     discountedPricePerQuantity: JSON.stringify(data.discountedPricePerQuantity),
   };
 };

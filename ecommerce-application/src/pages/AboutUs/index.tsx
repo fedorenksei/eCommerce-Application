@@ -1,25 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { getButtonStyles } from '../../shared/ui/styles';
 import { Header2 } from '../../shared/ui/text/Header2';
-import { Header5 } from '../../shared/ui/text/Header5';
+import { membersData } from './data';
+import { Member } from './ui/Member';
 
 export const AboutUs = () => {
   return (
-    <div className="flex flex-col justify-between items-center min-h-[80vh] p-10 gap-3 text-center">
-      <Header2>Coming soon :&#41;</Header2>
-      <Header5>About us page</Header5>
-      <Link to="/">
-        <button
-          className={getButtonStyles({
-            size: 'large',
-            filling: 'filled',
-            shape: 'round',
-          })}
-        >
-          Go home
-        </button>
-      </Link>
+    <div className="p-10 space-y-3 text-center">
+      <Header2>Our team</Header2>
+      <div className="grid grid-cols-[minmax(0,_400px)] justify-center lg:grid-cols-3 gap-4">
+        {membersData.map((member) => (
+          <Member
+            {...member}
+            key={`${member.github}`}
+          />
+        ))}
+      </div>
     </div>
   );
 };

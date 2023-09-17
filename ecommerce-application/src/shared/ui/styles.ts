@@ -3,11 +3,13 @@ import clsx from 'clsx';
 type TextStyleParams = {
   font?: 'simple' | 'h2' | 'h3' | 'h5';
   color?: 'default' | 'second' | 'light' | 'primary' | 'danger';
+  link?: boolean;
 };
 
 export function getTextStyles({
   font = 'simple',
   color = 'default',
+  link = false,
 }: TextStyleParams) {
   return clsx(
     'font-[Montserrat] tracking-[0.2px]',
@@ -24,6 +26,7 @@ export function getTextStyles({
       primary: 'text-primary-color',
       danger: 'text-danger-color',
     }[color],
+    link && 'transition hover:text-primary-color hover:underline',
   );
 }
 

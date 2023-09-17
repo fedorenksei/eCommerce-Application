@@ -4,6 +4,7 @@ import { ServerAPI } from '../../../shared/api/ServerAPI';
 import { Header5 } from '../../../shared/ui/text/Header5';
 import { Paragraph } from '../../../shared/ui/text/Paragraph';
 import { getButtonStyles } from '../../../shared/ui/styles';
+import { Link } from 'react-router-dom';
 import {
   AddCartAction,
   ChangeLineAction,
@@ -21,10 +22,12 @@ export const ItemCarts = () => {
     <div className="grid grid-cols-[repeat(auto-fill,_minmax(150px,_300px))] justify-evenly gap-3">
       {lineItems.map((item: LineItem) => (
         <div key={item.id}>
-          <img
-            src={item.imageUrl}
-            alt={item.name}
-          />
+          <Link to={`/product/${item.productId}`}>
+            <img
+              src={item.imageUrl}
+              alt={item.name}
+            />
+          </Link>
           <Header5>{item.name}</Header5>
           <Paragraph>Quantity: {item.quantity}</Paragraph>
           <div
@@ -63,7 +66,6 @@ export const ItemCarts = () => {
             </button>
             <button
               onClick={() => {
-                // Univers Button
                 delInCart(item.id);
               }}
               className={getButtonStyles({

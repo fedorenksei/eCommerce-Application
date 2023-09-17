@@ -190,4 +190,5 @@ export interface CartState {
   totalPrice: number;
   discountedPrice: number;
   discountCodes: string[];
+  totalLineItemQuantity: number;
 }

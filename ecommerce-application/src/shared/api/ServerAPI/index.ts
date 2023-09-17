@@ -507,6 +507,7 @@ export class ServerAPI {
         totalPrice: cart.totalPrice.centAmount,
         discountedPrice,
         discountCodes: cart.discountCodes,
+        totalLineItemQuantity: cart.totalLineItemQuantity,
       }),
     );
   }

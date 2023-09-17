@@ -9,7 +9,6 @@ import { FormButton } from '../../../../shared/ui/forms/FormButton';
 import { useState } from 'react';
 import Spinner from '../../../../shared/ui/Spinner';
 import { setIsShown, setText } from '../../../../shared/store/modalSlice';
-import { Header5 } from '../../../../shared/ui/text/Header5';
 import { Paragraph } from '../../../../shared/ui/text/Paragraph';
 
 interface PasswordConfirmFields {

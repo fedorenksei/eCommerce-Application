@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 
 type TextStyleParams = {
-  font?: 'simple' | 'h2' | 'h3' | 'h5';
+  font?: 'simple' | 'h2' | 'h3' | 'h4' | 'h5';
   color?: 'default' | 'second' | 'light' | 'primary' | 'danger';
   link?: boolean;
 };
@@ -16,6 +16,7 @@ export function getTextStyles({
     {
       h2: 'text-[40px] leading-[57px] font-bold',
       h3: 'text-2xl font-bold',
+      h4: 'text-xl leading-[30px] font-medium',
       h5: 'text-base font-bold',
       simple: 'text-sm font-medium',
     }[font],
@@ -36,6 +37,8 @@ type ButtonStyleParams = {
   filling: 'filled' | 'transparent';
   color?: 'primary' | 'danger';
   disabled?: boolean;
+  switchable?: boolean;
+  isTurnedOn?: boolean;
 };
 
 export function getButtonStyles({

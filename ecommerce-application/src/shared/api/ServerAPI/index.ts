@@ -12,6 +12,7 @@ import { setFiltersState } from '../../store/filtersSlice';
 import { getFiltersParams } from '../../utils/getFiltersParams';
 import { setCategories } from '../../store/categoriesSlice';
 import { CustomerUpdateAction } from '../../types/types';
+import { setCart } from '../../store/cartSlice';
 
 export class ServerAPI {
   private static instance: ServerAPI;
@@ -52,41 +53,56 @@ export class ServerAPI {
     return ServerAPI.instance;
   }
 
-  public async preflight() {
-    this.loadTokens();
+  public async init() {
+    await this.restoreUser();
+    this.storeCart();
+    this.storeCategories();
+  }
+
+  private async restoreUser() {
+    this.getRefreshToken();
 
     if (this.refreshToken) {
-      const isUpdated = await this.updateTokens();
+      const isUpdated = await this.updateAccessToken();
       if (isUpdated === false) {
-        await this.getCommonToken();
+        await this.loginAnonymously();
       }
     } else {
-      await this.getCommonToken();
+      await this.loginAnonymously();
     }
-
-    const categoriesId: Record<string, string> = {};
-    const categories: CategoryData[] = await this.getCategories(true);
-    categories.forEach(({ name: { 'en-US': categoryName }, id }) => {
-      categoriesId[categoryName] = id;
-    });
-    store.dispatch(setCategories(categoriesId));
   }
 
-  private loadTokens() {
-    this.accessToken = localStorage.getItem(`${this.prefix}-access-token`);
-    this.refreshToken = localStorage.getItem(`${this.prefix}-refresh-token`);
+  private getRefreshToken() {
+    this.refreshToken =
+      localStorage.getItem(`${this.prefix}-identified-refresh-token`) ||
+      localStorage.getItem(`${this.prefix}-anonymous-refresh-token`) ||
+      localStorage.getItem(`${this.prefix}-refresh-token`);
   }
 
-  private saveTokens(accessToken: string, refreshToken?: string) {
-    localStorage.setItem(`${this.prefix}-access-token`, accessToken);
+  private saveTokens({
+    userType,
+    accessToken,
+    refreshToken,
+  }: {
+    userType: 'anonymous' | 'identified';
+    accessToken: string;
+    refreshToken?: string;
+  }) {
+    localStorage.setItem(
+      `${this.prefix}-${userType}-access-token`,
+      accessToken,
+    );
     this.accessToken = accessToken;
     if (refreshToken) {
-      localStorage.setItem(`${this.prefix}-refresh-token`, refreshToken);
+      localStorage.setItem(
+        `${this.prefix}-${userType}-refresh-token`,
+        refreshToken,
+      );
       this.refreshToken = refreshToken;
     }
   }
 
-  private async updateTokens() {
+  private async updateAccessToken() {
     const link = `${this.AUTH_URL}/oauth/token?grant_type=refresh_token&refresh_token=${this.refreshToken}`;
 
     let isOk = false;
@@ -112,22 +128,20 @@ export class ServerAPI {
     }
 
     if (isOk) {
-      this.saveTokens(res.access_token);
-      await this.getCustomerInfo();
-      store.dispatch(
-        setAuth({
-          isAuth: true,
-        }),
-      );
-      return isOk;
+      this.accessToken = res.access_token;
+      const isUserIdentified = await this.storeCustomerInfo();
+      this.saveTokens({
+        userType: isUserIdentified ? 'identified' : 'anonymous',
+        accessToken: res.access_token,
+      });
     }
 
     return isOk;
   }
 
-  private async getCommonToken() {
-    const link = `${this.AUTH_URL}/oauth/token?grant_type=client_credentials`;
-    let token = '';
+  private async loginAnonymously() {
+    const link = `${this.AUTH_URL}/oauth/${this.KEY}/anonymous/token?grant_type=client_credentials`;
+    let result = null;
 
     try {
       const response = await fetch(link, {
@@ -138,14 +152,21 @@ export class ServerAPI {
           )}`,
         },
       });
-      const res = await response.json();
-      token = res.access_token;
+
+      if (response.ok) {
+        result = await response.json();
+      }
     } catch (e) {
       console.log(e);
     }
 
-    if (!token) return;
-    this.saveTokens(token);
+    if (result) {
+      this.saveTokens({
+        userType: 'anonymous',
+        accessToken: result.access_token,
+        refreshToken: result.refresh_token,
+      });
+    }
   }
 
   public async createNewCustomer(customerInfo: NewCustomerInfo) {
@@ -171,6 +192,108 @@ export class ServerAPI {
         password: customerInfo.password,
       });
     }
+    return isOk;
+  }
+
+  public async loginCustomer(loginData: LoginData) {
+    const email = encodeURIComponent(loginData.email);
+    const password = encodeURIComponent(loginData.password);
+    const link = `${this.AUTH_URL}/oauth/${this.KEY}/customers/token?grant_type=password&username=${email}&password=${password}`;
+    let isOk = false;
+    let res = null;
+
+    try {
+      const response = await fetch(link, {
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${btoa(
+            `${this.CLIENT_ID}:${this.CLIENT_SECRET}`,
+          )}`,
+        },
+      });
+      isOk = response.ok;
+
+      if (isOk) {
+        res = await response.json();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (isOk) {
+      this.saveTokens({
+        userType: 'identified',
+        accessToken: res.access_token,
+        refreshToken: res.refresh_token,
+      });
+      this.storeCustomerInfo();
+      this.storeCart();
+    }
+
+    return isOk;
+  }
+
+  public async logout() {
+    localStorage.removeItem(`${this.prefix}-identified-access-token`);
+    localStorage.removeItem(`${this.prefix}-identified-refresh-token`);
+
+    store.dispatch(
+      setAuth({
+        isAuth: false,
+      }),
+    );
+    store.dispatch(
+      setCustomerData({
+        customerInfo: null,
+      }),
+    );
+
+    this.accessToken = null;
+    this.refreshToken = null;
+
+    await this.restoreUser();
+    this.storeCart();
+  }
+
+  private async storeCustomerInfo(): Promise<boolean> {
+    const link = `${this.API_URL}/${this.KEY}/me`;
+    let isOk = false;
+    let res = null;
+
+    try {
+      const response = await fetch(link, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+
+      isOk = response.ok;
+
+      if (isOk) {
+        res = await response.json();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (isOk) {
+      this.customerID = res.id;
+      this.customerInfo = {
+        ...res,
+      };
+      store.dispatch(
+        setCustomerData({
+          customerInfo: { ...res },
+        }),
+      );
+      store.dispatch(
+        setAuth({
+          isAuth: true,
+        }),
+      );
+    }
+
     return isOk;
   }
 
@@ -215,84 +338,11 @@ export class ServerAPI {
     return isOk;
   }
 
-  public async loginCustomer(loginData: LoginData) {
-    const email = encodeURIComponent(loginData.email);
-    const password = encodeURIComponent(loginData.password);
-    const link = `${this.AUTH_URL}/oauth/${this.KEY}/customers/token?grant_type=password&username=${email}&password=${password}`;
-    let isOk = false;
-    let res = null;
-
-    try {
-      const response = await fetch(link, {
-        method: 'POST',
-        headers: {
-          Authorization: `Basic ${btoa(
-            `${this.CLIENT_ID}:${this.CLIENT_SECRET}`,
-          )}`,
-        },
-      });
-      isOk = response.ok;
-
-      if (isOk) {
-        res = await response.json();
-      }
-    } catch (e) {
-      console.log(e);
-    }
-
-    if (isOk) {
-      this.saveTokens(res.access_token, res.refresh_token);
-      await this.getCustomerInfo();
-      store.dispatch(
-        setAuth({
-          isAuth: true,
-        }),
-      );
-    }
-
-    return isOk;
-  }
-
   public async checkPassword(password: string) {
     return await this.loginCustomer({
       password,
       email: this.customerInfo?.email || '',
     });
-  }
-
-  private async getCustomerInfo() {
-    const link = `${this.API_URL}/${this.KEY}/me`;
-    let isOk = false;
-    let res = null;
-
-    try {
-      const response = await fetch(link, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${this.accessToken}`,
-        },
-      });
-
-      isOk = response.ok;
-
-      if (isOk) {
-        res = await response.json();
-      }
-    } catch (e) {
-      console.log(e);
-    }
-
-    if (isOk) {
-      this.customerID = res.id;
-      this.customerInfo = {
-        ...res,
-      };
-      store.dispatch(
-        setCustomerData({
-          customerInfo: { ...res },
-        }),
-      );
-    }
   }
 
   public async resetPassword(password: string) {
@@ -337,7 +387,7 @@ export class ServerAPI {
     return isOk;
   }
 
-  public async getCategories(onlyMain = false) {
+  public async storeCategories() {
     const link = `${this.API_URL}/${this.KEY}/categories`;
     let res = null;
 
@@ -354,16 +404,19 @@ export class ServerAPI {
       console.log(e);
     }
 
-    if (res) {
-      res = onlyMain
-        ? res.filter((cat: CategoryData) => cat.ancestors.length === 0)
-        : res;
+    if (!res) return;
 
-      return res;
-    }
+    const categories: CategoryData[] = res.filter(
+      (cat: CategoryData) => cat.ancestors.length === 0,
+    );
+    const categoriesId: Record<string, string> = {};
+    categories.forEach(({ name: { 'en-US': categoryName }, id }) => {
+      categoriesId[categoryName] = id;
+    });
+    store.dispatch(setCategories(categoriesId));
   }
 
-  getProducts = async ({
+  public async getProducts({
     categoryId = null,
     material = null,
     color = null,
@@ -373,7 +426,7 @@ export class ServerAPI {
     searchText = null,
     sort = null,
     page = null,
-  }: ProductRequestParams) => {
+  }: ProductRequestParams) {
     let filterParams = '';
     if (material) {
       filterParams += `filter.query=variants.attributes.material.label:${material}&`;
@@ -440,7 +493,7 @@ export class ServerAPI {
 
     store.dispatch(setFiltersState(params));
     return { results, filterParams: params, total: res.total };
-  };
+  }
 
   public async getProduct(id: string) {
     const link = `${this.API_URL}/${this.KEY}/products/${id}`;
@@ -462,22 +515,64 @@ export class ServerAPI {
     return res ? res : false;
   }
 
-  public async logout() {
-    localStorage.removeItem(`${this.prefix}-access-token`);
-    localStorage.removeItem(`${this.prefix}-refresh-token`);
-    this.accessToken = null;
-    this.refreshToken = null;
+  private async storeCart() {
+    let cart = await this.getActiveCart();
+    if (!cart) {
+      cart = await this.createCart();
+    }
+
+    // TODO: catch error
+    if (!cart) return;
+
     store.dispatch(
-      setAuth({
-        isAuth: false,
+      setCart({
+        id: cart.id,
+        lineItems: cart.lineItems,
       }),
     );
-    store.dispatch(
-      setCustomerData({
-        customerInfo: null,
-      }),
-    );
-    await this.getCommonToken();
+  }
+
+  private async getActiveCart() {
+    const link = `${this.API_URL}/${this.KEY}/me/active-cart`;
+
+    let result = null;
+    try {
+      const response = await fetch(link, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+
+      if (response.ok) result = await response.json();
+    } catch (e) {
+      console.log(e);
+    }
+
+    return result;
+  }
+
+  private async createCart() {
+    const link = `${this.API_URL}/${this.KEY}/me/carts`;
+
+    let result = null;
+    try {
+      const response = await fetch(link, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+        body: JSON.stringify({
+          currency: 'EUR',
+        }),
+      });
+
+      if (response.ok) result = await response.json();
+    } catch (e) {
+      console.log(e);
+    }
+
+    return result;
   }
 }
 

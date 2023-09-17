@@ -6,6 +6,7 @@ import { Header2 } from '../../../shared/ui/text/Header2';
 import { Header3 } from '../../../shared/ui/text/Header3';
 import { Paragraph } from '../../../shared/ui/text/Paragraph';
 import { getButtonStyles } from '../../../shared/ui/styles';
+import { AddCartAction } from '../../../shared/types/types';
 import clsx from 'clsx';
 
 import './slider.css';
@@ -103,6 +104,19 @@ export const Product = () => {
             >
               &gt;&gt;
             </button>
+            <button
+              onClick={() => {
+                // todo add action to add in cart
+                addToCard(id);
+              }}
+              className={getButtonStyles({
+                size: 'small',
+                filling: 'transparent',
+                shape: 'round',
+              })}
+            >
+              Add to cart
+            </button>
           </div>
           <div
             className="overflow-hidden"
@@ -130,4 +144,25 @@ export const Product = () => {
       </div>
     </div>
   );
+
+  async function addToCard(idProduct: string | undefined) {
+    console.log(idProduct);
+
+    const res = await serverApi.updateCart(getUpdateActions(idProduct));
+    console.log(res);
+  }
+
+  // add to cart
+  function getUpdateActions(id: string | undefined, amount: number = 1) {
+    const actions: AddCartAction[] = [
+      {
+        action: 'addLineItem',
+        productId: id,
+        variantId: 1,
+        quantity: amount,
+      },
+    ];
+    console.log(actions);
+    return actions;
+  }
 };

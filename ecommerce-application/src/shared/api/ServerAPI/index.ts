@@ -2,6 +2,7 @@ import store from '../../../app/store';
 import {
   CategoryData,
   CustomerData,
+  LineItem,
   LoginData,
   NewCustomerInfo,
   ProductRequestParams,
@@ -11,8 +12,10 @@ import { setCustomerData } from '../../store/customerDataSlice';
 import { setFiltersState } from '../../store/filtersSlice';
 import { getFiltersParams } from '../../utils/getFiltersParams';
 import { setCategories } from '../../store/categoriesSlice';
-import { CustomerUpdateAction } from '../../types/types';
+import { CustomerUpdateAction, CartUpdateAction } from '../../types/types';
 import { setCart } from '../../store/cartSlice';
+import { setDiscountCodes } from '../../store/discountCodesSlice';
+import { getLineItem } from '../../utils/getLineItem';
 
 export class ServerAPI {
   private static instance: ServerAPI;
@@ -524,10 +527,25 @@ export class ServerAPI {
     // TODO: catch error
     if (!cart) return;
 
+    const lineItems: LineItem[] = cart.lineItems.map(getLineItem);
+    const discountCodeId = cart.discountCodes
+      .filter(
+        (item: { state: string; discountCode: { id: string } }) =>
+          item.state === 'MatchesCart',
+      )
+      .map(
+        (item: { discountCode: { id: string } }) => item.discountCode.id,
+      )?.[0];
+
+    const discountedPrice = 0;
     store.dispatch(
       setCart({
+        version: cart.version,
         id: cart.id,
-        lineItems: cart.lineItems,
+        lineItems,
+        totalPrice: cart.totalPrice.centAmount,
+        discountedPrice,
+        discountCodeId,
       }),
     );
   }
@@ -574,6 +592,74 @@ export class ServerAPI {
 
     return result;
   }
-}
 
+  private async storeDiscountCodes() {
+    const link = `${this.API_URL}/${this.KEY}/discount-codes`;
+
+    let result = null;
+    try {
+      const response = await fetch(link, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+
+      if (response.ok) result = await response.json();
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (!result) return;
+
+    const discountCodes = result.results.map(
+      (item: {
+        id: string;
+        name: { 'en-US': string };
+        description: { 'en-US': string };
+        code: string;
+      }) => ({
+        id: item.id,
+        name: item.name['en-US'],
+        description: item.description['en-US'],
+        code: item.code,
+      }),
+    );
+    store.dispatch(setDiscountCodes({ discountCodes }));
+  }
+
+  public async updateCart(actions: CartUpdateAction[]) {
+    const { id, version } = store.getState().cart;
+    const link = `${this.API_URL}/${this.KEY}/me/carts/${id}`;
+    let isOk = false;
+    //let res = null;
+
+    try {
+      const response = await fetch(link, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+        body: JSON.stringify({
+          version,
+          actions,
+        }),
+      });
+
+      isOk = response.ok;
+
+      if (isOk) {
+        //res = await response.json();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (isOk) {
+      this.storeCart();
+    }
+
+    return isOk;
+  }
+}
 //! TODO удалить лишние консоль логи

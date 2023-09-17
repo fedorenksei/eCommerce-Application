@@ -112,12 +112,15 @@ export function getInputStyles({ disabled, focus }: InputStyleParams) {
       'rounded-md',
       'border-0 !outline-none',
       'ring-1 ring-inset',
-      focus
-        ? 'ring-2 ring-primary-color dark:ring-primary-color'
-        : 'ring-neutral-200 dark:ring-slate-600',
+      [
+        focus
+          ? 'ring-2 ring-primary-color dark:ring-primary-color'
+          : 'ring-neutral-200 dark:ring-slate-600',
+        'focus:ring-2 focus:ring-primary-color dark:focus:ring-primary-color',
+      ],
     ],
     !disabled && [
-      focus && 'focus:shadow-lg',
+      [focus && 'shadow-lg', 'focus:shadow-lg'],
       'hover:shadow-md transition-shadow',
       'dark:shadow-slate-700',
       !focus && 'hover:ring-hover-color dark:hover:ring-hover-color',

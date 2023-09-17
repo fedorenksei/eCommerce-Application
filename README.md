@@ -27,7 +27,7 @@ All materials that you can find here are used for non-commercial purposes. If yo
 
 ## Technologies stack
 
-- React, react-hook-form
+- React, react-hook-form, react-icons
 - Redux,
 - Storybook,
 - Jest,

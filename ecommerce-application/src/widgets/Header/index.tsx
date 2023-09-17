@@ -4,6 +4,15 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import { ServerAPI } from '../../shared/api/ServerAPI';
 import { CustomerData } from '../../shared/types/interfaces';
+import {
+  BsCart3,
+  BsPerson,
+  BsPersonAdd,
+  BsBoxArrowRight,
+  BsBoxArrowInRight,
+} from 'react-icons/bs';
+import { NavListItem } from './ui/NavListItem';
+import { getTextStyles } from '../../shared/ui/styles';
 
 export const Header = () => {
   const auth = useSelector((state: RootState) => state.auth);
@@ -33,66 +42,99 @@ export const Header = () => {
             !burgerShown ? 'hidden' : 'absolute flex flex-col top-20 left-0'
           } shadow-md md:shadow-none bg-bg-color w-full z-10 md:flex md:static md:flex-row justify-end gap-10 items-center flex-auto`}
         >
-          <ul className="flex py-6 gap-4 flex-col md:flex-row">
-            <li className="text-center text-text-color dark:text-dt-text-color text-md font-bold hover:text-primary-color hover:underline">
+          <ul className="flex items-center py-6 gap-4 flex-col md:flex-row">
+            <NavListItem>
               <Link
                 onClick={() => setBurgerShown((state) => !state)}
                 to="/"
               >
                 Main
               </Link>
-            </li>
-            <li className="text-center text-text-color dark:text-dt-text-color text-md font-bold hover:text-primary-color hover:underline">
+            </NavListItem>
+            <NavListItem>
               <Link
                 onClick={() => setBurgerShown((state) => !state)}
                 to="/catalog"
               >
                 Catalog
               </Link>
-            </li>
-          </ul>
-          <ul className="flex py-6 gap-4 flex-col md:flex-row">
+            </NavListItem>
+            <NavListItem>
+              <Link
+                onClick={() => setBurgerShown((state) => !state)}
+                to="/about-us"
+              >
+                About us
+              </Link>
+            </NavListItem>
+            <NavListItem>
+              <Link
+                onClick={() => setBurgerShown((state) => !state)}
+                to="/basket"
+              >
+                <BsCart3
+                  size="1.5em"
+                  title="Shopping cart"
+                />
+              </Link>
+            </NavListItem>
             {!auth.isAuth && (
               <>
-                <li className="text-center text-text-color dark:text-dt-text-color text-md font-bold hover:text-primary-color hover:underline">
+                <NavListItem>
                   <Link
                     onClick={() => setBurgerShown((state) => !state)}
                     to="/login"
                   >
-                    Log in
+                    <BsBoxArrowInRight
+                      size="1.5em"
+                      title="Log in"
+                    />
                   </Link>
-                </li>
-                <li className="text-center text-text-color dark:text-dt-text-color text-md font-bold hover:text-primary-color hover:underline">
+                </NavListItem>
+                <NavListItem>
                   <Link
                     onClick={() => setBurgerShown((state) => !state)}
                     to="/registration"
                   >
-                    Sign up
+                    <BsPersonAdd
+                      size="1.7em"
+                      title="Sign up"
+                    />
                   </Link>
-                </li>
+                </NavListItem>
               </>
             )}
             {auth.isAuth && (
               <>
-                <li className="text-center text-text-color dark:text-dt-text-color text-md font-bold hover:text-primary-color">
-                  <button onClick={() => serverAPI.logout()}>
-                    <span className="hover:underline">Logout</span>
-                  </button>
-                </li>
-                <li className="text-center text-text-color dark:text-dt-text-color text-md font-bold hover:text-primary-color hover:underline">
+                <NavListItem>
                   <Link
                     onClick={() => setBurgerShown((state) => !state)}
                     to="/profile"
+                    className="flex gap-1 items-center"
                   >
-                    Profile
+                    <BsPerson
+                      size="1.7em"
+                      title="Profile"
+                    />
+                    {customerData.customerData && (
+                      <span className={getTextStyles({ color: 'primary' })}>
+                        {(customerData.customerData as CustomerData).email}
+                      </span>
+                    )}
                   </Link>
-                </li>
+                </NavListItem>
+                <NavListItem>
+                  <button
+                    className="grid place-items-center"
+                    onClick={() => serverAPI.logout()}
+                  >
+                    <BsBoxArrowRight
+                      size="1.5em"
+                      title="Log out"
+                    />
+                  </button>
+                </NavListItem>
               </>
-            )}
-            {customerData.customerData && (
-              <span className="text-center text-primary-color text-base font-bold">
-                {(customerData.customerData as CustomerData).email}
-              </span>
             )}
           </ul>
         </div>

@@ -44,7 +44,7 @@ test('component just rendering', async () => {
   await userEvent.click(screen.getAllByText('Log in')[0]);
   expect(screen.getByText('Welcome back!')).toBeInTheDocument();
 
-  await userEvent.click(screen.getByText('Sign up'));
+  await userEvent.click(screen.getByTitle('Sign up'));
   expect(screen.getByText('Registration')).toBeInTheDocument();
 });
 

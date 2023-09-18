@@ -27,6 +27,8 @@ export const Member = ({
 
       <a
         href={`https://github.com/${github}`}
+        rel="noopener noreferrer"
+        target="_blank"
         className={clsx(
           'flex gap-2 justify-center items-center',
           getTextStyles({ link: true }),

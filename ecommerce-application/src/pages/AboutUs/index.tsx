@@ -20,6 +20,7 @@ export const AboutUs = () => {
           project management effectively.
         </Paragraph>
       </section>
+
       <section className="space-y-3">
         <Header2>Team&apos;s members</Header2>
         <div className="grid grid-cols-[minmax(0,_400px)] justify-center lg:grid-cols-3 gap-4">
@@ -31,9 +32,32 @@ export const AboutUs = () => {
           ))}
         </div>
       </section>
+
       <section className="space-y-3">
         <Header2>Members&apos; contribution</Header2>
         <Contribution membersData={membersData} />
+      </section>
+
+      <section className="space-y-3 mx-auto max-w-[600px]">
+        <Header2>Our gratitude</Header2>
+        <Paragraph>
+          We are very grateful to our mentor,{' '}
+          <a
+            href="https://github.com/Margaryta-Maletz"
+            rel="noopener noreferrer"
+            target="_blank"
+            className={'text-hover-color hover:text-primary-color'}
+          >
+            Margaryta Maletz
+          </a>
+          , for her sensitive guidance and support, constant communication, and
+          unwavering belief in our success. We are equally thankful to Rolling
+          Scopes School for organizing the educational process, the dedication
+          of many mentors, lecturers, administrators, volunteers, and active
+          students. Throughout our education and work on this project, we have
+          elevated both our hard and soft skills to an entirely new level and
+          are fueled with motivation to continue growing. Until we meet again!
+        </Paragraph>
       </section>
     </div>
   );

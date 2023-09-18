@@ -663,5 +663,26 @@ export class ServerAPI {
 
     return isOk;
   }
+
+  public async deleteCart() {
+    const { id, version } = store.getState().cart;
+    const link = `${this.API_URL}/${this.KEY}/carts/${id}?version=${version}`;
+
+    let result = null;
+    try {
+      const response = await fetch(link, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+
+      if (response.ok) result = await response.json();
+    } catch (e) {
+      console.log(e);
+    }
+
+    return result;
+  }
 }
 //! TODO удалить лишние консоль логи

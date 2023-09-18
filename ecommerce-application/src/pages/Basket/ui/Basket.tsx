@@ -1,4 +1,5 @@
 import React from 'react';
+import { ServerAPI } from '../../../shared/api/ServerAPI';
 import { Header2 } from '../../../shared/ui/text/Header2';
 import { Header5 } from '../../../shared/ui/text/Header5';
 import { useSelector } from 'react-redux';
@@ -11,8 +12,8 @@ import { getButtonStyles } from '../../../shared/ui/styles';
 import clsx from 'clsx';
 
 export const Basket = () => {
+  const serverApi = ServerAPI.getInstance();
   const cart = useSelector((state: RootState) => state.cart);
-  console.log('Summa:', cart.totalPrice, 'items:', cart.totalLineItemQuantity);
   const lineItems = useSelector((state: RootState) => state.cart.lineItems);
   if (lineItems.length == 0) {
     return (
@@ -56,7 +57,24 @@ export const Basket = () => {
         <div>
           <ItemCarts />
         </div>
+        <button
+          onClick={() => {
+            delCart();
+          }}
+          type="button"
+          className={getButtonStyles({
+            size: 'medium',
+            filling: 'filled',
+            shape: 'round',
+          })}
+        >
+          Delete Cart
+        </button>
       </div>
     );
+  }
+  async function delCart() {
+    await serverApi.deleteCart();
+    return;
   }
 };

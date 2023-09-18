@@ -67,7 +67,7 @@ export const Header = () => {
           className={`${
             !burgerShown
               ? 'hidden'
-              : 'absolute flex flex-col top-full left-0 p-3'
+              : 'absolute flex flex-col top-full left-0 p-3 md:p-0'
           } shadow-md md:shadow-none bg-bg-color w-full z-10 md:flex md:static md:flex-row justify-end gap-10 items-center flex-auto`}
         >
           <ul className="flex items-center gap-4 flex-col md:flex-row">

@@ -4,6 +4,7 @@ import { membersData } from './data';
 import { Member } from './ui/Member';
 import { Contribution } from './ui/Contribution';
 import { Paragraph } from '../../shared/ui/text/Paragraph';
+import { RssLogo } from './ui/RssLogo';
 
 export const AboutUs = () => {
   return (
@@ -58,6 +59,9 @@ export const AboutUs = () => {
           elevated both our hard and soft skills to an entirely new level and
           are fueled with motivation to continue growing. Until we meet again!
         </Paragraph>
+        <div className="max-w-[300px] mx-auto pt-4">
+          <RssLogo />
+        </div>
       </section>
     </div>
   );

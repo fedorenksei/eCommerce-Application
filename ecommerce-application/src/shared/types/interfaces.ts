@@ -178,6 +178,8 @@ export interface LineItem {
   price: number;
   totalPrice: number;
   quantity: number;
+  name: string;
+  imageUrl: string;
 }
 
 export interface CartState {
@@ -187,4 +189,5 @@ export interface CartState {
   totalPrice: number;
   discountedPrice: number;
   discountCodeId?: string;
+  totalLineItemQuantity: number;
 }

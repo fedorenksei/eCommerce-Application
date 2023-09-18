@@ -7,6 +7,7 @@ const initialState: CartState = {
   lineItems: [],
   totalPrice: 0,
   discountedPrice: 0,
+  totalLineItemQuantity: 0,
 };
 
 const cartSlice = createSlice({
@@ -20,6 +21,7 @@ const cartSlice = createSlice({
       state.totalPrice = action.payload.totalPrice;
       state.discountedPrice = action.payload.discountedPrice;
       state.discountCodeId = action.payload.discountCodeId;
+      state.totalLineItemQuantity = action.payload.totalLineItemQuantity || 0;
     },
   },
 });

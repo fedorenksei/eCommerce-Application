@@ -1,3 +1,4 @@
+import React from 'react';
 import { Header5 } from '../../../shared/ui/text/Header5';
 import {
   getButtonStyles,

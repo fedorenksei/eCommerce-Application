@@ -2,42 +2,15 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store';
 import { AppComponent } from './model';
 import { Route, Routes } from 'react-router-dom';
-import { Main } from '../pages/Main';
-import { Login } from '../pages/Login';
-import { Registration } from '../pages/Registration';
 import { NotFound } from '../pages/NotFound';
-
-test('component just rendering', async () => {
-  render(
-    <Provider store={store}>
-      <BrowserRouter>
-        <AppComponent />
-        <Routes>
-          <Route
-            path="/"
-            element={<Main />}
-          />
-          <Route
-            path="/login"
-            element={<Login />}
-          />
-          <Route
-            path="/registration"
-            element={<Registration />}
-          />
-          <Route
-            path="*"
-            element={<NotFound />}
-          />
-        </Routes>
-      </BrowserRouter>
-    </Provider>,
-  );
+import { App } from '.';
+test('component just rendering and routing works fine', async () => {
+  render(App);
 
   expect(screen.getByText('Main page')).toBeInTheDocument();
 
@@ -46,6 +19,17 @@ test('component just rendering', async () => {
 
   await userEvent.click(screen.getByTitle('Sign up'));
   expect(screen.getByText('Registration')).toBeInTheDocument();
+
+  await userEvent.click(screen.getByText('BI-KU-KLE'));
+  await userEvent.click(screen.getByText('Profile'));
+  expect(screen.getByText('Welcome back!')).toBeInTheDocument();
+
+  await userEvent.click(screen.getByText('BI-KU-KLE'));
+  await userEvent.click(screen.getByText('Basket'));
+  expect(screen.getByText('Your cart')).toBeInTheDocument();
+
+  await userEvent.click(screen.getByText('About us'));
+  expect(screen.getByText('Our team')).toBeInTheDocument();
 });
 
 test('landing bad page', async () => {
@@ -56,18 +40,6 @@ test('landing bad page', async () => {
       <MemoryRouter initialEntries={[badRoute]}>
         <AppComponent />
         <Routes>
-          <Route
-            path="/"
-            element={<Main />}
-          />
-          <Route
-            path="/login"
-            element={<Login />}
-          />
-          <Route
-            path="/registration"
-            element={<Registration />}
-          />
           <Route
             path="*"
             element={<NotFound />}

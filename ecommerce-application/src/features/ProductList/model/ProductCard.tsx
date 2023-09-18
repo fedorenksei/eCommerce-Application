@@ -112,11 +112,8 @@ export const ProductCard = ({
   }
 
   async function delInCart() {
-    if (lineItemId === undefined) {
-      return;
-    } else {
-      const res = await serverApi.updateCart(deleteActions(lineItemId));
-      console.log(res);
+    if (lineItemId) {
+      await serverApi.updateCart(deleteActions(lineItemId));
       return;
     }
   }

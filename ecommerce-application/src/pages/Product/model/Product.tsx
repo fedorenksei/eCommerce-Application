@@ -222,25 +222,17 @@ export const Product = () => {
   }
 
   async function delInCart() {
-    if (lineItemOfProduct?.id === undefined) {
-      return;
-    } else {
-      const res = await serverApi.updateCart(
-        deleteActions(lineItemOfProduct?.id),
-      );
-      console.log(res);
+    if (lineItemOfProduct?.id) {
+      await serverApi.updateCart(deleteActions(lineItemOfProduct?.id));
       return;
     }
   }
 
   async function changeLineCart(amount: number) {
-    if (lineItemOfProduct?.id === undefined) {
-      return;
-    } else {
-      const res = await serverApi.updateCart(
+    if (lineItemOfProduct?.id) {
+      await serverApi.updateCart(
         changeLineActions(lineItemOfProduct?.id, amount),
       );
-      console.log(res);
       return;
     }
   }

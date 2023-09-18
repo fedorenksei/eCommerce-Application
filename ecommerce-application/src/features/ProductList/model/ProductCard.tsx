@@ -81,8 +81,18 @@ export const ProductCard = ({
 
       <Header5>{productName}</Header5>
       <div className="space-x-2">
-        <span className="text-neutral-400 line-through">€{price}</span>
-        <span className="text-danger-color">€{discountedPrice}</span>
+        <span
+          className={clsx(
+            discountedPrice
+              ? 'text-neutral-400 line-through'
+              : 'text-text-color dark:text-dt-text-color',
+          )}
+        >
+          €{price}
+        </span>
+        {discountedPrice > 0 && (
+          <span className="text-danger-color">€{discountedPrice}</span>
+        )}
       </div>
       <Paragraph>{shortDescription}</Paragraph>
     </div>

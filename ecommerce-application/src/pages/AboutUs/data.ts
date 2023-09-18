@@ -104,7 +104,8 @@ export const membersData: MemberData[] = [
     name: 'Mikalai',
     surname: 'Tserakhau',
     imageUrl: './images/MikalaiTserakhau.png',
-    shortBio: '',
+    shortBio:
+      'I work as a specialist in the support, repair and sale of computer equipment. I want to become a developer. I like to study frontend at RS since 2022. This is my first React project.',
     roles: ['developer', 'commerce tools administrator'],
     github: 'nickbis',
     contribution: [

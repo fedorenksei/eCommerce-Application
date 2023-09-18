@@ -59,14 +59,14 @@ export const Product = () => {
 
   const productName = product?.masterData.current.name['en-US'];
   const description = product?.masterData.current.description['en-US'];
-  const discountedPrice =
-    Number(
-      product?.masterData.current.masterVariant.prices[0].discounted.value
-        .centAmount,
-    ) / 100;
   const price =
     Number(
       product?.masterData.current.masterVariant.prices[0].value.centAmount,
+    ) / 100;
+  const discountedPrice =
+    Number(
+      product?.masterData.current.masterVariant.prices[0].discounted?.value
+        .centAmount,
     ) / 100;
 
   const imageUrls =
@@ -84,8 +84,18 @@ export const Product = () => {
       <div className="max-w-lg space-y-2 mx-auto">
         <Header3>{productName}</Header3>
         <div className="space-x-2">
-          <span className="text-neutral-400 line-through">€{price}</span>
-          <span className="text-danger-color">€{discountedPrice}</span>
+          <span
+            className={clsx(
+              discountedPrice
+                ? 'text-neutral-400 line-through'
+                : 'text-text-color dark:text-dt-text-color',
+            )}
+          >
+            €{price}
+          </span>
+          {discountedPrice > 0 && (
+            <span className="text-danger-color">€{discountedPrice}</span>
+          )}
         </div>
         <Paragraph>{description}</Paragraph>
 

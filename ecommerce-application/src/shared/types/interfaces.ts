@@ -177,7 +177,6 @@ export interface LineItem {
   productId: string;
   price: number;
   totalPrice: number;
-  discountedPricePerQuantity: string;
   quantity: number;
 }
 
@@ -187,5 +186,5 @@ export interface CartState {
   lineItems: LineItem[];
   totalPrice: number;
   discountedPrice: number;
-  discountCodes: string[];
+  discountCodeId?: string;
 }

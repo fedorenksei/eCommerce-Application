@@ -16,6 +16,10 @@ import { CustomerUpdateAction, CartUpdateAction } from '../../types/types';
 import { setCart } from '../../store/cartSlice';
 import { setDiscountCodes } from '../../store/discountCodesSlice';
 import { getLineItem } from '../../utils/getLineItem';
+import { CustomerUpdateAction, CartUpdateAction } from '../../types/types';
+import { setCart } from '../../store/cartSlice';
+import { setDiscountCodes } from '../../store/discountCodesSlice';
+import { getLineItem } from '../../utils/getLineItem';
 
 export class ServerAPI {
   private static instance: ServerAPI;
@@ -57,7 +61,13 @@ export class ServerAPI {
   }
 
   public async init() {
-    this.loadTokens();
+    await this.restoreUser();
+    this.storeCart();
+    this.storeCategories();
+  }
+
+  private async restoreUser() {
+    this.getRefreshToken();
 
     if (this.refreshToken) {
       const isUpdated = await this.updateAccessToken();
@@ -67,28 +77,34 @@ export class ServerAPI {
     } else {
       await this.loginAnonymously();
     }
-
-    this.storeCart();
-    this.storeDiscountCodes();
-
-    const categoriesId: Record<string, string> = {};
-    const categories: CategoryData[] = await this.getCategories(true);
-    categories.forEach(({ name: { 'en-US': categoryName }, id }) => {
-      categoriesId[categoryName] = id;
-    });
-    store.dispatch(setCategories(categoriesId));
   }
 
-  private loadTokens() {
-    this.accessToken = localStorage.getItem(`${this.prefix}-access-token`);
-    this.refreshToken = localStorage.getItem(`${this.prefix}-refresh-token`);
+  private getRefreshToken() {
+    this.refreshToken =
+      localStorage.getItem(`${this.prefix}-identified-refresh-token`) ||
+      localStorage.getItem(`${this.prefix}-anonymous-refresh-token`) ||
+      localStorage.getItem(`${this.prefix}-refresh-token`);
   }
 
-  private saveTokens(accessToken: string, refreshToken?: string) {
-    localStorage.setItem(`${this.prefix}-access-token`, accessToken);
+  private saveTokens({
+    userType,
+    accessToken,
+    refreshToken,
+  }: {
+    userType: 'anonymous' | 'identified';
+    accessToken: string;
+    refreshToken?: string;
+  }) {
+    localStorage.setItem(
+      `${this.prefix}-${userType}-access-token`,
+      accessToken,
+    );
     this.accessToken = accessToken;
     if (refreshToken) {
-      localStorage.setItem(`${this.prefix}-refresh-token`, refreshToken);
+      localStorage.setItem(
+        `${this.prefix}-${userType}-refresh-token`,
+        refreshToken,
+      );
       this.refreshToken = refreshToken;
     }
   }
@@ -119,8 +135,12 @@ export class ServerAPI {
     }
 
     if (isOk) {
-      this.saveTokens(res.access_token);
-      this.storeCustomerInfo();
+      this.accessToken = res.access_token;
+      const isUserIdentified = await this.storeCustomerInfo();
+      this.saveTokens({
+        userType: isUserIdentified ? 'identified' : 'anonymous',
+        accessToken: res.access_token,
+      });
     }
 
     return isOk;
@@ -148,7 +168,11 @@ export class ServerAPI {
     }
 
     if (result) {
-      this.saveTokens(result.access_token, result.refresh_token);
+      this.saveTokens({
+        userType: 'anonymous',
+        accessToken: result.access_token,
+        refreshToken: result.refresh_token,
+      });
     }
   }
 
@@ -204,7 +228,11 @@ export class ServerAPI {
     }
 
     if (isOk) {
-      this.saveTokens(res.access_token, res.refresh_token);
+      this.saveTokens({
+        userType: 'identified',
+        accessToken: res.access_token,
+        refreshToken: res.refresh_token,
+      });
       this.storeCustomerInfo();
       this.storeCart();
     }
@@ -213,10 +241,9 @@ export class ServerAPI {
   }
 
   public async logout() {
-    localStorage.removeItem(`${this.prefix}-access-token`);
-    localStorage.removeItem(`${this.prefix}-refresh-token`);
-    this.accessToken = null;
-    this.refreshToken = null;
+    localStorage.removeItem(`${this.prefix}-identified-access-token`);
+    localStorage.removeItem(`${this.prefix}-identified-refresh-token`);
+
     store.dispatch(
       setAuth({
         isAuth: false,
@@ -227,11 +254,15 @@ export class ServerAPI {
         customerInfo: null,
       }),
     );
-    await this.loginAnonymously();
+
+    this.accessToken = null;
+    this.refreshToken = null;
+
+    await this.restoreUser();
     this.storeCart();
   }
 
-  private async storeCustomerInfo() {
+  private async storeCustomerInfo(): Promise<boolean> {
     const link = `${this.API_URL}/${this.KEY}/me`;
     let isOk = false;
     let res = null;
@@ -363,7 +394,7 @@ export class ServerAPI {
     return isOk;
   }
 
-  public async getCategories(onlyMain = false) {
+  public async storeCategories() {
     const link = `${this.API_URL}/${this.KEY}/categories`;
     let res = null;
 
@@ -380,13 +411,16 @@ export class ServerAPI {
       console.log(e);
     }
 
-    if (res) {
-      res = onlyMain
-        ? res.filter((cat: CategoryData) => cat.ancestors.length === 0)
-        : res;
+    if (!res) return;
 
-      return res;
-    }
+    const categories: CategoryData[] = res.filter(
+      (cat: CategoryData) => cat.ancestors.length === 0,
+    );
+    const categoriesId: Record<string, string> = {};
+    categories.forEach(({ name: { 'en-US': categoryName }, id }) => {
+      categoriesId[categoryName] = id;
+    });
+    store.dispatch(setCategories(categoriesId));
   }
 
   public async getProducts({
@@ -498,6 +532,15 @@ export class ServerAPI {
     if (!cart) return;
 
     const lineItems: LineItem[] = cart.lineItems.map(getLineItem);
+    const discountCodeId = cart.discountCodes
+      .filter(
+        (item: { state: string; discountCode: { id: string } }) =>
+          item.state === 'MatchesCart',
+      )
+      .map(
+        (item: { discountCode: { id: string } }) => item.discountCode.id,
+      )?.[0];
+
     const discountedPrice = 0;
     store.dispatch(
       setCart({
@@ -506,7 +549,7 @@ export class ServerAPI {
         lineItems,
         totalPrice: cart.totalPrice.centAmount,
         discountedPrice,
-        discountCodes: cart.discountCodes,
+        discountCodeId,
       }),
     );
   }
@@ -575,10 +618,12 @@ export class ServerAPI {
 
     const discountCodes = result.results.map(
       (item: {
+        id: string;
         name: { 'en-US': string };
         description: { 'en-US': string };
         code: string;
       }) => ({
+        id: item.id,
         name: item.name['en-US'],
         description: item.description['en-US'],
         code: item.code,

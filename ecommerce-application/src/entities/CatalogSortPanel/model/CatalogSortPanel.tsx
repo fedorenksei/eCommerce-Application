@@ -18,6 +18,7 @@ export const CatalogSortPanel = () => {
     }
     setSearchParams(searchParams);
   };
+
   return (
     <div>
       <Header3>Sort</Header3>

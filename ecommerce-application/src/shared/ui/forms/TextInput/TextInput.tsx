@@ -4,6 +4,7 @@ import { UseFormRegisterReturn } from 'react-hook-form';
 import { getInputStyles } from '../../styles';
 import { TextInputType } from '../../../types/types';
 import { Eye } from './Eye';
+import { BsSearch } from 'react-icons/bs';
 
 type TextInputProps = {
   type?: TextInputType;
@@ -11,7 +12,7 @@ type TextInputProps = {
   defaultValue?: string;
   disabled?: boolean;
   register?: UseFormRegisterReturn;
-  inputId: string;
+  inputId?: string;
 };
 
 export const TextInput = ({
@@ -25,12 +26,16 @@ export const TextInput = ({
   const [showPassword, setShowPassword] = useState(false);
   const [focusStyle, setFocusStyle] = useState(false);
 
+  let htmlInputType = type;
+  if (showPassword) htmlInputType = 'text';
+  if (htmlInputType === 'search') htmlInputType = 'text';
+
   return (
     <div
       className={clsx(
         getInputStyles({ disabled, focus: focusStyle }),
         type === 'password' && 'mr-5',
-        'flex gap-2',
+        'flex gap-2 items-center',
       )}
       onFocus={() => {
         setFocusStyle(true);
@@ -41,7 +46,7 @@ export const TextInput = ({
     >
       <input
         id={inputId}
-        type={showPassword ? 'text' : type}
+        type={htmlInputType}
         disabled={disabled}
         placeholder={placeholder}
         defaultValue={defaultValue}
@@ -56,6 +61,7 @@ export const TextInput = ({
           <Eye opened={!showPassword} />
         </button>
       )}
+      {type === 'search' && <BsSearch size="1.5em" />}
     </div>
   );
 };

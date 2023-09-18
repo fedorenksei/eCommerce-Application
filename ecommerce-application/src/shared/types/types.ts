@@ -1,4 +1,4 @@
-export type TextInputType = 'text' | 'password' | 'date' | 'email';
+export type TextInputType = 'text' | 'password' | 'date' | 'email' | 'search';
 
 export type CustomerUpdateAction = {
   action: string;

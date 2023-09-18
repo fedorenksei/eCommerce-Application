@@ -19,5 +19,7 @@ export const getLineItem = (data: LineItemApiData): LineItem => {
     price: data.price.value.centAmount,
     totalPrice: data.totalPrice.centAmount,
     quantity: data.quantity,
+    name: data.name['en-US'],
+    imageUrl: data.variant.images[0].url,
   };
 };

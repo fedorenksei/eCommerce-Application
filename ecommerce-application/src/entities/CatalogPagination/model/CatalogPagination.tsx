@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getButtonStyles, getTextStyles } from '../../../shared/ui/styles';
+import { Paragraph } from '../../../shared/ui/text/Paragraph';
+import { BsArrowLeftCircle, BsArrowRightCircle } from 'react-icons/bs';
 
 type Props = {
   totalProducts: number;
@@ -37,32 +39,39 @@ export const CatalogPagination = ({ totalProducts }: Props) => {
   };
 
   return (
-    <div className="flex justify-center gap-5 p-4 items-center">
-      <button
-        disabled={currPage === 1 ? true : false}
-        onClick={onPrevPageClick}
-        className={getButtonStyles({
-          size: 'small',
-          filling: 'transparent',
-          shape: 'round',
-          disabled: currPage === 1 ? true : false,
-        })}
-      >
-        &lt;&lt;
-      </button>
-      <span className={getTextStyles({ font: 'h2' })}>{currPage}</span>
-      <button
-        disabled={Number(currPage) >= Number(maxPage) ? true : false}
-        onClick={onNextPageClick}
-        className={getButtonStyles({
-          size: 'small',
-          filling: 'transparent',
-          shape: 'round',
-          disabled: Number(currPage) >= Number(maxPage) ? true : false,
-        })}
-      >
-        &gt;&gt;
-      </button>
+    <div className="flex flex-wrap gap-5 items-center">
+      <div className="flex justify-center gap-5 p-4 items-center">
+        <button
+          disabled={currPage === 1 ? true : false}
+          onClick={onPrevPageClick}
+          className={getButtonStyles({
+            size: 'small',
+            filling: 'transparent',
+            shape: 'round',
+            disabled: currPage === 1 ? true : false,
+            icon: true,
+          })}
+        >
+          <BsArrowLeftCircle size="1.5em" />
+        </button>
+        <span className={getTextStyles({ font: 'h3' })}>
+          {currPage} / {maxPage}
+        </span>
+        <button
+          disabled={Number(currPage) >= Number(maxPage) ? true : false}
+          onClick={onNextPageClick}
+          className={getButtonStyles({
+            size: 'small',
+            filling: 'transparent',
+            shape: 'round',
+            disabled: Number(currPage) >= Number(maxPage) ? true : false,
+            icon: true,
+          })}
+        >
+          <BsArrowRightCircle size="1.5em" />
+        </button>
+      </div>
+      <Paragraph>Total: {totalProducts}</Paragraph>
     </div>
   );
 };

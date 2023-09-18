@@ -85,11 +85,11 @@ export const Products = () => {
   return (
     <>
       <Categories categories={categories} />
-      <div className="grid grid-cols-1 md:grid-cols-[minmax(200px,_300px),_1fr] gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-[minmax(200px,_300px),_1fr] gap-3 items-start">
         <ProductFilters />
         <div>
-          <ProductList products={products} />
           <CatalogPagination totalProducts={totalProducts} />
+          <ProductList products={products} />
         </div>
       </div>
     </>

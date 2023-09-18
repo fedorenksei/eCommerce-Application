@@ -16,7 +16,7 @@ export const ProductFilters = () => {
   const filterNames = Object.keys(filters).filter((item) => item !== 'prices');
 
   return (
-    <div className="p-2 space-y-4 border rounded-md border-slate-300 md:max-w-sm">
+    <div className="p-2 pb-4 space-y-4 border rounded-md border-slate-300 md:max-w-sm">
       {filterNames.map((filterNameKey) => {
         if (filters[filterNameKey as keyof VariantsParams])
           return (

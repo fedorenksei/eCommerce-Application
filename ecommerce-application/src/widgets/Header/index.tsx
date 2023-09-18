@@ -17,6 +17,9 @@ import clsx from 'clsx';
 
 export const Header = () => {
   const auth = useSelector((state: RootState) => state.auth);
+  const lineItemsQuantity = useSelector(
+    (state: RootState) => state.cart.totalLineItemQuantity,
+  );
   const customerData = useSelector((state: RootState) => state.customerData);
   const serverAPI = ServerAPI.getInstance();
   const [burgerShown, setBurgerShown] = useState(false);
@@ -56,7 +59,7 @@ export const Header = () => {
               />
             </div>
             {!isScrolled && (
-              <div className="text-text-color text-2xl font-bold min-w-[8rem]">
+              <div className="text-text-color dark:text-dt-text-color hover:text-primary-color transition text-2xl font-bold min-w-[8rem]">
                 BI-KU-KLE
               </div>
             )}
@@ -99,11 +102,15 @@ export const Header = () => {
               <Link
                 onClick={() => setBurgerShown((state) => !state)}
                 to="/basket"
+                className="flex gap-1 items-center"
               >
                 <BsCart3
                   size="1.5em"
                   title="Shopping cart"
                 />
+                <div className="bg-disabled-color text-white px-1 rounded-full">
+                  {lineItemsQuantity}
+                </div>
               </Link>
             </NavListItem>
             {!auth.isAuth && (

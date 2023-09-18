@@ -27,7 +27,7 @@ export function getTextStyles({
       primary: 'text-primary-color',
       danger: 'text-danger-color',
     }[color],
-    link && 'transition hover:text-primary-color hover:underline',
+    link && 'transition hover:text-primary-color',
   );
 }
 

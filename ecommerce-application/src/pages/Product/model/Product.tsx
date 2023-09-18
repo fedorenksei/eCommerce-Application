@@ -6,7 +6,13 @@ import { Header2 } from '../../../shared/ui/text/Header2';
 import { Header3 } from '../../../shared/ui/text/Header3';
 import { Paragraph } from '../../../shared/ui/text/Paragraph';
 import { getButtonStyles } from '../../../shared/ui/styles';
-import { AddCartAction } from '../../../shared/types/types';
+import {
+  AddCartAction,
+  ChangeLineAction,
+  DeleteItemAction,
+} from '../../../shared/types/types';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../app/store';
 import clsx from 'clsx';
 
 import './slider.css';
@@ -21,6 +27,7 @@ export const Product = () => {
     [],
   );
   const serverApi = ServerAPI.getInstance();
+  const lineItems = useSelector((state: RootState) => state.cart.lineItems);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -31,6 +38,24 @@ export const Product = () => {
 
     fetchProduct();
   }, [cbSetProduct, id, serverApi]);
+
+  const productSearch = lineItems.filter(
+    (lineItem) => lineItem.productId === id,
+  );
+  const lineItemOfProduct = productSearch[0];
+  let amount: number;
+  let isCart: boolean = false;
+  let nameButton: string = 'Add';
+
+  if (lineItemOfProduct?.id === undefined) {
+    isCart = false;
+    amount = 0;
+    nameButton = 'Add';
+  } else {
+    isCart = true;
+    amount = lineItemOfProduct?.quantity;
+    nameButton = 'Del';
+  }
 
   const productName = product?.masterData.current.name['en-US'];
   const description = product?.masterData.current.description['en-US'];
@@ -69,7 +94,7 @@ export const Product = () => {
         >
           <div
             className={clsx(
-              'max-w-[100%] gap-5 p-4',
+              'max-w-[100%] gap-2 p-4',
               'flex justify-center items-center',
             )}
           >
@@ -105,9 +130,42 @@ export const Product = () => {
               &gt;&gt;
             </button>
             <button
+              disabled={isCart ? false : true}
               onClick={() => {
-                // todo add action to add in cart
-                addToCard(id);
+                changeLineCart(amount - 1);
+              }}
+              className={clsx(
+                getButtonStyles({
+                  size: 'small',
+                  filling: 'transparent',
+                  shape: 'round',
+                  disabled: isCart ? false : true,
+                }),
+              )}
+            >
+              -
+            </button>
+            <Paragraph>{amount}</Paragraph>
+
+            <button
+              onClick={() => {
+                addToCart(id, 1);
+              }}
+              className={clsx(
+                getButtonStyles({
+                  size: 'small',
+                  filling: 'transparent',
+                  shape: 'round',
+                }),
+              )}
+            >
+              +
+            </button>
+
+            <button
+              onClick={() => {
+                // Univers Button
+                updateCard(id);
               }}
               className={getButtonStyles({
                 size: 'small',
@@ -115,7 +173,7 @@ export const Product = () => {
                 shape: 'round',
               })}
             >
-              Add to cart
+              {nameButton}
             </button>
           </div>
           <div
@@ -145,10 +203,8 @@ export const Product = () => {
     </div>
   );
 
-  async function addToCard(idProduct: string | undefined) {
-    console.log(idProduct);
-
-    const res = await serverApi.updateCart(getUpdateActions(idProduct));
+  async function addToCart(idProduct: string | undefined, amount: number = 1) {
+    const res = await serverApi.updateCart(getUpdateActions(idProduct, amount));
     console.log(res);
   }
 
@@ -162,7 +218,52 @@ export const Product = () => {
         quantity: amount,
       },
     ];
-    console.log(actions);
     return actions;
+  }
+
+  async function delInCart() {
+    if (lineItemOfProduct?.id) {
+      await serverApi.updateCart(deleteActions(lineItemOfProduct?.id));
+      return;
+    }
+  }
+
+  async function changeLineCart(amount: number) {
+    if (lineItemOfProduct?.id) {
+      await serverApi.updateCart(
+        changeLineActions(lineItemOfProduct?.id, amount),
+      );
+      return;
+    }
+  }
+
+  function deleteActions(ItemId: string) {
+    const actions: DeleteItemAction[] = [
+      {
+        action: 'removeLineItem',
+        lineItemId: ItemId,
+      },
+    ];
+    return actions;
+  }
+
+  function changeLineActions(ItemId: string, amount: number) {
+    const actions: ChangeLineAction[] = [
+      {
+        action: 'changeLineItemQuantity',
+        lineItemId: ItemId,
+        quantity: amount,
+      },
+    ];
+    return actions;
+  }
+
+  async function updateCard(id: string | undefined) {
+    if (isCart) {
+      delInCart();
+    } else {
+      addToCart(id);
+    }
+    return;
   }
 };

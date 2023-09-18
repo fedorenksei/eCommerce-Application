@@ -60,6 +60,7 @@ export class ServerAPI {
     await this.restoreUser();
     this.storeCart();
     this.storeCategories();
+    this.storeDiscountCodes();
   }
 
   private async restoreUser() {
@@ -514,7 +515,7 @@ export class ServerAPI {
       console.log(e);
     }
 
-    console.log(res);
+    //console.log(res);
     return res ? res : false;
   }
 

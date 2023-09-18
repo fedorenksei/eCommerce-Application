@@ -102,7 +102,7 @@ export const membersData: MemberData[] = [
   {
     name: 'Mikalai',
     surname: 'Tserakhau',
-    imageUrl: './images/',
+    imageUrl: './images/MikalaiTserakhau.png',
     shortBio: '',
     roles: ['developer', 'commerce tools administrator'],
     github: 'nickbis',

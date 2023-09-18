@@ -18,24 +18,46 @@ export const CatalogPagination = ({ totalProducts }: Props) => {
   useEffect(() => {
     if (page) {
       setCurrPage(maxPage < Number(page) ? maxPage : Number(page));
+    } else {
+      setCurrPage(1);
     }
   }, [page, maxPage]);
 
-  useEffect(() => {
-    if (currPage === 1) {
-      searchParams.delete('page');
-    } else {
-      searchParams.set('page', String(currPage));
-    }
-    setSearchParams(searchParams);
-  }, [currPage, searchParams, setSearchParams]);
+  // useEffect(() => {
+  //   if (currPage === 1) {
+  //     searchParams.delete('page');
+  //   } else {
+  //     searchParams.set('page', String(currPage));
+  //   }
+  //   setSearchParams(searchParams);
+  // }, [currPage, searchParams, setSearchParams]);
+
+  // const onNextPageClick = () => {
+  //   setCurrPage((curr) => curr + 1);
+  // };
+
+  // const onPrevPageClick = () => {
+  //   setCurrPage((curr) => curr - 1);
+  // };
 
   const onNextPageClick = () => {
-    setCurrPage((curr) => curr + 1);
+    const newPage = currPage + 1;
+    if (newPage === 1) {
+      searchParams.delete('page');
+    } else {
+      searchParams.set('page', String(newPage));
+    }
+    setSearchParams(searchParams);
   };
 
   const onPrevPageClick = () => {
-    setCurrPage((curr) => curr - 1);
+    const newPage = currPage - 1;
+    if (newPage === 1) {
+      searchParams.delete('page');
+    } else {
+      searchParams.set('page', String(newPage));
+    }
+    setSearchParams(searchParams);
   };
 
   return (

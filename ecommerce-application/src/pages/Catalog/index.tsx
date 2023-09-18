@@ -4,7 +4,7 @@ import { Products } from '../../widgets/Products';
 
 export const Catalog = () => {
   return (
-    <div className="p-3 space-y-3">
+    <div className="p-3 pt-10 space-y-3 max-w-7xl mx-auto">
       <div className="text-center">
         <Header2>Catalog</Header2>
       </div>

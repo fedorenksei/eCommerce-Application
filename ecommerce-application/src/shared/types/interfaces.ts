@@ -97,6 +97,11 @@ export interface Price {
   value: {
     centAmount: string;
   };
+  discounted: {
+    value: {
+      centAmount: string;
+    };
+  };
 }
 
 export interface ProductImage {

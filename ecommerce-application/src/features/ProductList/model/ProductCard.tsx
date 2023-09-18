@@ -12,6 +12,7 @@ interface ProductCardProps {
   id: string;
   productName: string;
   price: number;
+  priceDiscount: number;
   imageUrl: string;
   description: string;
 }
@@ -20,6 +21,7 @@ export const ProductCard = ({
   id,
   productName,
   price,
+  priceDiscount,
   imageUrl,
   description,
 }: ProductCardProps) => {
@@ -27,7 +29,7 @@ export const ProductCard = ({
 
   const shortDescription =
     description.length > 100 ? `${description.slice(0, 97)}...` : description;
-  const discountedPrice = Math.floor(price * 0.95);
+  const discountedPrice = priceDiscount;
   const lineItems = useSelector((state: RootState) => state.cart.lineItems);
   const productSearch = lineItems.filter(
     (lineItem) => lineItem.productId === id,

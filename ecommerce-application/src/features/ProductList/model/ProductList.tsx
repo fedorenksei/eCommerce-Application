@@ -21,6 +21,7 @@ export const ProductList = ({ products }: Props) => {
             id={id}
             productName={productName}
             price={Number(prices[0].value.centAmount) / 100}
+            priceDiscount={Number(prices[0].discounted.value.centAmount) / 100}
             imageUrl={images[0].url}
             description={description?.['en-US']}
           />

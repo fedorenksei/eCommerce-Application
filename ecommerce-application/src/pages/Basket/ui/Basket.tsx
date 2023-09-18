@@ -7,7 +7,6 @@ import { RootState } from '../../../app/store';
 import { DiscountCode } from './DiscountCode';
 import { ItemCarts } from './LinesCart';
 import { Link } from 'react-router-dom';
-import { Paragraph } from '../../../shared/ui/text/Paragraph';
 import { getButtonStyles } from '../../../shared/ui/styles';
 import clsx from 'clsx';
 
@@ -17,23 +16,31 @@ export const Basket = () => {
   const lineItems = useSelector((state: RootState) => state.cart.lineItems);
   if (lineItems.length == 0) {
     return (
-      <div className="p-10 space-y-3 text-center">
-        <Header2>Your cart</Header2>
+      <div className="p-10 space-y-3 text-center flex justify-items-center justify-center">
         <div>
-          <Header5>Cart is empty</Header5>
-          <Paragraph>Welcome to Shopping</Paragraph>
-          <Link to={`/catalog`}>
-            <button
-              type="button"
-              className={getButtonStyles({
-                size: 'medium',
-                filling: 'filled',
-                shape: 'round',
-              })}
-            >
-              Catalog
-            </button>
-          </Link>
+          <Header2>Your cart</Header2>
+          <div>
+            <Header5>Cart is empty</Header5>
+            <div>
+              <img
+                src="../../../../public/images/Empty.png"
+                alt="empty bike"
+              />
+            </div>
+            <Header5>Welcome to Shopping</Header5>
+            <Link to={`/catalog`}>
+              <button
+                type="button"
+                className={getButtonStyles({
+                  size: 'medium',
+                  filling: 'filled',
+                  shape: 'round',
+                })}
+              >
+                Catalog
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     );

@@ -59,11 +59,15 @@ export const Product = () => {
 
   const productName = product?.masterData.current.name['en-US'];
   const description = product?.masterData.current.description['en-US'];
+  const discountedPrice =
+    Number(
+      product?.masterData.current.masterVariant.prices[0].discounted.value
+        .centAmount,
+    ) / 100;
   const price =
     Number(
       product?.masterData.current.masterVariant.prices[0].value.centAmount,
     ) / 100;
-  const discountedPrice = Math.floor(price * 0.95);
 
   const imageUrls =
     product?.masterData.current.masterVariant.images.map(

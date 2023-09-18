@@ -45,7 +45,7 @@ export const Contribution = ({
 
   return (
     <>
-      <div className="flex justify-evenly">
+      <div className="flex justify-center gap-4">
         <AggregationButton
           typeName="byMember"
           onClick={() => setAggregation('byMember')}

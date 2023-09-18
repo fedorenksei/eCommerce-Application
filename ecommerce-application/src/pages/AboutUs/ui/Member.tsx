@@ -41,9 +41,9 @@ export const Member = ({
         {roles.map((role) => (
           <div
             key={`${github}-${role}`}
-            className="w-max border border-neutral-700 rounded-lg p-2"
+            className="border border-neutral-700 rounded-lg p-2"
           >
-            <Paragraph>{role}</Paragraph>
+            <span className={getTextStyles({})}>{role}</span>
           </div>
         ))}
       </div>

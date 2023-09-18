@@ -6,7 +6,7 @@ import { Contribution } from './ui/Contribution';
 
 export const AboutUs = () => {
   return (
-    <div className="p-10 space-y-7 text-center">
+    <div className="p-5 md:p-10 space-y-7 max-w-7xl mx-auto text-center">
       <section className="space-y-3">
         <Header2>Our team</Header2>
         <div className="grid grid-cols-[minmax(0,_400px)] justify-center lg:grid-cols-3 gap-4">

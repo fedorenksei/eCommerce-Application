@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Header3 } from '../../../shared/ui/text/Header3';
 import { Header4 } from '../../../shared/ui/text/Header4';
 import { Paragraph } from '../../../shared/ui/text/Paragraph';
+import { BsPersonCircle, BsBicycle, BsFillCircleFill } from 'react-icons/bs';
 
 type AggregationType = 'byMember' | 'bySprint';
 type ContributionData = {
@@ -30,10 +31,12 @@ export const Contribution = ({
 
   const dataBySprint = membersData.reduce<ContributionData>((prev, curr) => {
     const fullName = `${curr.name} ${curr.surname}`;
-    curr.contribution.forEach(({ label: sprint, items }, indexSprint) => {
-      prev[indexSprint] = prev[indexSprint] || { label: sprint, items: [] };
-      prev[indexSprint].items.push({ label: fullName, items });
-    });
+    curr.contribution.forEach(
+      ({ label: sprint, items, comma }, indexSprint) => {
+        prev[indexSprint] = prev[indexSprint] || { label: sprint, items: [] };
+        prev[indexSprint].items.push({ label: fullName, items, comma });
+      },
+    );
     return prev;
   }, []);
 
@@ -54,24 +57,37 @@ export const Contribution = ({
           currenAggregation={aggregation}
         />
       </div>
-      <ul className="text-left space-y-4">
+      <ul className="text-left grid grid-cols-[minmax(0,_400px)] justify-center lg:grid-cols-3 gap-4">
         {data.map(({ label, items }) => (
           <li key={label}>
-            <Header3>{label}</Header3>
-            <ul className="pl-4">
+            <Label
+              text={label}
+              level="top"
+              type={aggregation === 'byMember' ? 'person' : 'sprint'}
+            />
+
+            <ul className="pl-4 space-y-2 mt-1">
               {items.map(({ label, items, comma }) => (
                 <li key={label}>
-                  <Header4>{label}</Header4>
-                  <ul className="pl-4">
-                    {!comma ? (
-                      items.map((item) => (
-                        <li key={item}>
-                          <Paragraph>{item}</Paragraph>
-                        </li>
-                      ))
-                    ) : (
-                      <Paragraph>{items.join(', ')}</Paragraph>
-                    )}
+                  <Label
+                    text={label}
+                    level="secondary"
+                    type={aggregation === 'bySprint' ? 'person' : 'sprint'}
+                  />
+
+                  <ul className="pl-4 space-y-1">
+                    {(comma ? [items.join(', ')] : items).map((item) => (
+                      <li
+                        key={item}
+                        className="flex gap-1 items-baseline"
+                      >
+                        <BsFillCircleFill
+                          size="0.4em"
+                          className="flex-shrink-0"
+                        />
+                        <Paragraph>{item}</Paragraph>
+                      </li>
+                    ))}
                   </ul>
                 </li>
               ))}
@@ -97,14 +113,54 @@ function AggregationButton({
       type="button"
       onClick={onClick}
       className={clsx(
-        getTextStyles({ font: 'h5' }),
+        getTextStyles({}),
         'p-2 border rounded-md',
         'border-primary-color select-none',
-        'cursor-pointer transition hover:border-hover-color hover:shadow-md',
-        currenAggregation === typeName && 'bg-primary-color text-white',
+        currenAggregation !== typeName &&
+          'cursor-pointer transition hover:border-hover-color hover:bg-hover-color hover:text-white hover:shadow-md',
+        currenAggregation === typeName &&
+          'cursor-default bg-disabled-color !font-bold',
       )}
     >
       By {typeName === 'byMember' ? 'member' : 'sprint'}
     </button>
+  );
+}
+
+function Label({
+  text,
+  level,
+  type,
+}: {
+  text: string;
+  level: 'top' | 'secondary';
+  type: 'person' | 'sprint';
+}) {
+  const icon =
+    type === 'person' ? (
+      <BsPersonCircle
+        size="1em"
+        className="flex-shrink-0"
+      />
+    ) : (
+      <BsBicycle
+        size="1.5em"
+        className="flex-shrink-0"
+      />
+    );
+  return level === 'top' ? (
+    <div
+      className={clsx(getTextStyles({ font: 'h3' }), 'flex gap-1 items-center')}
+    >
+      {icon}
+      <Header3>{text}</Header3>
+    </div>
+  ) : (
+    <div
+      className={clsx(getTextStyles({ font: 'h4' }), 'flex gap-1 items-center')}
+    >
+      {icon}
+      <Header4>{text}</Header4>
+    </div>
   );
 }

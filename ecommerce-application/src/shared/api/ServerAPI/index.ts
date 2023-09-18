@@ -16,10 +16,6 @@ import { CustomerUpdateAction, CartUpdateAction } from '../../types/types';
 import { setCart } from '../../store/cartSlice';
 import { setDiscountCodes } from '../../store/discountCodesSlice';
 import { getLineItem } from '../../utils/getLineItem';
-import { CustomerUpdateAction, CartUpdateAction } from '../../types/types';
-import { setCart } from '../../store/cartSlice';
-import { setDiscountCodes } from '../../store/discountCodesSlice';
-import { getLineItem } from '../../utils/getLineItem';
 
 export class ServerAPI {
   private static instance: ServerAPI;
@@ -64,6 +60,7 @@ export class ServerAPI {
     await this.restoreUser();
     this.storeCart();
     this.storeCategories();
+    this.storeDiscountCodes();
   }
 
   private async restoreUser() {

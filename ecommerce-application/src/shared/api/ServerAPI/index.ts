@@ -676,12 +676,11 @@ export class ServerAPI {
           Authorization: `Bearer ${this.accessToken}`,
         },
       });
-
+      this.storeCart();
       if (response.ok) result = await response.json();
     } catch (e) {
       console.log(e);
     }
-
     return result;
   }
 }

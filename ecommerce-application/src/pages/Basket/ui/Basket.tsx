@@ -68,7 +68,7 @@ export const Basket = () => {
             shape: 'round',
           })}
         >
-          Delete Cart
+          Clear Shopping Cart
         </button>
       </div>
     );

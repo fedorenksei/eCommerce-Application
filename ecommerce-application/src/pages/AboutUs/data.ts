@@ -19,7 +19,7 @@ export const membersData: MemberData[] = [
     imageUrl: './images/AlekseiFedorenko.png',
     shortBio:
       'I have been developing chat-bots on a platform using JavaScript (ES5) for 2 years. I am learning frontend at RSS since December from stage 0. This is my first React project',
-    roles: ['team lead', 'developer'],
+    roles: ['team lead', 'developer', 'UI design'],
     github: 'fedorenksei',
     contribution: [
       {

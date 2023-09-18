@@ -55,7 +55,8 @@ export const membersData: MemberData[] = [
     name: 'Dmitriy',
     surname: 'Romanenkov',
     imageUrl: './images/DmitriyRomanenkov.jpg',
-    shortBio: '',
+    shortBio:
+      'I have no relevant development experience, I studied frontend at Rolling Scopes since 2022, this is my second React project.',
     roles: ['tech lead', 'developer'],
     github: 'color-zebra',
     contribution: [

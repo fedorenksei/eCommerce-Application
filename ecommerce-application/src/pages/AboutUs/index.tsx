@@ -41,6 +41,7 @@ export const AboutUs = () => {
 
       <section className="space-y-3 mx-auto max-w-[600px]">
         <Header2>Our gratitude</Header2>
+
         <Paragraph>
           We are very grateful to our mentor,{' '}
           <a
@@ -59,6 +60,7 @@ export const AboutUs = () => {
           elevated both our hard and soft skills to an entirely new level and
           are fueled with motivation to continue growing. Until we meet again!
         </Paragraph>
+
         <div className="max-w-[300px] mx-auto pt-4">
           <RssLogo />
         </div>

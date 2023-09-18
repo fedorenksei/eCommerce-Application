@@ -54,7 +54,7 @@ export const membersData: MemberData[] = [
   {
     name: 'Dmitriy',
     surname: 'Romanenkov',
-    imageUrl: './images/',
+    imageUrl: './images/DmitriyRomanenkov.jpg',
     shortBio: '',
     roles: ['tech lead', 'developer'],
     github: 'color-zebra',

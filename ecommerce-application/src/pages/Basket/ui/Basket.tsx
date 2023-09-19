@@ -23,7 +23,7 @@ export const Basket = () => {
             <Header5>Cart is empty</Header5>
             <div>
               <img
-                src="../../../../public/images/Empty.png"
+                src="./images/Empty.png"
                 alt="empty bike"
               />
             </div>

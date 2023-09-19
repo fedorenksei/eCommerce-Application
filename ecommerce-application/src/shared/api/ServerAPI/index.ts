@@ -17,6 +17,8 @@ import { setCart } from '../../store/cartSlice';
 import { setDiscountCodes } from '../../store/discountCodesSlice';
 import { getLineItem } from '../../utils/getLineItem';
 
+export const DEFAULT_LIMIT = 12;
+
 export class ServerAPI {
   private static instance: ServerAPI;
   private accessToken: string | null;
@@ -31,14 +33,13 @@ export class ServerAPI {
   private readonly REGION: string;
   private readonly AUTH_URL: string;
   private readonly API_URL: string;
-  private readonly limit: number;
+  // public static readonly DEFAULT_LIMIT: 12;
 
   constructor() {
     this.accessToken = null;
     this.refreshToken = null;
     this.customerID = null;
     this.customerInfo = null;
-    this.limit = 9;
     this.prefix = 'nkj1k238sadQ';
     this.KEY = 'ecommerce-application-creative-team';
     this.CLIENT_ID = '2S2FwbXYw3IAoCFUFaIeHqAi';
@@ -429,6 +430,7 @@ export class ServerAPI {
     priceRange = null,
     searchText = null,
     sort = null,
+    limit,
     page = null,
   }: ProductRequestParams) {
     let filterParams = '';
@@ -450,9 +452,12 @@ export class ServerAPI {
     if (searchText) {
       filterParams += `text.en-US="${searchText}"&`;
     }
+
+    const limitParams = `limit=${limit || DEFAULT_LIMIT}&`;
     if (page) {
-      filterParams += `offset=${this.limit * (Number(page) - 1)}&`;
+      filterParams += `offset=${Number(limit) * (Number(page) - 1)}&`;
     }
+
     switch (sort) {
       case 'nameAsc':
         filterParams += 'sort=name.en-US asc&';
@@ -473,7 +478,6 @@ export class ServerAPI {
       ? `filter.query=categories.id:subtree("${categoryId}")&`
       : '';
     const facetParams = `facet=variants.attributes.gender-01.label.en-US&facet=variants.attributes.brand.label&facet=variants.attributes.material.label&facet=variants.attributes.color01.label&facet=variants.price.centAmount&`;
-    const limitParams = `limit=${this.limit}&`;
     const searchParams = `${limitParams}${categoryParams}${filterParams}${facetParams}`;
     const link = `${this.API_URL}/${this.KEY}/product-projections/search?${searchParams}`;
 

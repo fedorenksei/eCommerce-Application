@@ -157,6 +157,7 @@ export interface ProductRequestParams {
   searchText?: null | string | undefined;
   sort?: null | string | undefined;
   page?: null | string | undefined;
+  limit: number;
   priceRange?: null | PriceParams;
 }
 

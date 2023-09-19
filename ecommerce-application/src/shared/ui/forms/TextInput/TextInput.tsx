@@ -13,7 +13,7 @@ type TextInputProps = {
   disabled?: boolean;
   register?: UseFormRegisterReturn;
   inputId?: string;
-  enterKeyHint?: 'search';
+  enterKeyHint?: 'search' | 'done';
 };
 
 export const TextInput = ({
@@ -49,11 +49,13 @@ export const TextInput = ({
       <input
         id={inputId}
         type={htmlInputType}
+        step={htmlInputType === 'number' ? '1' : ''}
+        min={htmlInputType === 'number' ? '1' : ''}
         disabled={disabled}
         placeholder={placeholder}
         defaultValue={defaultValue}
         enterKeyHint={enterKeyHint}
-        className="appearance-none !outline-none flex-grow bg-input-bg dark:bg-dt-input-bg"
+        className="appearance-none max-w-full !outline-none flex-grow bg-input-bg dark:bg-dt-input-bg"
         {...register}
       />
       {type === 'password' && (

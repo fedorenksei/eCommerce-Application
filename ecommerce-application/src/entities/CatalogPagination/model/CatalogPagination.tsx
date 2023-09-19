@@ -3,15 +3,15 @@ import { useSearchParams } from 'react-router-dom';
 import { getButtonStyles, getTextStyles } from '../../../shared/ui/styles';
 import { Paragraph } from '../../../shared/ui/text/Paragraph';
 import { BsArrowLeftCircle, BsArrowRightCircle } from 'react-icons/bs';
+import { PaginationLimit } from './PaginationLimit';
 
 type Props = {
   totalProducts: number;
+  itemsOnPage: number;
 };
 
-const productsOnPage = 9;
-
-export const CatalogPagination = ({ totalProducts }: Props) => {
-  const maxPage = Math.ceil(totalProducts / productsOnPage);
+export const CatalogPagination = ({ totalProducts, itemsOnPage }: Props) => {
+  const maxPage = Math.ceil(totalProducts / itemsOnPage);
   const [currPage, setCurrPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const page = searchParams.get('page');
@@ -44,8 +44,8 @@ export const CatalogPagination = ({ totalProducts }: Props) => {
   };
 
   return (
-    <div className="flex flex-wrap gap-5 items-center">
-      <div className="flex justify-center gap-5 p-4 items-center">
+    <div className="flex flex-wrap py-4 md:p-4 gap-x-5 gap-y-2 justify-between items-center">
+      <div className="flex justify-center gap-5 items-center">
         <button
           disabled={currPage === 1 ? true : false}
           onClick={onPrevPageClick}
@@ -83,6 +83,7 @@ export const CatalogPagination = ({ totalProducts }: Props) => {
         </button>
       </div>
       <Paragraph>Total: {totalProducts}</Paragraph>
+      <PaginationLimit />
     </div>
   );
 };

@@ -29,6 +29,7 @@ export const CatalogSearch = () => {
         <TextInput
           type="search"
           placeholder="Type for search"
+          enterKeyHint="search"
           register={register('searchText')}
         />
       </div>

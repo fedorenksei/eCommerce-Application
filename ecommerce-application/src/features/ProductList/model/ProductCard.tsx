@@ -7,6 +7,7 @@ import { AddCartAction, DeleteItemAction } from '../../../shared/types/types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
 import clsx from 'clsx';
+import { useState } from 'react';
 
 interface ProductCardProps {
   id: string;
@@ -25,6 +26,7 @@ export const ProductCard = ({
   imageUrl,
   description,
 }: ProductCardProps) => {
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   const shortDescription =
@@ -67,7 +69,14 @@ export const ProductCard = ({
       <img
         src={imageUrl}
         alt={productName}
+        className={clsx('w-full aspect-square', isLoading && 'hidden')}
+        onLoad={() => setIsLoading(false)}
       />
+      {isLoading && (
+        <div className="w-full aspect-square grid place-items-center">
+          <div className="w-5 h-5 border border-hover-color rounded-full border-r-0 border-t-0 animate-spin"></div>
+        </div>
+      )}
       <button
         onClick={handleButtonClick}
         className={getButtonStyles({

@@ -2,7 +2,8 @@ export type TextInputType = 'text' | 'password' | 'date' | 'email' | 'search';
 
 export type CustomerUpdateAction = {
   action: string;
-  [index: string]: string | { [index: string]: string };
+  addressId?: string;
+  [index: string]: string | { [index: string]: string } | undefined;
 };
 
 export type AddCartAction = {

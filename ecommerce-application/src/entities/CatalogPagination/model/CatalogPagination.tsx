@@ -23,23 +23,6 @@ export const CatalogPagination = ({ totalProducts }: Props) => {
     }
   }, [page, maxPage]);
 
-  // useEffect(() => {
-  //   if (currPage === 1) {
-  //     searchParams.delete('page');
-  //   } else {
-  //     searchParams.set('page', String(currPage));
-  //   }
-  //   setSearchParams(searchParams);
-  // }, [currPage, searchParams, setSearchParams]);
-
-  // const onNextPageClick = () => {
-  //   setCurrPage((curr) => curr + 1);
-  // };
-
-  // const onPrevPageClick = () => {
-  //   setCurrPage((curr) => curr - 1);
-  // };
-
   const onNextPageClick = () => {
     const newPage = currPage + 1;
     if (newPage === 1) {
@@ -74,7 +57,10 @@ export const CatalogPagination = ({ totalProducts }: Props) => {
             icon: true,
           })}
         >
-          <BsArrowLeftCircle size="1.5em" />
+          <BsArrowLeftCircle
+            size="1.5em"
+            title="Previous page"
+          />
         </button>
         <span className={getTextStyles({ font: 'h3' })}>
           {currPage} / {maxPage}
@@ -90,7 +76,10 @@ export const CatalogPagination = ({ totalProducts }: Props) => {
             icon: true,
           })}
         >
-          <BsArrowRightCircle size="1.5em" />
+          <BsArrowRightCircle
+            size="1.5em"
+            title="Next page"
+          />
         </button>
       </div>
       <Paragraph>Total: {totalProducts}</Paragraph>

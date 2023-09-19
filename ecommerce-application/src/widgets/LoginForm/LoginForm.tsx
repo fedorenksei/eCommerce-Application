@@ -21,7 +21,7 @@ export const LoginForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
-    if (auth.isAuth) navigate('/');
+    if (auth.isAuth) navigate('/', { replace: true });
   }, [navigate, auth]);
 
   const [isLoading, setIsLoading] = useState(false);

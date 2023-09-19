@@ -55,7 +55,7 @@ const routePairs = [
 ];
 
 export const withRouter = (component: JSX.Element) => (
-  <BrowserRouter /* basename="/ecommerce-deploy" */>
+  <BrowserRouter>
     <>{component}</>
     <Routes>
       {routePairs.map(({ path, component }) => {

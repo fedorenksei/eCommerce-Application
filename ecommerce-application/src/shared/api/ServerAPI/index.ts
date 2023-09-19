@@ -453,21 +453,21 @@ export class ServerAPI {
     if (page) {
       filterParams += `offset=${this.limit * (Number(page) - 1)}&`;
     }
-    if (sort) {
-      switch (sort) {
-        case 'nameAsc':
-          filterParams += 'sort=name.en-US asc&';
-          break;
-        case 'nameDesc':
-          filterParams += 'sort=name.en-US desc&';
-          break;
-        case 'priceAsc':
-          filterParams += 'sort=price asc&';
-          break;
-        case 'priceDesc':
-          filterParams += 'sort=price desc&';
-          break;
-      }
+    switch (sort) {
+      case 'nameAsc':
+        filterParams += 'sort=name.en-US asc&';
+        break;
+      case 'nameDesc':
+        filterParams += 'sort=name.en-US desc&';
+        break;
+      case 'priceAsc':
+        filterParams += 'sort=price asc&';
+        break;
+      case 'priceDesc':
+        filterParams += 'sort=price desc&';
+        break;
+      default:
+        filterParams += 'sort=createdAt desc&';
     }
     const categoryParams = categoryId
       ? `filter.query=categories.id:subtree("${categoryId}")&`

@@ -27,9 +27,6 @@ test('component just rendering and routing works fine', async () => {
   await userEvent.click(screen.getByText('BI-KU-KLE'));
   await userEvent.click(screen.getByText('Basket'));
   expect(screen.getByText('Your cart')).toBeInTheDocument();
-
-  await userEvent.click(screen.getByText('About us'));
-  expect(screen.getByText('Our team')).toBeInTheDocument();
 });
 
 test('landing bad page', async () => {

@@ -12,6 +12,7 @@ interface ProductCardProps {
   id: string;
   productName: string;
   price: number;
+  priceDiscount: number;
   imageUrl: string;
   description: string;
 }
@@ -20,6 +21,7 @@ export const ProductCard = ({
   id,
   productName,
   price,
+  priceDiscount,
   imageUrl,
   description,
 }: ProductCardProps) => {
@@ -27,7 +29,7 @@ export const ProductCard = ({
 
   const shortDescription =
     description.length > 100 ? `${description.slice(0, 97)}...` : description;
-  const discountedPrice = Math.floor(price * 0.95);
+  const discountedPrice = priceDiscount;
   const lineItems = useSelector((state: RootState) => state.cart.lineItems);
   const productSearch = lineItems.filter(
     (lineItem) => lineItem.productId === id,
@@ -79,8 +81,18 @@ export const ProductCard = ({
 
       <Header5>{productName}</Header5>
       <div className="space-x-2">
-        <span className="text-neutral-400 line-through">€{price}</span>
-        <span className="text-danger-color">€{discountedPrice}</span>
+        <span
+          className={clsx(
+            discountedPrice
+              ? 'text-neutral-400 line-through'
+              : 'text-text-color dark:text-dt-text-color',
+          )}
+        >
+          €{price}
+        </span>
+        {discountedPrice > 0 && (
+          <span className="text-danger-color">€{discountedPrice}</span>
+        )}
       </div>
       <Paragraph>{shortDescription}</Paragraph>
     </div>

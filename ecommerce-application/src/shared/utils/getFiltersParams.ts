@@ -19,6 +19,7 @@ interface Term {
 }
 
 export const getFiltersParams = (facets: FacetsData) => {
+  console.log(facets);
   const colors = facets['variants.attributes.color01.label'].terms
     .map((item: Term) => item.term)
     .sort();
@@ -55,5 +56,6 @@ export const getFiltersParams = (facets: FacetsData) => {
     },
   };
 
+  console.log(filtersParams);
   return filtersParams;
 };

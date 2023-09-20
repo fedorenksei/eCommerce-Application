@@ -157,7 +157,7 @@ export const Product = () => {
           className={clsx(
             'space-y-3 text-center pb-3',
             fullScreen &&
-              'absolute top-0 left-0 shadow-[0px_0px_0px_100000px_rgba(0,_0,_0,_0.5)] z-10 bg-bg-color dark:bg-dt-bg-color',
+              'absolute top-[70px] left-0 shadow-white z-10 bg-bg-color dark:bg-dt-bg-color',
           )}
         >
           <div

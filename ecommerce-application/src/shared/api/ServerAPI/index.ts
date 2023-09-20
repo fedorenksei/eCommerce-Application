@@ -672,7 +672,7 @@ export class ServerAPI {
     const { id, version } = store.getState().cart;
     const link = `${this.API_URL}/${this.KEY}/carts/${id}?version=${version}`;
 
-    let result = null;
+    let isOk = null;
     try {
       const response = await fetch(link, {
         method: 'DELETE',
@@ -681,11 +681,11 @@ export class ServerAPI {
         },
       });
       this.storeCart();
-      if (response.ok) result = await response.json();
+      if (response.ok) isOk = true;
     } catch (e) {
       console.log(e);
     }
-    return result;
+    return isOk;
   }
 }
 //! TODO удалить лишние консоль логи

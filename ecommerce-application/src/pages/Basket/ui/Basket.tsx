@@ -9,11 +9,33 @@ import { ItemCarts } from './LinesCart';
 import { Link } from 'react-router-dom';
 import { getButtonStyles } from '../../../shared/ui/styles';
 import clsx from 'clsx';
+import { setIsShown, setText } from '../../../shared/store/modalSlice';
+import { useDispatch } from 'react-redux';
 
 export const Basket = () => {
   const serverApi = ServerAPI.getInstance();
   const cart = useSelector((state: RootState) => state.cart);
   const lineItems = useSelector((state: RootState) => state.cart.lineItems);
+  const dispatch = useDispatch();
+
+  async function delCart() {
+    const isOk = await serverApi.deleteCart();
+    dispatch(setIsShown({ isShown: true }));
+    if (isOk) {
+      dispatch(
+        setText({
+          text: 'You have cleared your cart',
+        }),
+      );
+    } else {
+      dispatch(
+        setText({
+          text: 'Something went wrong. You have not cleared your cart',
+        }),
+      );
+    }
+  }
+
   if (lineItems.length == 0) {
     return (
       <div className="p-10 space-y-3 text-center flex justify-items-center justify-center">
@@ -79,9 +101,5 @@ export const Basket = () => {
         </button>
       </div>
     );
-  }
-  async function delCart() {
-    await serverApi.deleteCart();
-    return;
   }
 };

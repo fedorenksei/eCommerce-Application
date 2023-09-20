@@ -10,6 +10,7 @@ import { Basket } from '../../pages/Basket';
 import { Profile } from '../../pages/Profile';
 import { Catalog } from '../../pages/Catalog';
 import { Product } from '../../pages/Product';
+import { Footer } from '../../widgets/Footer';
 
 const routePairs = [
   {
@@ -68,5 +69,6 @@ export const withRouter = (component: JSX.Element) => (
         );
       })}
     </Routes>
+    <Footer />
   </BrowserRouter>
 );

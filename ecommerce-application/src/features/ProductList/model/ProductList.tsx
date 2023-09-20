@@ -8,7 +8,7 @@ type Props = {
 
 export const ProductList = ({ products }: Props) => {
   return (
-    <div className="grid grid-cols-[repeat(auto-fill,_minmax(100px,_200px))] justify-evenly gap-3">
+    <div className="grid grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(200px,_1fr))] justify-evenly gap-3">
       {products.map(
         ({
           name: { 'en-US': productName },

@@ -4,8 +4,6 @@ import { RootState } from '../../../app/store';
 import { Filter } from '../../../entities/Filter';
 import { VariantsParams } from '../../../shared/types/interfaces';
 import { RangeFilter } from '../../../entities/RangeFilter';
-import { CatalogSearch } from '../../../entities/CatalogSearch';
-import { CatalogSortPanel } from '../../../entities/CatalogSortPanel';
 
 export const ProductFilters = () => {
   const filters = useSelector(
@@ -17,7 +15,7 @@ export const ProductFilters = () => {
   const filterNames = Object.keys(filters).filter((item) => item !== 'prices');
 
   return (
-    <div className="p-2 space-y-4 border rounded-md border-slate-300 md:max-w-sm">
+    <div className="p-2 pb-4 space-y-4 border rounded-md dark:border-second-text-color md:max-w-sm">
       {filterNames.map((filterNameKey) => {
         if (filters[filterNameKey as keyof VariantsParams])
           return (
@@ -32,8 +30,6 @@ export const ProductFilters = () => {
         filterParams={priceFilter}
         filterName="prices"
       />
-      <CatalogSearch />
-      <CatalogSortPanel />
     </div>
   );
 };

@@ -92,12 +92,10 @@ function getUpdateActions({
     city: data.city,
     country: data.country,
   };
-  if (id) {
-    address.addressId = id;
-  }
   const action = {
     action: actionType,
     address,
+    addressId: id,
   };
   return [action];
 }

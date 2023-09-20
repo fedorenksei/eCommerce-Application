@@ -8,7 +8,7 @@ import { RssLogo } from './ui/RssLogo';
 
 export const AboutUs = () => {
   return (
-    <div className="p-5 md:p-10 space-y-7 max-w-7xl mx-auto text-center">
+    <div className="p-5 py-10 md:p-10 space-y-7 max-w-7xl mx-auto text-center">
       <section className="space-y-3 mx-auto max-w-[600px]">
         <Header2>Meet our Agile team</Header2>
         <Paragraph>

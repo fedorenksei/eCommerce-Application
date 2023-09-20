@@ -27,7 +27,7 @@ export function getTextStyles({
       primary: 'text-primary-color',
       danger: 'text-danger-color',
     }[color],
-    link && 'transition hover:text-primary-color hover:underline',
+    link && 'transition hover:text-primary-color dark:hover:text-primary-color',
   );
 }
 
@@ -39,6 +39,7 @@ type ButtonStyleParams = {
   disabled?: boolean;
   switchable?: boolean;
   isTurnedOn?: boolean;
+  icon?: boolean;
 };
 
 export function getButtonStyles({
@@ -47,6 +48,7 @@ export function getButtonStyles({
   filling,
   color = 'primary',
   disabled,
+  icon = false,
 }: ButtonStyleParams) {
   const textStyles = getTextStyles({
     font: size === 'large' ? 'h3' : 'h5',
@@ -101,6 +103,7 @@ export function getButtonStyles({
       round: 'rounded-full',
     }[shape],
     textStyles,
+    icon && '!ring-0 !px-0 !py-0 !shadow-none',
   );
 }
 

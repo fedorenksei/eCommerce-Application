@@ -1,8 +1,15 @@
-export type TextInputType = 'text' | 'password' | 'date' | 'email';
+export type TextInputType =
+  | 'text'
+  | 'password'
+  | 'date'
+  | 'email'
+  | 'search'
+  | 'number';
 
 export type CustomerUpdateAction = {
   action: string;
-  [index: string]: string | { [index: string]: string };
+  addressId?: string;
+  [index: string]: string | { [index: string]: string } | undefined;
 };
 
 export type AddCartAction = {

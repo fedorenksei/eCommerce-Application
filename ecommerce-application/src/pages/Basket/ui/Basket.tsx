@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ServerAPI } from '../../../shared/api/ServerAPI';
 import { Header2 } from '../../../shared/ui/text/Header2';
 import { Header5 } from '../../../shared/ui/text/Header5';
@@ -17,6 +17,7 @@ export const Basket = () => {
   const cart = useSelector((state: RootState) => state.cart);
   const lineItems = useSelector((state: RootState) => state.cart.lineItems);
   const dispatch = useDispatch();
+  const [isModalShown, setIsModalShown] = useState(false);
 
   async function delCart() {
     const isOk = await serverApi.deleteCart();
@@ -89,7 +90,8 @@ export const Basket = () => {
 
         <button
           onClick={() => {
-            delCart();
+            /* delCart(); */
+            setIsModalShown(true);
           }}
           type="button"
           className={getButtonStyles({
@@ -101,6 +103,30 @@ export const Basket = () => {
         >
           Clear Shopping Cart
         </button>
+        {isModalShown && (
+          <div className="flex gap-3 flex-wrap w-full h-full top-0 left-0 justify-center items-center fixed bg-gray-900 opacity-90 text-white text-xl">
+            <span className="basis-full">
+              The cart will be clear! Are you sure?
+            </span>
+            <button
+              onClick={() => {
+                setIsModalShown(false);
+              }}
+              className="p-2 bg-slate-100 text-black"
+            >
+              Please no!!!
+            </button>
+            <button
+              onClick={() => {
+                delCart();
+                setIsModalShown(false);
+              }}
+              className="p-2 bg-slate-100 text-black"
+            >
+              Do it baby!
+            </button>
+          </div>
+        )}
       </div>
     );
   }

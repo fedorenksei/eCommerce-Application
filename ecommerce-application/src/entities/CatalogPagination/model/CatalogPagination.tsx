@@ -63,7 +63,7 @@ export const CatalogPagination = ({ totalProducts, itemsOnPage }: Props) => {
           />
         </button>
         <span className={getTextStyles({ font: 'h3' })}>
-          {currPage} / {maxPage}
+          {currPage} / {isNaN(maxPage) ? '...' : maxPage}
         </span>
         <button
           disabled={Number(currPage) >= Number(maxPage) ? true : false}

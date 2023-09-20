@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getTextStyles } from '../../../shared/ui/styles';
-import { Paragraph } from '../../../shared/ui/text/Paragraph';
 import { PaginationLimit } from './PaginationLimit';
 import {
   ButtonNext,
@@ -47,7 +46,7 @@ export const CatalogPagination = ({ totalProducts, itemsOnPage }: Props) => {
   };
 
   return (
-    <div className="flex flex-wrap py-4 md:p-4 gap-x-5 gap-y-2 justify-between items-center">
+    <div className="flex flex-wrap py-4 gap-x-5 gap-y-2 justify-between items-center">
       <div className="flex justify-center gap-5 items-center">
         <ButtonPrevious
           disabled={currPage === 1}
@@ -61,7 +60,6 @@ export const CatalogPagination = ({ totalProducts, itemsOnPage }: Props) => {
           onClick={onNextPageClick}
         />
       </div>
-      <Paragraph>Total: {totalProducts}</Paragraph>
       <PaginationLimit />
     </div>
   );

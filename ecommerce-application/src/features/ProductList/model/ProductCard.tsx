@@ -53,6 +53,7 @@ export const ProductCard = ({
         'space-y-2',
         'border dark:border-second-text-color rounded-md p-2',
         'transition cursor-pointer',
+        'bg-bg-color dark:bg-dt-bg-color',
         'hover:shadow-lg hover:border-hover-color dark:hover:border-hover-color hover:scale-[1.02]',
       )}
       key={id}

@@ -4,7 +4,6 @@ import { RootState } from '../../../app/store';
 import { Filter } from '../../../entities/Filter';
 import { VariantsParams } from '../../../shared/types/interfaces';
 import { RangeFilter } from '../../../entities/RangeFilter';
-import { CatalogSortPanel } from '../../../entities/CatalogSortPanel';
 
 export const ProductFilters = () => {
   const filters = useSelector(
@@ -31,7 +30,6 @@ export const ProductFilters = () => {
         filterParams={priceFilter}
         filterName="prices"
       />
-      <CatalogSortPanel />
     </div>
   );
 };

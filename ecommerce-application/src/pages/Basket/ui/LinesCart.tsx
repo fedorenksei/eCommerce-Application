@@ -27,7 +27,7 @@ export const ItemCarts = () => {
             <img
               src={item.imageUrl}
               alt={item.name}
-              className="w-12 min-w-[3rem]"
+              className="w-12 aspect-square min-w-[3rem]"
             />
           </Link>
 

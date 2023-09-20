@@ -13,6 +13,8 @@ import { ProductFilters } from '../../../features/ProductFilters';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
 import { CatalogPagination } from '../../../entities/CatalogPagination';
+import { CatalogSortPanel } from '../../../entities/CatalogSortPanel';
+import { Paragraph } from '../../../shared/ui/text/Paragraph';
 
 export const Products = () => {
   const [products, setProducts] = useState<ProductData[]>([]);
@@ -98,11 +100,17 @@ export const Products = () => {
       <div className="grid grid-cols-1 md:grid-cols-[minmax(200px,_300px),_1fr] gap-3 items-start">
         <ProductFilters />
         <div>
-          <CatalogPagination
-            totalProducts={totalProducts}
-            itemsOnPage={itemsOnPage}
-          />
-          <ProductList products={products} />
+          <div className="flex justify-between flex-wrap items-center gap-2">
+            <CatalogSortPanel />
+            <Paragraph>Total of products: {totalProducts}</Paragraph>
+          </div>
+          <div>
+            <CatalogPagination
+              totalProducts={totalProducts}
+              itemsOnPage={itemsOnPage}
+            />
+            <ProductList products={products} />
+          </div>
         </div>
       </div>
     </>

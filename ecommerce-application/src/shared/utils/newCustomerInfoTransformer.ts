@@ -9,6 +9,8 @@ export const newCustomerTransformInfo = (
   firstFormDate: CustomerInputData,
   secondFormData: CustomerInputAddress,
 ) => {
+  console.log(firstFormDate);
+  console.log(secondFormData);
   const shippingAddress: CustomerAddress = {
     country: secondFormData.country,
     city: secondFormData.shippingCity,
@@ -55,5 +57,6 @@ export const newCustomerTransformInfo = (
     customerInfo.defaultBillingAddress = 1;
   }
 
+  console.log(customerInfo);
   return customerInfo;
 };

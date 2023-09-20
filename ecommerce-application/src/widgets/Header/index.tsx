@@ -71,7 +71,7 @@ export const Header = () => {
             !burgerShown
               ? 'hidden'
               : 'absolute flex flex-col top-full left-0 p-3 md:p-0'
-          } shadow-md md:shadow-none w-full z-10 md:flex md:static md:flex-row justify-end gap-10 items-center flex-auto`}
+          } shadow-md md:shadow-none bg-bg-color dark:bg-dt-bg-color w-full z-30 md:flex md:static md:flex-row justify-end gap-10 items-center flex-auto`}
         >
           <ul className="flex flex-wrap items-center gap-4 flex-col md:flex-row">
             <NavListItem>

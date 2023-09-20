@@ -103,7 +103,7 @@ export function getButtonStyles({
       round: 'rounded-full',
     }[shape],
     textStyles,
-    icon && '!ring-0 !px-0 !py-0 shadow-none',
+    icon && '!ring-0 !px-0 !py-0 !shadow-none',
   );
 }
 

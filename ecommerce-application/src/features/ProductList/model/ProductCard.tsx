@@ -58,9 +58,9 @@ export const ProductCard = ({
   return (
     <div
       className={clsx(
-        'border rounded-md p-2',
+        'border dark:border-second-text-color rounded-md p-2',
         'transition cursor-pointer',
-        'hover:shadow-lg hover:border-hover-color hover:-translate-y-1',
+        'hover:shadow-lg hover:border-hover-color dark:hover:border-hover-color hover:-translate-y-1',
       )}
       key={id}
       role="presentation"

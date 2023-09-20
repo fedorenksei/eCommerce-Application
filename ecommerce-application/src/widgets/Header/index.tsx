@@ -59,7 +59,7 @@ export const Header = () => {
               />
             </div>
             {!isScrolled && (
-              <div className="text-text-color dark:text-dt-text-color hover:text-primary-color transition text-2xl font-bold min-w-[8rem]">
+              <div className="text-text-color dark:text-dt-text-color hover:text-primary-color dark:hover:text-primary-color transition text-2xl font-bold min-w-[8rem]">
                 BI-KU-KLE
               </div>
             )}
@@ -71,9 +71,9 @@ export const Header = () => {
             !burgerShown
               ? 'hidden'
               : 'absolute flex flex-col top-full left-0 p-3 md:p-0'
-          } shadow-md md:shadow-none bg-bg-color w-full z-10 md:flex md:static md:flex-row justify-end gap-10 items-center flex-auto`}
+          } shadow-md md:shadow-none w-full z-10 md:flex md:static md:flex-row justify-end gap-10 items-center flex-auto`}
         >
-          <ul className="flex items-center gap-4 flex-col md:flex-row">
+          <ul className="flex flex-wrap items-center gap-4 flex-col md:flex-row">
             <NavListItem>
               <Link
                 onClick={() => setBurgerShown((state) => !state)}
@@ -152,7 +152,12 @@ export const Header = () => {
                       title="Profile"
                     />
                     {customerData.customerData && (
-                      <span className={getTextStyles({ color: 'primary' })}>
+                      <span
+                        className={clsx(
+                          getTextStyles({ color: 'primary' }),
+                          'break-all',
+                        )}
+                      >
                         {(customerData.customerData as CustomerData).email}
                       </span>
                     )}

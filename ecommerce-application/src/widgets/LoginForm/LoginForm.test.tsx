@@ -2,6 +2,12 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { App } from '../../app';
+import { validationErrors } from '../../shared/data/validationErrors';
+
+const rightEmail = 'uac@mail.ru';
+const rightPassword = 'asdASD123&';
+const wrongEmail = 'uac@';
+const wrongPassword = 'asdA';
 
 test('component just rendering', async () => {
   render(App);
@@ -23,28 +29,20 @@ test('There is clear error messages on wrong input', async () => {
   render(App);
   await userEvent.click(screen.getByTitle('Log in'));
 
-  await userEvent.type(screen.getByLabelText('Password'), '123');
-  expect(
-    screen.getByText(
-      'Password should contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (such as !@#$%^&*)',
-    ),
-  ).toBeInTheDocument();
+  await userEvent.type(screen.getByLabelText('Password'), wrongPassword);
+  expect(screen.getByText(validationErrors.password)).toBeInTheDocument();
 
-  await userEvent.type(screen.getByLabelText('Email'), 'a');
-  expect(
-    screen.getByText(
-      "Email must be properly formatted, contain a domain name, contain an '@' symbol separating local part and domain name (e.g., user@example.com), no contain whitespaces and domain length at least 2 characters",
-    ),
-  ).toBeInTheDocument();
+  await userEvent.type(screen.getByLabelText('Email'), wrongEmail);
+  expect(screen.getByText(validationErrors.mail)).toBeInTheDocument();
 });
 
 test('Button enabled after good input', async () => {
   render(App);
   await userEvent.click(screen.getByTitle('Log in'));
 
-  await userEvent.type(screen.getByLabelText('Email'), 'uac@mail.ru');
+  await userEvent.type(screen.getByLabelText('Email'), rightEmail);
 
-  await userEvent.type(screen.getByLabelText('Password'), 'asdASD123&');
+  await userEvent.type(screen.getByLabelText('Password'), rightPassword);
   expect(
     screen.getByText('Log in', { selector: 'button[type="submit"]' }),
   ).toBeEnabled();

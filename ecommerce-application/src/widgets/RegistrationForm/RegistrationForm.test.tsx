@@ -3,6 +3,13 @@ import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { App } from '../../app';
 
+const rightEmail = 'uac@mail.ru';
+const rightPassword = 'asdASD123&';
+const rightDate = '2000-05-12';
+const wrongEmail = 'uac@';
+const wrongPassword = 'asdA';
+const wrongDate = '2015-05-12';
+
 test('component just rendering', async () => {
   render(App);
   await userEvent.click(screen.getByTitle('Sign up'));
@@ -17,20 +24,14 @@ test('component just rendering', async () => {
 test('Next step button disabled on initial step', async () => {
   render(App);
   await userEvent.click(screen.getByTitle('Sign up'));
-  expect(screen.getByText(/Next step/i).closest('button')).toBeDisabled();
-});
-
-test('Next step button disabled on initial step', async () => {
-  render(App);
-  await userEvent.click(screen.getByTitle('Sign up'));
-  expect(screen.getByText(/Next step/i).closest('button')).toBeDisabled();
+  expect(screen.getByText('Next step').closest('button')).toBeDisabled();
 });
 
 test('There is clear error messages on wrong input', async () => {
   render(App);
   await userEvent.click(screen.getByTitle('Sign up'));
 
-  await userEvent.type(screen.getByLabelText('Password'), '123');
+  await userEvent.type(screen.getByLabelText('Password'), wrongPassword);
   expect(
     screen.getByText(
       'Password should contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (such as !@#$%^&*)',
@@ -38,14 +39,14 @@ test('There is clear error messages on wrong input', async () => {
   ).toBeInTheDocument();
   expect(screen.getByText('Field is require')).toBeInTheDocument();
 
-  await userEvent.type(screen.getByLabelText('Email'), 'a');
+  await userEvent.type(screen.getByLabelText('Email'), wrongEmail);
   expect(
     screen.getByText(
       "Email must be properly formatted, contain a domain name, contain an '@' symbol separating local part and domain name (e.g., user@example.com), no contain whitespaces and domain length at least 2 characters",
     ),
   ).toBeInTheDocument();
   fireEvent.change(screen.getByLabelText('Date of birth'), {
-    target: { value: '2020-05-12' },
+    target: { value: wrongDate },
   });
   await userEvent.click(screen.getByLabelText('Date of birth'));
 
@@ -60,44 +61,50 @@ test('Button enabled after good input', async () => {
   render(App);
   await userEvent.click(screen.getByTitle('Sign up'));
 
-  await userEvent.type(screen.getByLabelText('Email'), 'uac@mail.ru');
+  await userEvent.type(screen.getByLabelText('Email'), rightEmail);
 
-  await userEvent.type(screen.getByLabelText('Password'), 'asdASD123&');
+  await userEvent.type(screen.getByLabelText('Password'), rightPassword);
 
-  await userEvent.type(screen.getByLabelText('Confirm password'), 'asdASD123&');
+  await userEvent.type(
+    screen.getByLabelText('Confirm password'),
+    rightPassword,
+  );
 
   await userEvent.type(screen.getByLabelText('First name'), 'pupa');
 
   await userEvent.type(screen.getByLabelText('Last name'), 'lupa');
 
   fireEvent.change(screen.getByLabelText('Date of birth'), {
-    target: { value: '2000-05-12' },
+    target: { value: rightDate },
   });
   await userEvent.click(screen.getByLabelText('Date of birth'));
 
-  expect(screen.getByText(/Next step/i).closest('button')).toBeEnabled();
+  expect(screen.getByText('Next step').closest('button')).toBeEnabled();
 });
 
 test('Next step of form is loaded', async () => {
   render(App);
   await userEvent.click(screen.getByTitle('Sign up'));
 
-  await userEvent.type(screen.getByLabelText('Email'), 'uac@mail.ru');
+  await userEvent.type(screen.getByLabelText('Email'), rightEmail);
 
-  await userEvent.type(screen.getByLabelText('Password'), 'asdASD123&');
+  await userEvent.type(screen.getByLabelText('Password'), rightPassword);
 
-  await userEvent.type(screen.getByLabelText('Confirm password'), 'asdASD123&');
+  await userEvent.type(
+    screen.getByLabelText('Confirm password'),
+    rightPassword,
+  );
 
   await userEvent.type(screen.getByLabelText('First name'), 'pupa');
 
   await userEvent.type(screen.getByLabelText('Last name'), 'lupa');
 
   fireEvent.change(screen.getByLabelText('Date of birth'), {
-    target: { value: '2000-05-12' },
+    target: { value: rightDate },
   });
   await userEvent.click(screen.getByLabelText('Date of birth'));
 
-  await userEvent.click(screen.getByText(/Next step/i));
+  await userEvent.click(screen.getByText('Next step'));
 
   expect(screen.getByText('Shipping address')).toBeInTheDocument();
   expect(screen.getByText('Billing address')).toBeInTheDocument();

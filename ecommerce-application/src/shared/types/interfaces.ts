@@ -182,6 +182,8 @@ export interface LineItem {
   id: string;
   productId: string;
   price: number;
+  productDiscountedPrice?: number;
+  promoDiscountedPrice?: number;
   totalPrice: number;
   quantity: number;
   name: string;

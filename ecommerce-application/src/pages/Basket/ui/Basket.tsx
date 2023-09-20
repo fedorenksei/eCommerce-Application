@@ -72,6 +72,7 @@ export const Basket = () => {
         <Header2>Your cart</Header2>
 
         <DiscountCode discountCodeId={cart.discountCodeId} />
+
         <div
           className={clsx(
             'max-w-[100%] gap-4 p-4',
@@ -83,18 +84,19 @@ export const Basket = () => {
             {cart.totalPrice / 100}
           </Header2>
         </div>
-        <div>
-          <ItemCarts />
-        </div>
+
+        <ItemCarts />
+
         <button
           onClick={() => {
             delCart();
           }}
           type="button"
           className={getButtonStyles({
-            size: 'medium',
-            filling: 'filled',
+            size: 'small',
+            filling: 'transparent',
             shape: 'round',
+            color: 'danger',
           })}
         >
           Clear Shopping Cart

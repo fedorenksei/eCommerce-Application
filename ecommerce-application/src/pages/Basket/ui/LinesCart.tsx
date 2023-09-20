@@ -3,7 +3,7 @@ import { LineItem } from '../../../shared/types/interfaces';
 import { ServerAPI } from '../../../shared/api/ServerAPI';
 import { Header5 } from '../../../shared/ui/text/Header5';
 import { Paragraph } from '../../../shared/ui/text/Paragraph';
-import { getButtonStyles } from '../../../shared/ui/styles';
+import { getTextStyles } from '../../../shared/ui/styles';
 import { Link } from 'react-router-dom';
 import {
   AddCartAction,
@@ -13,82 +13,109 @@ import {
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
 import clsx from 'clsx';
+import { BsCartPlus, BsCartDash, BsTrash } from 'react-icons/bs';
 
 export const ItemCarts = () => {
   const serverApi = ServerAPI.getInstance();
   const lineItems = useSelector((state: RootState) => state.cart.lineItems);
 
   return (
-    <div className="grid grid-cols-[repeat(auto-fill,_minmax(150px,_300px))] justify-evenly gap-3">
+    <div className="grid grid-cols-[repeat(4,_auto)] md:grid-cols-[repeat(8,_auto)] justify-evenly place-items-center gap-3">
       {lineItems.map((item: LineItem) => (
-        <div key={item.id}>
+        <React.Fragment key={item.id}>
           <Link to={`/product/${item.productId}`}>
             <img
               src={item.imageUrl}
               alt={item.name}
+              className="w-12 min-w-[3rem]"
             />
           </Link>
+
           <Header5>{item.name}</Header5>
-          <Paragraph>Quantity: {item.quantity}</Paragraph>
-          <div
-            className={clsx(
-              'max-w-[100%] gap-2 p-4',
-              'flex justify-center items-center',
-            )}
-          >
+
+          <div className="flex flex-wrap items-center gap-1">
             <button
               onClick={() => {
                 changeLineCart(item.id, item.quantity - 1);
               }}
-              className={clsx(
-                getButtonStyles({
-                  size: 'small',
-                  filling: 'transparent',
-                  shape: 'round',
-                }),
-              )}
+              className={
+                (clsx(getTextStyles({})),
+                'text-hover-color hover:text-primary-color')
+              }
             >
-              -
+              <BsCartDash
+                size="1.5rem"
+                title="Remove one from cart"
+              />
             </button>
             <button
               onClick={() => {
                 addToCart(item.productId, 1);
               }}
-              className={clsx(
-                getButtonStyles({
-                  size: 'small',
-                  filling: 'transparent',
-                  shape: 'round',
-                }),
-              )}
+              className={
+                (clsx(getTextStyles({})),
+                'text-hover-color hover:text-primary-color')
+              }
             >
-              +
+              <BsCartPlus
+                size="1.5rem"
+                title="Add one to cart"
+              />
             </button>
             <button
               onClick={() => {
                 delInCart(item.id);
               }}
-              className={getButtonStyles({
-                size: 'small',
-                filling: 'transparent',
-                shape: 'round',
-              })}
+              className={
+                (clsx(getTextStyles({})),
+                'text-hover-color hover:text-primary-color')
+              }
             >
-              Delete
+              <BsTrash
+                size="1.5rem"
+                title="Delete from cart"
+              />
             </button>
           </div>
-          <div className="space-x-2">
-            <span className="text-neutral-400 line-through">
-              Price: €{item.price / 100}
-            </span>
-            <span className="text-danger-color">
-              Total price: €{item.totalPrice / 100}
-            </span>
-          </div>
-        </div>
+
+          <span
+            className={
+              item.productDiscountedPrice
+                ? 'text-neutral-400 line-through'
+                : getTextStyles({})
+            }
+          >
+            €{item.price / 100}
+          </span>
+          <span className="text-danger-color">
+            {item.productDiscountedPrice &&
+              `€${item.productDiscountedPrice / 100}`}
+          </span>
+
+          <Paragraph>x{item.quantity}</Paragraph>
+
+          <span
+            className={
+              item.promoDiscountedPrice
+                ? 'text-neutral-400 line-through'
+                : getTextStyles({})
+            }
+          >
+            €
+            {(item.promoDiscountedPrice
+              ? item.price * item.quantity
+              : item.totalPrice) / 100}
+          </span>
+
+          <span className="text-danger-color">
+            {item.promoDiscountedPrice &&
+              `€${(item.promoDiscountedPrice * item.quantity) / 100}`}
+          </span>
+        </React.Fragment>
       ))}
     </div>
   );
+
   async function addToCart(idProduct: string | undefined, amount: number = 1) {
     const res = await serverApi.updateCart(getUpdateActions(idProduct, amount));
     console.log(res);

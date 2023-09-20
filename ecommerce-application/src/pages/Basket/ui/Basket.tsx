@@ -7,10 +7,11 @@ import { RootState } from '../../../app/store';
 import { DiscountCode } from './DiscountCode';
 import { ItemCarts } from './LinesCart';
 import { Link } from 'react-router-dom';
-import { getButtonStyles } from '../../../shared/ui/styles';
-import clsx from 'clsx';
+import { getButtonStyles, getTextStyles } from '../../../shared/ui/styles';
 import { setIsShown, setText } from '../../../shared/store/modalSlice';
 import { useDispatch } from 'react-redux';
+import { Header3 } from '../../../shared/ui/text/Header3';
+import { Header4 } from '../../../shared/ui/text/Header4';
 
 export const Basket = () => {
   const serverApi = ServerAPI.getInstance();
@@ -36,6 +37,10 @@ export const Basket = () => {
       );
     }
   }
+
+  const totalPriceWithoutDiscount = cart.lineItems
+    .map((item) => item.price * item.quantity)
+    .reduce((prev, curr) => prev + curr, 0);
 
   if (lineItems.length == 0) {
     return (
@@ -69,24 +74,33 @@ export const Basket = () => {
     );
   } else {
     return (
-      <div className="p-10 space-y-3 text-center">
+      <div className="p-5 md:p-10 max-w-7xl mx-auto space-y-3 text-center">
+        <DiscountCode discountCodeId={cart.discountCodeId} />
         <Header2>Your cart</Header2>
 
-        <DiscountCode discountCodeId={cart.discountCodeId} />
-
-        <div
-          className={clsx(
-            'max-w-[100%] gap-4 p-4',
-            'flex justify-center items-center',
-          )}
-        >
-          <Header2>
-            Products: {cart.totalLineItemQuantity} Total: €
-            {cart.totalPrice / 100}
-          </Header2>
-        </div>
-
         <ItemCarts />
+
+        <div className="p-4 flex flex-wrap gap-4 justify-between items-center">
+          <Header4>Products: {cart.totalLineItemQuantity}</Header4>
+          <Header3>
+            Total:{' '}
+            <span
+              className={
+                totalPriceWithoutDiscount !== cart.totalPrice
+                  ? 'text-neutral-400 line-through'
+                  : getTextStyles({ font: 'h3' })
+              }
+            >
+              €{totalPriceWithoutDiscount / 100}
+            </span>
+            {totalPriceWithoutDiscount !== cart.totalPrice && (
+              <span className="text-danger-color">
+                {' '}
+                €{cart.totalPrice / 100}
+              </span>
+            )}
+          </Header3>
+        </div>
 
         <button
           onClick={() => {

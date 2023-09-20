@@ -12,6 +12,8 @@ test('Pagination render fine', () => {
     </BrowserRouter>,
   );
   expect(screen.getByText('<<')).toBeInTheDocument();
+  expect(screen.getByText('>>')).toBeInTheDocument();
+  expect(screen.getByText('1')).toBeInTheDocument();
 });
 
 test('Pagination change pages fine', async () => {
@@ -30,13 +32,15 @@ test('Pagination change pages fine', async () => {
   expect(screen.getByText('5')).toBeInTheDocument();
 });
 
-test('On the first page prev btn disabled', () => {
+test('On the first page prev btn disabled', async () => {
   render(
     <BrowserRouter>
-      <CatalogPagination totalProducts={1} />
+      <CatalogPagination totalProducts={11} />
     </BrowserRouter>,
   );
+  await userEvent.click(screen.getByText('<<'));
   expect(screen.getByText('<<').closest('button')).toBeDisabled();
+  expect(screen.getByText('>>').closest('button')).toBeEnabled();
 });
 
 test('On the last page prev btn disabled', async () => {
@@ -48,4 +52,5 @@ test('On the last page prev btn disabled', async () => {
 
   await userEvent.click(screen.getByText('>>'));
   expect(screen.getByText('>>').closest('button')).toBeDisabled();
+  expect(screen.getByText('<<').closest('button')).toBeEnabled();
 });

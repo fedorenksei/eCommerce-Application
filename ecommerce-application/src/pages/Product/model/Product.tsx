@@ -5,7 +5,7 @@ import { ServerAPI } from '../../../shared/api/ServerAPI';
 import { Header2 } from '../../../shared/ui/text/Header2';
 import { Header3 } from '../../../shared/ui/text/Header3';
 import { Paragraph } from '../../../shared/ui/text/Paragraph';
-import { getButtonStyles } from '../../../shared/ui/styles';
+import { getButtonStyles, getTextStyles } from '../../../shared/ui/styles';
 import {
   AddCartAction,
   ChangeLineAction,
@@ -17,6 +17,10 @@ import clsx from 'clsx';
 
 import './slider.css';
 import { useToggle } from '../../../shared/utils/hooks';
+import {
+  ButtonNext,
+  ButtonPrevious,
+} from '../../../shared/ui/buttons/PrevNext';
 
 export const Product = () => {
   const { id } = useParams();
@@ -45,16 +49,16 @@ export const Product = () => {
   const lineItemOfProduct = productSearch[0];
   let amount: number;
   let isCart: boolean = false;
-  let nameButton: string = 'Add';
+  let cartButtonTitle: string = 'Add';
 
   if (lineItemOfProduct?.id === undefined) {
     isCart = false;
     amount = 0;
-    nameButton = 'Add';
+    cartButtonTitle = 'Add';
   } else {
     isCart = true;
     amount = lineItemOfProduct?.quantity;
-    nameButton = 'Del';
+    cartButtonTitle = 'Del';
   }
 
   const productName = product?.masterData.current.name['en-US'];
@@ -101,6 +105,54 @@ export const Product = () => {
         </div>
         <Paragraph>{description}</Paragraph>
 
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            disabled={isCart ? false : true}
+            onClick={() => {
+              changeLineCart(amount - 1);
+            }}
+            className={clsx(
+              getButtonStyles({
+                size: 'small',
+                filling: 'transparent',
+                shape: 'round',
+                disabled: isCart ? false : true,
+              }),
+            )}
+          >
+            -
+          </button>
+          <span className={getTextStyles({ font: 'h4' })}>{amount}</span>
+
+          <button
+            onClick={() => {
+              addToCart(id, 1);
+            }}
+            className={clsx(
+              getButtonStyles({
+                size: 'small',
+                filling: 'transparent',
+                shape: 'round',
+              }),
+            )}
+          >
+            +
+          </button>
+
+          <button
+            onClick={() => {
+              updateCard(id);
+            }}
+            className={getButtonStyles({
+              size: 'small',
+              filling: 'transparent',
+              shape: 'round',
+            })}
+          >
+            {cartButtonTitle}
+          </button>
+        </div>
+
         <div
           className={clsx(
             'space-y-3 text-center pb-3',
@@ -114,83 +166,18 @@ export const Product = () => {
               'flex justify-center items-center',
             )}
           >
-            <button
-              disabled={currImg === 0 ? true : false}
+            <ButtonPrevious
               onClick={() => {
                 setCurrImg((c) => c - 1);
               }}
-              className={clsx(
-                getButtonStyles({
-                  size: 'small',
-                  filling: 'transparent',
-                  shape: 'round',
-                  disabled: currImg === 0 ? true : false,
-                }),
-              )}
-            >
-              &lt;&lt;
-            </button>
-
-            <button
-              disabled={currImg >= imageUrls.length - 1 ? true : false}
+              disabled={currImg === 0}
+            />
+            <ButtonNext
               onClick={() => {
                 setCurrImg((c) => c + 1);
               }}
-              className={getButtonStyles({
-                size: 'small',
-                filling: 'transparent',
-                shape: 'round',
-                disabled: currImg >= imageUrls.length - 1 ? true : false,
-              })}
-            >
-              &gt;&gt;
-            </button>
-            <button
-              disabled={isCart ? false : true}
-              onClick={() => {
-                changeLineCart(amount - 1);
-              }}
-              className={clsx(
-                getButtonStyles({
-                  size: 'small',
-                  filling: 'transparent',
-                  shape: 'round',
-                  disabled: isCart ? false : true,
-                }),
-              )}
-            >
-              -
-            </button>
-            <Paragraph>{amount}</Paragraph>
-
-            <button
-              onClick={() => {
-                addToCart(id, 1);
-              }}
-              className={clsx(
-                getButtonStyles({
-                  size: 'small',
-                  filling: 'transparent',
-                  shape: 'round',
-                }),
-              )}
-            >
-              +
-            </button>
-
-            <button
-              onClick={() => {
-                // Univers Button
-                updateCard(id);
-              }}
-              className={getButtonStyles({
-                size: 'small',
-                filling: 'transparent',
-                shape: 'round',
-              })}
-            >
-              {nameButton}
-            </button>
+              disabled={currImg >= imageUrls.length - 1}
+            />
           </div>
           <div
             className="overflow-hidden"

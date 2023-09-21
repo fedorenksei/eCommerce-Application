@@ -3,9 +3,8 @@ import { PriceParams } from '../../../shared/types/interfaces';
 import { useSearchParams } from 'react-router-dom';
 import { Header3 } from '../../../shared/ui/text/Header3';
 import { capitalize, roundNumber } from '../../../shared/utils/helpers';
-import { getButtonStyles, getTextStyles } from '../../../shared/ui/styles';
-import { Paragraph } from '../../../shared/ui/text/Paragraph';
-import './range-input.css';
+import { Header5 } from '../../../shared/ui/text/Header5';
+import { getButtonStyles } from '../../../shared/ui/styles';
 
 type Props = {
   filterParams: PriceParams;
@@ -27,16 +26,12 @@ export const RangeFilter = ({
 
   const onMinInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const curVal = e.target!.value;
-    if (Number(curVal) < maxValue - 10000) {
-      setMinValue(() => +curVal);
-    }
+    setMinValue(() => +curVal);
   };
 
   const onMaxInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const curVal = e.target!.value;
-    if (Number(curVal) > minValue + 10000) {
-      setMaxValue(() => +curVal);
-    }
+    setMaxValue(() => +curVal);
   };
 
   const onApplyParamsClick = () => {
@@ -59,44 +54,30 @@ export const RangeFilter = ({
   return (
     <div className="space-y-2">
       <Header3>{capitalize(filterName)}</Header3>
-      <div className="relative h-6">
+      <label className="space-x-2">
+        <Header5>Min value</Header5>
         <input
-          id="min-price-range"
-          className="my-range-input-class absolute top-1/2 left-0 w-full h-2 -mt-1"
+          className="w-32 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
           type="range"
           min={min}
-          max={max}
+          max={maxValue}
           value={minValue}
           onChange={onMinInputChange}
         />
+        <span>€ {roundNumber(minValue)}</span>
+      </label>
+      <label className="space-x-2">
+        <Header5>Max value</Header5>
         <input
-          id="max-price-range"
-          className="my-range-input-class absolute top-1/2 left-0 w-full h-2 -mt-1"
+          className="w-32 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
           type="range"
-          min={min}
+          min={minValue}
           max={max}
           value={maxValue}
           onInput={onMaxInputChange}
         />
-      </div>
-
-      <div className="flex justify-between">
-        <label
-          htmlFor="min-price-range"
-          className="flex flex-wrap items-center gap-1"
-        >
-          <Paragraph>from</Paragraph>
-          <span className={getTextStyles({})}>€ {roundNumber(minValue)}</span>
-        </label>
-        <label
-          htmlFor="max-price-range"
-          className="flex flex-wrap items-center gap-1"
-        >
-          <Paragraph>to</Paragraph>
-          <span className={getTextStyles({})}>€ {roundNumber(maxValue)}</span>
-        </label>
-      </div>
-
+        <span>€ {roundNumber(maxValue)}</span>
+      </label>
       <div className="space-x-2">
         <button
           className={getButtonStyles({

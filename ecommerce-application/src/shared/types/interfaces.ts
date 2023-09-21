@@ -157,7 +157,6 @@ export interface ProductRequestParams {
   searchText?: null | string | undefined;
   sort?: null | string | undefined;
   page?: null | string | undefined;
-  limit: number;
   priceRange?: null | PriceParams;
 }
 
@@ -182,8 +181,6 @@ export interface LineItem {
   id: string;
   productId: string;
   price: number;
-  productDiscountedPrice?: number;
-  promoDiscountedPrice?: number;
   totalPrice: number;
   quantity: number;
   name: string;

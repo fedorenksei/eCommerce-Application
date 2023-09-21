@@ -4,7 +4,6 @@ import { UseFormRegisterReturn } from 'react-hook-form';
 import { getInputStyles } from '../../styles';
 import { TextInputType } from '../../../types/types';
 import { Eye } from './Eye';
-import { BsSearch } from 'react-icons/bs';
 
 type TextInputProps = {
   type?: TextInputType;
@@ -12,8 +11,7 @@ type TextInputProps = {
   defaultValue?: string;
   disabled?: boolean;
   register?: UseFormRegisterReturn;
-  inputId?: string;
-  enterKeyHint?: 'search' | 'done';
+  inputId: string;
 };
 
 export const TextInput = ({
@@ -23,21 +21,16 @@ export const TextInput = ({
   defaultValue,
   register,
   inputId,
-  enterKeyHint,
 }: TextInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [focusStyle, setFocusStyle] = useState(false);
-
-  let htmlInputType = type;
-  if (showPassword) htmlInputType = 'text';
-  if (htmlInputType === 'search') htmlInputType = 'text';
 
   return (
     <div
       className={clsx(
         getInputStyles({ disabled, focus: focusStyle }),
         type === 'password' && 'mr-5',
-        'flex gap-2 items-center',
+        'flex gap-2',
       )}
       onFocus={() => {
         setFocusStyle(true);
@@ -48,14 +41,11 @@ export const TextInput = ({
     >
       <input
         id={inputId}
-        type={htmlInputType}
-        step={htmlInputType === 'number' ? '1' : ''}
-        min={htmlInputType === 'number' ? '1' : ''}
+        type={showPassword ? 'text' : type}
         disabled={disabled}
         placeholder={placeholder}
         defaultValue={defaultValue}
-        enterKeyHint={enterKeyHint}
-        className="appearance-none max-w-full !outline-none flex-grow bg-input-bg dark:bg-dt-input-bg"
+        className="appearance-none !outline-none flex-grow bg-input-bg dark:bg-dt-input-bg"
         {...register}
       />
       {type === 'password' && (
@@ -66,7 +56,6 @@ export const TextInput = ({
           <Eye opened={!showPassword} />
         </button>
       )}
-      {type === 'search' && <BsSearch size="1.5em" />}
     </div>
   );
 };

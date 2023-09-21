@@ -17,8 +17,6 @@ import { setCart } from '../../store/cartSlice';
 import { setDiscountCodes } from '../../store/discountCodesSlice';
 import { getLineItem } from '../../utils/getLineItem';
 
-export const DEFAULT_LIMIT = 12;
-
 export class ServerAPI {
   private static instance: ServerAPI;
   private accessToken: string | null;
@@ -33,13 +31,14 @@ export class ServerAPI {
   private readonly REGION: string;
   private readonly AUTH_URL: string;
   private readonly API_URL: string;
-  // public static readonly DEFAULT_LIMIT: 12;
+  private readonly limit: number;
 
   constructor() {
     this.accessToken = null;
     this.refreshToken = null;
     this.customerID = null;
     this.customerInfo = null;
+    this.limit = 9;
     this.prefix = 'nkj1k238sadQ';
     this.KEY = 'ecommerce-application-creative-team';
     this.CLIENT_ID = '2S2FwbXYw3IAoCFUFaIeHqAi';
@@ -430,7 +429,6 @@ export class ServerAPI {
     priceRange = null,
     searchText = null,
     sort = null,
-    limit,
     page = null,
   }: ProductRequestParams) {
     let filterParams = '';
@@ -452,32 +450,30 @@ export class ServerAPI {
     if (searchText) {
       filterParams += `text.en-US="${searchText}"&`;
     }
-
-    const limitParams = `limit=${limit || DEFAULT_LIMIT}&`;
     if (page) {
-      filterParams += `offset=${Number(limit) * (Number(page) - 1)}&`;
+      filterParams += `offset=${this.limit * (Number(page) - 1)}&`;
     }
-
-    switch (sort) {
-      case 'nameAsc':
-        filterParams += 'sort=name.en-US asc&';
-        break;
-      case 'nameDesc':
-        filterParams += 'sort=name.en-US desc&';
-        break;
-      case 'priceAsc':
-        filterParams += 'sort=price asc&';
-        break;
-      case 'priceDesc':
-        filterParams += 'sort=price desc&';
-        break;
-      default:
-        filterParams += 'sort=createdAt desc&';
+    if (sort) {
+      switch (sort) {
+        case 'nameAsc':
+          filterParams += 'sort=name.en-US asc&';
+          break;
+        case 'nameDesc':
+          filterParams += 'sort=name.en-US desc&';
+          break;
+        case 'priceAsc':
+          filterParams += 'sort=price asc&';
+          break;
+        case 'priceDesc':
+          filterParams += 'sort=price desc&';
+          break;
+      }
     }
     const categoryParams = categoryId
       ? `filter.query=categories.id:subtree("${categoryId}")&`
       : '';
     const facetParams = `facet=variants.attributes.gender-01.label.en-US&facet=variants.attributes.brand.label&facet=variants.attributes.material.label&facet=variants.attributes.color01.label&facet=variants.price.centAmount&`;
+    const limitParams = `limit=${this.limit}&`;
     const searchParams = `${limitParams}${categoryParams}${filterParams}${facetParams}`;
     const link = `${this.API_URL}/${this.KEY}/product-projections/search?${searchParams}`;
 
@@ -672,7 +668,7 @@ export class ServerAPI {
     const { id, version } = store.getState().cart;
     const link = `${this.API_URL}/${this.KEY}/carts/${id}?version=${version}`;
 
-    let isOk = null;
+    let result = null;
     try {
       const response = await fetch(link, {
         method: 'DELETE',
@@ -681,11 +677,11 @@ export class ServerAPI {
         },
       });
       this.storeCart();
-      if (response.ok) isOk = true;
+      if (response.ok) result = await response.json();
     } catch (e) {
       console.log(e);
     }
-    return isOk;
+    return result;
   }
 }
 //! TODO удалить лишние консоль логи

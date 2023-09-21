@@ -47,7 +47,7 @@ export const Filter = ({ filterState, filterName }: Props) => {
             key={item + index}
             onClick={() => onParamClick(item)}
             className={clsx(
-              getTextStyles({}),
+              getTextStyles({ font: 'h5' }),
               'p-1 border rounded-md',
               'border-primary-color select-none',
               'cursor-pointer transition hover:border-hover-color hover:-translate-y-0.5 hover:shadow-md',

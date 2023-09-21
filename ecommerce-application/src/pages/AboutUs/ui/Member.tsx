@@ -14,7 +14,7 @@ export const Member = ({
   shortBio,
 }: MemberData) => {
   return (
-    <div className="border dark:border-second-text-color rounded-md p-3 flex flex-col gap-4 items-center">
+    <div className="border rounded-md p-3 flex flex-col gap-4 items-center">
       <img
         src={imageUrl}
         alt={`${name} ${surname}`}
@@ -43,7 +43,7 @@ export const Member = ({
         {roles.map((role) => (
           <div
             key={`${github}-${role}`}
-            className="border border-neutral-700 dark:border-neutral-400 rounded-lg p-2"
+            className="border border-neutral-700 rounded-lg p-2"
           >
             <span className={getTextStyles({})}>{role}</span>
           </div>

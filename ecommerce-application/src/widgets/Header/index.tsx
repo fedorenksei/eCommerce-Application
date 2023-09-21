@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
@@ -13,67 +13,36 @@ import {
 } from 'react-icons/bs';
 import { NavListItem } from './ui/NavListItem';
 import { getTextStyles } from '../../shared/ui/styles';
-import clsx from 'clsx';
 
 export const Header = () => {
   const auth = useSelector((state: RootState) => state.auth);
-  const lineItemsQuantity = useSelector(
-    (state: RootState) => state.cart.totalLineItemQuantity,
-  );
   const customerData = useSelector((state: RootState) => state.customerData);
   const serverAPI = ServerAPI.getInstance();
   const [burgerShown, setBurgerShown] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  const handleScroll = () => {
-    if (window.scrollY > 0) {
-      setIsScrolled(true);
-    } else {
-      setIsScrolled(false);
-    }
-  };
 
   return (
-    <header className="fixed z-30 top-0 w-full flex justify-center items-center px-2 py-2 shadow-md bg-bg-color dark:bg-dt-bg-color">
-      <div className="max-w-7xl w-full flex justify-between items-center">
-        <Link
-          to="/"
-          onClick={() => setBurgerShown(false)}
-        >
+    <>
+      <header className="shadow-md z-10 bg-bg-color flex justify-between items-center px-2 h-20 relative">
+        <Link to="/">
           <div className="flex items-center">
             <div className="flex w-14 justify-center items-center">
               <img
-                className={clsx(
-                  isScrolled ? 'w-7' : 'w-14',
-                  'transition-all object-cover',
-                )}
+                className="w-14 object-cover"
                 src="./images/logo.png"
                 alt="bike logo"
               />
             </div>
-            {!isScrolled && (
-              <div className="text-text-color dark:text-dt-text-color hover:text-primary-color dark:hover:text-primary-color transition text-2xl font-bold min-w-[8rem]">
-                BI-KU-KLE
-              </div>
-            )}
+            <div className="text-text-color text-2xl font-bold min-w-[8rem]">
+              BI-KU-KLE
+            </div>
           </div>
         </Link>
-
         <div
           className={`${
-            !burgerShown
-              ? 'hidden'
-              : 'absolute flex flex-col top-full left-0 p-3 md:p-0'
-          } shadow-md md:shadow-none bg-bg-color dark:bg-dt-bg-color w-full z-30 md:flex md:static md:flex-row justify-end gap-10 items-center flex-auto`}
+            !burgerShown ? 'hidden' : 'absolute flex flex-col top-20 left-0'
+          } shadow-md md:shadow-none bg-bg-color w-full z-10 md:flex md:static md:flex-row justify-end gap-10 items-center flex-auto`}
         >
-          <ul className="flex flex-wrap items-center gap-4 flex-col md:flex-row">
+          <ul className="flex items-center py-6 gap-4 flex-col md:flex-row">
             <NavListItem>
               <Link
                 onClick={() => setBurgerShown((state) => !state)}
@@ -102,15 +71,11 @@ export const Header = () => {
               <Link
                 onClick={() => setBurgerShown((state) => !state)}
                 to="/basket"
-                className="flex gap-1 items-center"
               >
                 <BsCart3
                   size="1.5em"
                   title="Shopping cart"
                 />
-                <div className="bg-disabled-color text-white px-1 rounded-full">
-                  {lineItemsQuantity}
-                </div>
               </Link>
             </NavListItem>
             {!auth.isAuth && (
@@ -152,12 +117,7 @@ export const Header = () => {
                       title="Profile"
                     />
                     {customerData.customerData && (
-                      <span
-                        className={clsx(
-                          getTextStyles({ color: 'primary' }),
-                          'break-all',
-                        )}
-                      >
+                      <span className={getTextStyles({ color: 'primary' })}>
                         {(customerData.customerData as CustomerData).email}
                       </span>
                     )}
@@ -177,29 +137,18 @@ export const Header = () => {
               </>
             )}
           </ul>
-          <div
-            onClick={() => setBurgerShown(false)}
-            role="presentation"
-            className={clsx(
-              !burgerShown
-                ? 'hidden'
-                : 'absolute w-full h-screen top-full left-0 bg-hover-color/40 cursor-pointer',
-              'md:hidden',
-            )}
-          ></div>
         </div>
-
         <button
           onClick={() => setBurgerShown((state) => !state)}
           className={`w-7 h-6 flex flex-col justify-between cursor-pointer md:hidden transition-all duration-300 ${
             burgerShown && 'rotate-90'
           }`}
         >
-          <span className="w-full rounded-full h-[2px] bg-text-color dark:bg-dt-text-color"></span>
-          <span className="w-full rounded-full h-[2px] bg-text-color dark:bg-dt-text-color"></span>
-          <span className="w-full rounded-full h-[2px] bg-text-color dark:bg-dt-text-color"></span>
+          <span className="w-full h-[2px] bg-text-color"></span>
+          <span className="w-full h-[2px] bg-text-color"></span>
+          <span className="w-full h-[2px] bg-text-color"></span>
         </button>
-      </div>
-    </header>
+      </header>
+    </>
   );
 };

@@ -1,66 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { getTextStyles } from '../../../shared/ui/styles';
-import { PaginationLimit } from './PaginationLimit';
-import {
-  ButtonNext,
-  ButtonPrevious,
-} from '../../../shared/ui/buttons/PrevNext';
+import { getButtonStyles, getTextStyles } from '../../../shared/ui/styles';
 
 type Props = {
   totalProducts: number;
-  itemsOnPage: number;
 };
 
-export const CatalogPagination = ({ totalProducts, itemsOnPage }: Props) => {
-  const maxPage = Math.ceil(totalProducts / itemsOnPage);
+const productsOnPage = 9;
+
+export const CatalogPagination = ({ totalProducts }: Props) => {
+  const maxPage = Math.ceil(totalProducts / productsOnPage);
   const [currPage, setCurrPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const page = searchParams.get('page');
   useEffect(() => {
     if (page) {
       setCurrPage(maxPage < Number(page) ? maxPage : Number(page));
-    } else {
-      setCurrPage(1);
     }
   }, [page, maxPage]);
 
-  const onNextPageClick = () => {
-    const newPage = currPage + 1;
-    if (newPage === 1) {
+  useEffect(() => {
+    if (currPage === 1) {
       searchParams.delete('page');
     } else {
-      searchParams.set('page', String(newPage));
+      searchParams.set('page', String(currPage));
     }
     setSearchParams(searchParams);
+  }, [currPage, searchParams, setSearchParams]);
+
+  const onNextPageClick = () => {
+    setCurrPage((curr) => curr + 1);
   };
 
   const onPrevPageClick = () => {
-    const newPage = currPage - 1;
-    if (newPage === 1) {
-      searchParams.delete('page');
-    } else {
-      searchParams.set('page', String(newPage));
-    }
-    setSearchParams(searchParams);
+    setCurrPage((curr) => curr - 1);
   };
 
   return (
-    <div className="flex flex-wrap py-4 gap-x-5 gap-y-2 justify-between items-center">
-      <div className="flex justify-center gap-5 items-center">
-        <ButtonPrevious
-          disabled={currPage === 1}
-          onClick={onPrevPageClick}
-        />
-        <span className={getTextStyles({ font: 'h3' })}>
-          {currPage} / {isNaN(maxPage) ? '...' : maxPage}
-        </span>
-        <ButtonNext
-          disabled={Number(currPage) >= Number(maxPage)}
-          onClick={onNextPageClick}
-        />
-      </div>
-      <PaginationLimit />
+    <div className="flex justify-center gap-5 p-4 items-center">
+      <button
+        disabled={currPage === 1 ? true : false}
+        onClick={onPrevPageClick}
+        className={getButtonStyles({
+          size: 'small',
+          filling: 'transparent',
+          shape: 'round',
+          disabled: currPage === 1 ? true : false,
+        })}
+      >
+        &lt;&lt;
+      </button>
+      <span className={getTextStyles({ font: 'h2' })}>{currPage}</span>
+      <button
+        disabled={Number(currPage) >= Number(maxPage) ? true : false}
+        onClick={onNextPageClick}
+        className={getButtonStyles({
+          size: 'small',
+          filling: 'transparent',
+          shape: 'round',
+          disabled: Number(currPage) >= Number(maxPage) ? true : false,
+        })}
+      >
+        &gt;&gt;
+      </button>
     </div>
   );
 };

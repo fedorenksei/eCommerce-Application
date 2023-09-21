@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect, useCallback } from 'react';
-import { DEFAULT_LIMIT, ServerAPI } from '../../../shared/api/ServerAPI';
+import { ServerAPI } from '../../../shared/api/ServerAPI';
 import { useParams, useSearchParams } from 'react-router-dom';
 import {
   PriceParams,
@@ -13,13 +13,10 @@ import { ProductFilters } from '../../../features/ProductFilters';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
 import { CatalogPagination } from '../../../entities/CatalogPagination';
-import { CatalogSortPanel } from '../../../entities/CatalogSortPanel';
-import { Paragraph } from '../../../shared/ui/text/Paragraph';
 
 export const Products = () => {
   const [products, setProducts] = useState<ProductData[]>([]);
   const [totalProducts, setTotalProducts] = useState<number>(0);
-  const [itemsOnPage, setItemsOnPage] = useState<number>(0);
   const categoriesList = useSelector(
     (state: RootState) => state.categories.categoriesData,
   );
@@ -31,10 +28,6 @@ export const Products = () => {
   );
   const cbSetTotalProducts = useCallback(
     (total: number) => setTotalProducts(total),
-    [],
-  );
-  const cbSetItemsOnPage = useCallback(
-    (number: number) => setItemsOnPage(number),
     [],
   );
 
@@ -53,8 +46,6 @@ export const Products = () => {
       const searchText = searchParams.get('searchText');
       const sort = searchParams.get('sort');
       const page = searchParams.get('page');
-      const limit = searchParams.get('limit') || DEFAULT_LIMIT;
-
       let price: PriceParams | null = null;
       if (minPrice !== null && maxPrice !== null) {
         price = {
@@ -75,12 +66,10 @@ export const Products = () => {
         searchText,
         sort,
         page,
-        limit: Number(limit),
       });
       if (products) {
         cbSetProducts(products.results);
         cbSetTotalProducts(products.total);
-        cbSetItemsOnPage(Number(limit));
       }
     };
     fetchProducts();
@@ -91,26 +80,16 @@ export const Products = () => {
     serverApi,
     searchParams,
     cbSetTotalProducts,
-    cbSetItemsOnPage,
   ]);
 
   return (
     <>
       <Categories categories={categories} />
-      <div className="grid grid-cols-1 md:grid-cols-[minmax(200px,_300px),_1fr] gap-3 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-[minmax(200px,_300px),_1fr] gap-3">
         <ProductFilters />
         <div>
-          <div className="flex justify-between flex-wrap items-center gap-2">
-            <CatalogSortPanel />
-            <Paragraph>Total of products: {totalProducts}</Paragraph>
-          </div>
-          <div>
-            <CatalogPagination
-              totalProducts={totalProducts}
-              itemsOnPage={itemsOnPage}
-            />
-            <ProductList products={products} />
-          </div>
+          <ProductList products={products} />
+          <CatalogPagination totalProducts={totalProducts} />
         </div>
       </div>
     </>

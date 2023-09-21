@@ -14,7 +14,7 @@ export const Profile = () => {
   const auth = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
   useEffect(() => {
-    if (!auth.isAuth) navigate('/login');
+    if (!auth.isAuth) navigate('/login', { replace: true });
   }, [navigate, auth]);
 
   const customerData: null | CustomerData = useSelector(

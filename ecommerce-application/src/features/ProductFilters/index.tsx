@@ -1,1 +1,1 @@
-export { ProductFilters } from './model/ProductFilter';
+export { ProductFilters } from './model/ProductFilters';

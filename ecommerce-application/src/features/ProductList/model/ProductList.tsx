@@ -1,16 +1,14 @@
 import React from 'react';
 import { ProductData } from '../../../shared/types/interfaces';
 import { ProductCard } from './ProductCard';
-import { useNavigate } from 'react-router-dom';
 
 type Props = {
   products: ProductData[];
 };
 
 export const ProductList = ({ products }: Props) => {
-  const navigate = useNavigate();
   return (
-    <div className="grid grid-cols-[repeat(auto-fill,_minmax(100px,_200px))] justify-evenly gap-3">
+    <div className="grid grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(200px,_1fr))] justify-evenly gap-3">
       {products.map(
         ({
           name: { 'en-US': productName },
@@ -23,6 +21,9 @@ export const ProductList = ({ products }: Props) => {
             id={id}
             productName={productName}
             price={Number(prices[0].value.centAmount) / 100}
+            priceDiscount={
+              (Number(prices[0].discounted?.value.centAmount) || 0) / 100
+            }
             imageUrl={images[0].url}
             description={description?.['en-US']}
           />

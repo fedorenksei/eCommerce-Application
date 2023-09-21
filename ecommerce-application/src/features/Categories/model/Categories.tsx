@@ -11,7 +11,7 @@ export const Categories = ({ categories }: Props) => {
   const { category } = useParams();
   const navigate = useNavigate();
   return (
-    <div className="flex w-full justify-around flex-wrap gap-2">
+    <div className="flex w-full justify-between flex-wrap gap-2">
       {categories.map((item) => (
         <button
           className={clsx(

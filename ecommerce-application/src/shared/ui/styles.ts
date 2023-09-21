@@ -1,19 +1,22 @@
 import clsx from 'clsx';
 
 type TextStyleParams = {
-  font?: 'simple' | 'h2' | 'h3' | 'h5';
+  font?: 'simple' | 'h2' | 'h3' | 'h4' | 'h5';
   color?: 'default' | 'second' | 'light' | 'primary' | 'danger';
+  link?: boolean;
 };
 
 export function getTextStyles({
   font = 'simple',
   color = 'default',
+  link = false,
 }: TextStyleParams) {
   return clsx(
     'font-[Montserrat] tracking-[0.2px]',
     {
       h2: 'text-[40px] leading-[57px] font-bold',
       h3: 'text-2xl font-bold',
+      h4: 'text-xl leading-[30px] font-medium',
       h5: 'text-base font-bold',
       simple: 'text-sm font-medium',
     }[font],
@@ -24,6 +27,7 @@ export function getTextStyles({
       primary: 'text-primary-color',
       danger: 'text-danger-color',
     }[color],
+    link && 'transition hover:text-primary-color dark:hover:text-primary-color',
   );
 }
 
@@ -33,6 +37,9 @@ type ButtonStyleParams = {
   filling: 'filled' | 'transparent';
   color?: 'primary' | 'danger';
   disabled?: boolean;
+  switchable?: boolean;
+  isTurnedOn?: boolean;
+  icon?: boolean;
 };
 
 export function getButtonStyles({
@@ -41,6 +48,7 @@ export function getButtonStyles({
   filling,
   color = 'primary',
   disabled,
+  icon = false,
 }: ButtonStyleParams) {
   const textStyles = getTextStyles({
     font: size === 'large' ? 'h3' : 'h5',
@@ -95,6 +103,7 @@ export function getButtonStyles({
       round: 'rounded-full',
     }[shape],
     textStyles,
+    icon && '!ring-0 !px-0 !py-0 !shadow-none',
   );
 }
 
@@ -112,12 +121,15 @@ export function getInputStyles({ disabled, focus }: InputStyleParams) {
       'rounded-md',
       'border-0 !outline-none',
       'ring-1 ring-inset',
-      focus
-        ? 'ring-2 ring-primary-color dark:ring-primary-color'
-        : 'ring-neutral-200 dark:ring-slate-600',
+      [
+        focus
+          ? 'ring-2 ring-primary-color dark:ring-primary-color'
+          : 'ring-neutral-200 dark:ring-slate-600',
+        'focus:ring-2 focus:ring-primary-color dark:focus:ring-primary-color',
+      ],
     ],
     !disabled && [
-      focus && 'focus:shadow-lg',
+      [focus && 'shadow-lg', 'focus:shadow-lg'],
       'hover:shadow-md transition-shadow',
       'dark:shadow-slate-700',
       !focus && 'hover:ring-hover-color dark:hover:ring-hover-color',

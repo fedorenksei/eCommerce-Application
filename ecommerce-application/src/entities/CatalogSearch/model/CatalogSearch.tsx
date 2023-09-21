@@ -1,45 +1,38 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { getButtonStyles, getInputStyles } from '../../../shared/ui/styles';
-import { Header3 } from '../../../shared/ui/text/Header3';
+import { useForm } from 'react-hook-form';
+import { TextInput } from '../../../shared/ui/forms/TextInput';
 
 export const CatalogSearch = () => {
-  const [inputValue, setInputValue] = useState<string>('');
+  const { register, handleSubmit, setValue } = useForm<{
+    searchText: string;
+  }>();
+
   const [searchParams, setSearchParams] = useSearchParams();
-  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(() => e.target.value);
-  };
-  const onSearchClick = () => {
-    if (inputValue === '') {
+  const searched = searchParams.get('searchText');
+  useEffect(() => {
+    setValue('searchText', searched || '');
+  }, [searched, setValue]);
+
+  const onSearchApply = ({ searchText }: { searchText: string }) => {
+    if (searchText === '') {
       searchParams.delete('searchText');
     } else {
-      searchParams.set('searchText', inputValue);
+      searchParams.set('searchText', searchText);
     }
     setSearchParams(searchParams);
   };
+
   return (
-    <div>
-      <Header3>Search</Header3>
+    <form onSubmit={handleSubmit(onSearchApply)}>
       <div className="space-y-2 space-x-2">
-        <input
-          type="text"
+        <TextInput
+          type="search"
           placeholder="Type for search"
-          value={inputValue}
-          onChange={onInputChange}
-          className={getInputStyles({})}
+          enterKeyHint="search"
+          register={register('searchText')}
         />
-        <button
-          type="button"
-          onClick={onSearchClick}
-          className={getButtonStyles({
-            size: 'small',
-            filling: 'filled',
-            shape: 'round',
-          })}
-        >
-          Search
-        </button>
       </div>
-    </div>
+    </form>
   );
 };

@@ -12,3 +12,7 @@ export const validateDate = (value: string) => {
 export function capitalize(str: string) {
   return `${str[0].toUpperCase()}${str.slice(1)}`;
 }
+
+export function roundNumber(num: number) {
+  return num > 0 && num !== Infinity ? Math.round(num / 100) : 0;
+}

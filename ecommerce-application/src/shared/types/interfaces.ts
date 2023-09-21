@@ -97,6 +97,11 @@ export interface Price {
   value: {
     centAmount: string;
   };
+  discounted: {
+    value: {
+      centAmount: string;
+    };
+  };
 }
 
 export interface ProductImage {
@@ -152,6 +157,7 @@ export interface ProductRequestParams {
   searchText?: null | string | undefined;
   sort?: null | string | undefined;
   page?: null | string | undefined;
+  limit: number;
   priceRange?: null | PriceParams;
 }
 
@@ -171,3 +177,25 @@ export type FiltersState = {
   variantParams: VariantsParams;
   priceParams: PriceParams;
 };
+
+export interface LineItem {
+  id: string;
+  productId: string;
+  price: number;
+  productDiscountedPrice?: number;
+  promoDiscountedPrice?: number;
+  totalPrice: number;
+  quantity: number;
+  name: string;
+  imageUrl: string;
+}
+
+export interface CartState {
+  version: number;
+  id: string;
+  lineItems: LineItem[];
+  totalPrice: number;
+  discountedPrice: number;
+  discountCodeId?: string;
+  totalLineItemQuantity: number;
+}

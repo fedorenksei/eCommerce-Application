@@ -41,13 +41,13 @@ export class ServerAPI {
     this.customerID = null;
     this.customerInfo = null;
     this.prefix = 'nkj1k238sadQ';
-    this.KEY = 'creative-team';
-    this.CLIENT_ID = 'RP3V0vSViw9nFhFjWQ1FHIcf';
-    this.CLIENT_SECRET = '8rcumdBnnDzYvoU6Q0IChXdySwHf8vN5';
-    this.SCOPE = 'manage_project:creative-team';
-    this.REGION = 'europe-west1';
-    this.AUTH_URL = 'https://auth.europe-west1.gcp.commercetools.com';
-    this.API_URL = 'https://api.europe-west1.gcp.commercetools.com';
+    this.KEY = 'bikukle-shop';
+    this.CLIENT_ID = 'icS9sbm4tcHGnM_7cmwDtwFE';
+    this.CLIENT_SECRET = 'QAk1Fcj8gz220VmXC1Tusjh1KG3zSMWA';
+    this.SCOPE = 'manage_project:bikukle-shop';
+    this.REGION = 'us-central1';
+    this.AUTH_URL = 'https://auth.us-central1.gcp.commercetools.com';
+    this.API_URL = 'https://api.us-central1.gcp.commercetools.com';
   }
 
   public static getInstance() {
